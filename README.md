@@ -1,0 +1,1 @@
+# sko-qa-automation

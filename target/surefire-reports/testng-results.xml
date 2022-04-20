@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2022-03-25T14:33:55 IST" name="Surefire suite" finished-at="2022-03-25T14:34:08 IST" duration-ms="13354">
+    <groups>
+    </groups>
+    <test started-at="2022-03-25T14:33:55 IST" name="Surefire test" finished-at="2022-03-25T14:34:08 IST" duration-ms="13354">
+      <class name="com.test.course.TestCourseDetails">
+        <test-method signature="validateCourseDetails(java.lang.String,java.util.ArrayList)[pri:0, instance:com.test.course.TestCourseDetails@3be4f71]" started-at="2022-03-25T14:33:56 IST" name="validateCourseDetails" data-provider="excelData" finished-at="2022-03-25T14:34:08 IST" duration-ms="12318" status="FAIL">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Blockchain Essentials_Course]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[[[currentURL, https://skillup.online/courses/course-v1:IBM+BC0101EN+v1/about, https://in.skillup.online/courses/blockchain-essentials/], [checkMetaTagContentByName, name="title"-split-content="Blockchain Essentials - SkillUp Online", name="description"-split-content="Blockchain Essentials - Take this Blockchain Essentials course by SkillUp Online.", name="twitter:card"-split-content="summary_large_image", name="twitter:title"-split-content="Blockchain Essentials - SkillUp Online", name="twitter:description"-split-content="Blockchain Essentials - Take this Blockchain Essentials course by SkillUp Online.", name="twitter:image"-split-content="https://skillup.online/asset-v1:IBM+BC0101EN+v1+type@asset+block@FS-Prime-CO-Blockchain-Essentials.jpg"], [checkMetaTagContentByProperty, property="og:type"-split-content="website", property="og:url"-split-content="https://skillup.online/courses/blockchain-essentials", property="og:title"-split-content="Blockchain Essentials - SkillUp Online", property="og:description"-split-content="Learn the essentials of Blockchain, what is blockchain, its example and networks, IBM and blockchain, with SkillUp Online. Enrol now and earn a badge after completion of course/program.", property="og:image"-split-content="https://skillup.online/asset-v1:IBM+BC0101EN+v1+type@asset+block@FS-Prime-CO-Blockchain-Essentials.jpg", property="twitter:url"-split-content="https://skillup.online/courses/blockchain-essentials"], [checkTagWithInnerText, h1-split-Blockchain Essentials, h2-split-Course Outline, h2-split-Course details, h2-split-FAQs, h2-split-Get a Free Consultation], [checkImgSrcAndAlt, src="/asset-v1:IBM+BC0101EN+v1+type@asset+block@FS-Prime-CO-Blockchain-Essentials.jpg"-split-alt="Blockchain Essentials"", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/course-page/Course-icon.ec9fbb4c4dec.svg"-split-alt="Course Highlights", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/course-page/duration_Time.9cc280116435.svg"-split-alt="Course duration", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/course-page/Certificate_b.178dbd6bb6d9.svg"-split-alt="Course Certificate", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/course-page/Courses_b.28e4a7b4ab3a.svg"-split-alt="About Course", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/course-page/checkList_b.786cced4ac0d.svg"-split-alt="Course Includes", src="/static/Openedx-theme-ironwood-india/skillup_static/images/ibm-skillup-v2/Create2x.6c7a433c6ca3.png"-split-alt="Course Learning"], [checkRedirectStatus, /courses/course-v1:IBM+BC0101EN+v1/about /courses/blockchain-essentials/, 301], [FAQ, What does block chain mean?, Blockchain is a system of recording information in a way that makes it difficult, if not impossible, to change, hack, or cheat the system., A blockchain is essentially a digital ledger of transactions that is duplicated and distributed across the entire network of computer systems on the blockchain. Each block in the chain contains a number of transactions, and every time a new transaction occurs on the blockchain, a record of that transaction is added to every participant’s ledger., Blockchain technology provides a dynamic shared ledger that can be applied to save time when recording transactions between parties. It also removes costs associated with intermediaries, and reduces risk of fraud and tampering.], [FAQ, Are there any prerequisites for this course?, There are no prerequisite requirements for taking this course. However, it is beneficial for learners to have knowledge of at least one modern, high-level programming language.], [FAQ, How does the grading scheme work?, The grading scheme for Blockchain Essentials is as follows:, The minimum pass mark for the course is 70%, where the review questions are worth 40% and the final exam is worth 60% of the course mark.], [FAQ, When can I access the materials for this course?, Blockchain Essentials is provided 100% online. You will therefore need access to the internet to be able to use the course materials. When you enroll for this course, you be able to access the course materials from the course link in your dashboard immediately.]]]]>
+              </value>
+            </param>
+          </params>
+          <exception class="java.lang.IndexOutOfBoundsException">
+            <message>
+              <![CDATA[Index 0 out of bounds for length 0]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:266)
+at java.base/java.util.Objects.checkIndex(Objects.java:359)
+at java.base/java.util.ArrayList.get(ArrayList.java:427)
+at com.test.course.TestCourseDetails.faq(TestCourseDetails.java:102)
+at com.test.course.TestCourseDetails.validateCourseDetails(TestCourseDetails.java:79)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:135)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:673)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:220)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:50)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:945)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:193)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:146)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+at org.testng.TestRunner.privateRun(TestRunner.java:808)
+at org.testng.TestRunner.run(TestRunner.java:603)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:429)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:423)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:383)
+at org.testng.SuiteRunner.run(SuiteRunner.java:326)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1249)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1169)
+at org.testng.TestNG.runSuites(TestNG.java:1092)
+at org.testng.TestNG.run(TestNG.java:1060)
+at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:135)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeSingleClass(TestNGDirectoryTestSuite.java:112)
+at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:99)
+at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:146)
+at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:384)
+at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)
+at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)
+at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.IndexOutOfBoundsException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCourseDetails -->
+        <test-method is-config="true" signature="afterMethod(org.testng.ITestResult)[pri:0, instance:com.test.course.TestCourseDetails@3be4f71]" started-at="2022-03-25T14:34:08 IST" name="afterMethod" finished-at="2022-03-25T14:34:08 IST" duration-ms="2" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=validateCourseDetails status=FAILURE method=TestCourseDetails.validateCourseDetails(java.lang.String,java.util.ArrayList)[pri:0, instance:com.test.course.TestCourseDetails@3be4f71] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterMethod -->
+      </class> <!-- com.test.course.TestCourseDetails -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

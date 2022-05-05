@@ -33,7 +33,7 @@ public class CourseDetailsPage
 
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\Selenium jar\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101 version\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         options.addArguments("disable-infobars");
@@ -61,13 +61,45 @@ public class CourseDetailsPage
 		return driver.getCurrentUrl();
 	}
 	
+	public String getCanonicalURL(String canonicalURL)
+	{
+		String checkVPNStatus = "Fail";
+		try
+		{
+			if(!driver.getCurrentUrl().contains("in."))
+			{
+				String addHost = ConfigFileReader.getURL()+canonicalURL;
+				WebElement canonicalLocator = driver.findElement(By.cssSelector("link[rel='canonical']"));
+				String getCanonicalURLText = canonicalLocator.getAttribute("href");
+				if(addHost.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").equalsIgnoreCase(getCanonicalURLText.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "")))
+				{
+					System.out.println(getCanonicalURLText);
+					checkVPNStatus = "success";
+				}
+				else
+				{
+					System.out.println("It is not CanonicalURL");
+				}
+			}
+			else
+			{
+				checkVPNStatus = "success";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return checkVPNStatus;
+	}
+	
 	public String getAttributeOfTag(String selector, String attribute)
 	{
 		String attributeValue = null;
 		try
 		{
 			WebElement tag = driver.findElement(By.cssSelector(selector));
-			attributeValue = tag.getAttribute(attribute);
+			attributeValue = tag.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0", "").trim();
 			System.out.println(attributeValue);
 		}
 		catch(Exception e)
@@ -101,12 +133,12 @@ public class CourseDetailsPage
 		return tagToReturn;
 	}	
 	
-	public ArrayList<String> getAnswersForFAQQuestion(String questionFromExcel)
+	public ArrayList<String> getAnswersForFAQQuestion(String questionFromExcel) throws InterruptedException
 	{
 		ArrayList<String> ans = new ArrayList<String>();
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("window.scrollBy(0, 2400)");
-		List<WebElement> listOfFAQ = driver.findElements(By.cssSelector("div[class='panel panel-default ibm-v2-accordion faq-accordion']"));
+		List<WebElement> listOfFAQ = driver.findElements(By.cssSelector("div#faq:nth-child(1) div[class='panel panel-default ibm-v2-accordion faq-accordion']"));
 		if(listOfFAQ.size()>0)
 		{
 			for(int i = 0; i < listOfFAQ.size(); i++)

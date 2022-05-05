@@ -53,6 +53,9 @@ public class CourseDetailsValidator {
 				case "currentURL":
 					launchUrlAndTestRedirection(row.get(1), row.get(2));
 					break;
+				case "canonical":
+					canonical(row.get(1));
+					break;
 				case "checkMetaTagContentByName":
 					checkMetaTagContentByName(row);
 					break;
@@ -96,7 +99,7 @@ public class CourseDetailsValidator {
 		try
 		{
 			String redirectedURL = courseDetails.launchCourseURL(url);
-			if(!(ConfigFileReader.getURL()+redirectURLFromData).equals(redirectedURL))
+			if(!(ConfigFileReader.getURL()+redirectURLFromData.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()).equals(redirectedURL.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 			{
 				markProcessFailed();
 			}
@@ -107,6 +110,22 @@ public class CourseDetailsValidator {
 		}
 	}
 	
+	private void canonical(String canonicalURL)
+	{
+		String getCanonicalStatus = "success";
+		try
+		{
+			String checkCanonicalURL = courseDetails.getCanonicalURL(canonicalURL);
+			if(!getCanonicalStatus.equalsIgnoreCase(checkCanonicalURL))
+			{
+				markProcessFailed();
+			}
+		}
+		catch(Exception e)
+		{
+			markProcessFailed();
+		}
+	}
 	private void checkMetaTagContentByName(ArrayList<String> tags) 
 	{
 		for(int i = 0; i < tags.size(); i++)
@@ -119,7 +138,7 @@ public class CourseDetailsValidator {
 			try
 			{
 				String content = courseDetails.getAttributeOfTag("meta[name='" + attributes.get("name") + "']", "content").trim();
-				if(!(content.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()).equals(attributes.get("content").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
+				if(!(content.replaceAll("\\s", "").replaceAll("\\P{InBasic_Latin}", "").replaceAll("\u00A0", "").trim()).equals(attributes.get("content").replaceAll("\\P{InBasic_Latin}", "").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 				{
 					markColumnFailed(i);
 				}
@@ -184,7 +203,7 @@ public class CourseDetailsValidator {
 				HashMap<String, String> attributes = extractAttributesFromString(tag);
 				String altText = courseDetails.getAttributeOfTag("img[src='" + attributes.get("src") + "']", "alt");
 				
-				if(!altText.equals(attributes.get("alt")))
+				if(!altText.replaceAll("\\s", "").replaceAll("\u00A0", "").trim().equals(attributes.get("alt").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 				{
 					markColumnFailed(i);
 				}
@@ -266,7 +285,7 @@ public class CourseDetailsValidator {
 			String answer = row.get(2).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 			if(faqFromValidator.containsKey(question.replaceAll("\\s", "").replaceAll("\u00A0", "")))
 			{
-				if(!(answer.trim()).equalsIgnoreCase(faqFromValidator.get(question)))
+				if(!(answer.trim()).equalsIgnoreCase(faqFromValidator.get(question).trim()))
 				{
 					markColumnFailed(1);
 				}
@@ -376,8 +395,9 @@ public class CourseDetailsValidator {
 					//value = pair[1].replaceAll("\"", "");
 					if(j == 1)
 					{
+						Thread.sleep(1000);
 						value = pair[j].replaceAll("\"", "");//title
-						if(value.contains("url") || value.contains("image"))
+						if(value.contains(":url") || value.contains(":image"))
 						{
 							checkurl = true;
 						}

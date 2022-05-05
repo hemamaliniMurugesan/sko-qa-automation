@@ -8,7 +8,7 @@ import java.util.Properties;
 public class ConfigFileReader 
 {
 	private static Properties properties;
-	private static final String PROPERTY_FILE_PATH = "C:\\Users\\Skillup 200\\eclipse-workspace\\seo\\src\\main\\java\\com\\seo\\utility\\config.properties";
+	private static final String PROPERTY_FILE_PATH = "D:\\AutomationTestingWorkspace\\sko-qa-automation\\src\\main\\java\\com\\seo\\utility\\config.properties";
 	static
 	{
 		BufferedReader reader;
@@ -31,6 +31,11 @@ public class ConfigFileReader
 			e.printStackTrace();
 			throw new RuntimeException("Configuration.properties not found at " + PROPERTY_FILE_PATH);
 		}
+	}
+	
+	public static String getProperty(String property)
+	{
+		return properties.getProperty(property);
 	}
 	
 	public static String getchromeDriverPath()
@@ -78,6 +83,32 @@ public class ConfigFileReader
 		else
 		{
 			throw new RuntimeException("excelPath is not found in property file");
+		}
+	}
+	
+	public static String getAboutCourseURL()
+	{
+		String aboutCourseURL = properties.getProperty("aboutCourseURL");
+		if(aboutCourseURL != null)
+		{
+			return aboutCourseURL;
+		}
+		else
+		{
+			throw new RuntimeException("AboutCourse URL is not found in property file");
+		}
+	}
+	
+	public static String getSEOLoginURL()
+	{
+		String seoLoginURL = properties.getProperty("seoLoginURL");
+		if(seoLoginURL != null)
+		{
+			return seoLoginURL;
+		}
+		else
+		{
+			throw new RuntimeException("AboutCourse URL is not found in property file");
 		}
 	}
 }

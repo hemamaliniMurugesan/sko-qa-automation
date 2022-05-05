@@ -17,7 +17,8 @@ import com.seo.pompages.CourseDetailsPage;
 import com.seo.utility.ProcessExcel;
 import com.seo.utility.Utils;
 
-public class TestCourseDetails {
+public class TestCourseDetails
+{
 
 	WebDriverWait wait;
 	CourseDetailsPage courseDetails;
@@ -34,7 +35,7 @@ public class TestCourseDetails {
 	{
 		softAssert = new SoftAssert();
 		courseDetails = new CourseDetailsPage();
-		excelPath = "D:\\SEO\\AutomationScripts\\Sprint 7_Mar2022\\SEO_MarcomCourses\\TestEachCourse.xlsx";
+		excelPath = "D:\\SEO_InputData_FromTeam\\mahak\\ViewSourse\\IBM Applied AI Professional Certification.xlsx";
 		this.testCourseDetails(excelPath);
 	}
 	
@@ -42,7 +43,8 @@ public class TestCourseDetails {
 	{
 		EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP = new LinkedHashMap<String, ArrayList<ArrayList<String>>>();
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
-		try {
+		try 
+		{
 			LinkedHashMap<String, ArrayList<ArrayList<String>>> data = ProcessExcel.readExcelFileAsRows(excelPath);
 			EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP = ProcessExcel.readExcelFileAsRows(excelPath);
 			for (Entry<String, ArrayList<ArrayList<String>>> entry : data.entrySet()) 
@@ -60,7 +62,9 @@ public class TestCourseDetails {
 					e.printStackTrace();
 				}
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 		finally {

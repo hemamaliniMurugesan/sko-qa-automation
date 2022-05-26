@@ -335,34 +335,34 @@ public class CourseDetailsValidator {
 		emptyRow.add("");
 		
 		ArrayList<String> sheetStatusRow = new ArrayList<>();
-		sheetStatusRow.add("Status" + Utils.STYLE_DELIMITTER + "bold" + 
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		sheetStatusRow.add("Status" + Utils.DELIMITTER + "bold" + 
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		sheetStatusRow.add(sheetStatus + 
-				Utils.STYLE_DELIMITTER + "backgroundLT" + 
-				Utils.STYLE_DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" + 
+				Utils.DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> startTimeRow = new ArrayList<>();
-		startTimeRow.add("Started Time" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		startTimeRow.add(startTime + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		startTimeRow.add("Started Time" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		startTimeRow.add(startTime + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> endTimeRow = new ArrayList<>();
-		endTimeRow.add("Ended Time" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		endTimeRow.add(endTime + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		endTimeRow.add("Ended Time" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		endTimeRow.add(endTime + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> durationRow = new ArrayList<>();
-		durationRow.add("Execution Time" + Utils.STYLE_DELIMITTER + "bold" + 
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		durationRow.add(duration + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		durationRow.add("Execution Time" + Utils.DELIMITTER + "bold" + 
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		durationRow.add(duration + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(emptyRow);
 		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(sheetStatusRow);
@@ -382,7 +382,7 @@ public class CourseDetailsValidator {
 			// arr = [name="title", content="Blockchain Essentials | Learn Blockchain Essentials
 			// Course Online - SkillUp Online"];
 			boolean checkurl = false;
-			for (String keyValue : arr) 
+			for (String keyValue : arr)
 			{
 				// keyValue = "name="title""
 				String[] pair = keyValue.split("=");
@@ -396,16 +396,17 @@ public class CourseDetailsValidator {
 					if(j == 1)
 					{
 						Thread.sleep(1000);
-						value = pair[j].replaceAll("\"", "");//title
-						if(value.contains(":url") || value.contains(":image"))
+						value = pair[j];//title
+						if(value.contains("og:url") || value.contains("og:image") || value.contains("twitter:image") || value.contains("twitter:url"))
 						{
 							checkurl = true;
+							value = pair[j].replaceAll("\"", "");
 						}
 						else
 						{
 							value = pair[j].replaceAll("\"", "");
 						}
-						if(checkurl == true && (!(value.contains("url") || value.contains("image"))))
+						if(checkurl == true && (!(value.contains("og:url") || value.contains("og:image") || value.contains("twitter:url") || value.contains("twitter:image"))))
 						{
 							value = ConfigFileReader.getMetaURL()+pair[j].replaceAll("\"", "");
 						}

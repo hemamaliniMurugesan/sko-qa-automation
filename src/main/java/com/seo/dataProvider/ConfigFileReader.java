@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.management.RuntimeErrorException;
+
 public class ConfigFileReader 
 {
 	private static Properties properties;
@@ -109,6 +111,58 @@ public class ConfigFileReader
 		else
 		{
 			throw new RuntimeException("AboutCourse URL is not found in property file");
+		}
+	}
+	
+	public static String getUsername()
+	{
+		String username = properties.getProperty("username");
+		if(username != null)
+		{
+			return username;
+		}
+		else
+		{
+			throw new RuntimeException("username is not in property file");
+		}
+	}
+	
+	public static String getPassword()
+	{
+		String password = properties.getProperty("password");
+		if(password != null)
+		{
+			return password;
+		}
+		else
+		{
+			throw new RuntimeException("password is not in property file");
+		}
+	}
+	
+	public static String getPlan()
+	{
+		String plan = properties.getProperty("enrollPlan");
+		if(plan != null)
+		{
+			return plan;
+		}
+		else
+		{
+			throw new RuntimeException("enroll plan is not in property file");
+		}
+	}
+	
+	public static String getProdPaymentMode()
+	{
+		String prodPaymentMode = properties.getProperty("prodPaymentMode");
+		if(prodPaymentMode != null)
+		{
+			return prodPaymentMode;
+		}
+		else
+		{
+			throw new RuntimeException("prodPaymentMode is not available in property file");
 		}
 	}
 }

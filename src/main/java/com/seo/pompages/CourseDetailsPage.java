@@ -33,7 +33,7 @@ public class CourseDetailsPage
 
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101 version\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101.0.4951.41version\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         options.addArguments("disable-infobars");
@@ -137,7 +137,7 @@ public class CourseDetailsPage
 	{
 		ArrayList<String> ans = new ArrayList<String>();
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 2400)");
+		js.executeScript("window.scrollBy(0, 3000)");
 		List<WebElement> listOfFAQ = driver.findElements(By.cssSelector("div#faq:nth-child(1) div[class='panel panel-default ibm-v2-accordion faq-accordion']"));
 		if(listOfFAQ.size()>0)
 		{

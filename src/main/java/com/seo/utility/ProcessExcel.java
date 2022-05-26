@@ -156,9 +156,9 @@ public class ProcessExcel
 		{
 			String sheetName = entry.getKey();
 			String sheetTabColor = "";
-			if(sheetName.indexOf(Utils.STYLE_DELIMITTER) >= 0)
+			if(sheetName.indexOf(Utils.DELIMITTER) >= 0)
 			{
-				String[] sheetAndColor = sheetName.split(Utils.STYLE_DELIMITTER);
+				String[] sheetAndColor = sheetName.split(Utils.DELIMITTER);
 				sheetName = sheetAndColor[0];
 				sheetTabColor = sheetAndColor[1];
 			}
@@ -186,9 +186,9 @@ public class ProcessExcel
 	                style.setWrapText(true);
 	                cell.setCellStyle(style);
 	                
-	                if(cellValue.indexOf( Utils.STYLE_DELIMITTER ) >= 0)
+	                if(cellValue.indexOf( Utils.DELIMITTER ) >= 0)
 	                {
-	                	String[] styles = cellValue.split(Utils.STYLE_DELIMITTER);
+	                	String[] styles = cellValue.split(Utils.DELIMITTER);
 		                cellValue = styles[0];
 		                if(styles.length > 1)
 		                {

@@ -35,7 +35,7 @@ public class TestCourseDetails
 	{
 		softAssert = new SoftAssert();
 		courseDetails = new CourseDetailsPage();
-		excelPath = "D:\\SEO_InputData_FromTeam\\mahak\\ViewSourse\\IBM Applied AI Professional Certification.xlsx";
+		excelPath = "D:\\SEO_InputData_FromTeam\\sam\\viewSourse\\Preparing for Information Security Audits (1).xlsx";
 		this.testCourseDetails(excelPath);
 	}
 	
@@ -83,47 +83,47 @@ public class TestCourseDetails
 		ArrayList<ArrayList<String>> consolidatedSheedData = new ArrayList<ArrayList<String>>();
 		
 		ArrayList<String> testEnvRow = new ArrayList<>();
-		testEnvRow.add("Test environment" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		testEnvRow.add("Test environment" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		testEnvRow.add(ConfigFileReader.getURL() +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> executionStartsOn = new ArrayList<>();
-		executionStartsOn.add("Test execution starts on" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		executionStartsOn.add("Test execution starts on" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		executionStartsOn.add(startTime +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> executionEndsOn = new ArrayList<>();
-		executionEndsOn.add("Test execution ends on" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		executionEndsOn.add("Test execution ends on" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		executionEndsOn.add(endTime +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> executionDuration = new ArrayList<>();
-		executionDuration.add("Execution time" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		executionDuration.add("Execution time" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		executionDuration.add(duration +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> emptyRow = new ArrayList<>();
 		emptyRow.add("");
 		
 		ArrayList<String> courseResultHeader = new ArrayList<>();
-		courseResultHeader.add("Courses" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
-		courseResultHeader.add("Result" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		courseResultHeader.add("Courses" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
+		courseResultHeader.add("Result" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		consolidatedSheedData.add(testEnvRow);
 		consolidatedSheedData.add(executionStartsOn);
@@ -138,21 +138,21 @@ public class TestCourseDetails
 			String sheetStatus = entry.getValue();
 			ArrayList<String> sheetResult = new ArrayList<String>();
 			sheetResult.add(sheetName +
-					Utils.STYLE_DELIMITTER + "backgroundlime" +
-					Utils.STYLE_DELIMITTER + "border");
+					Utils.DELIMITTER + "backgroundlime" +
+					Utils.DELIMITTER + "border");
 			
 			if(sheetStatus.equalsIgnoreCase("Fail"))
 			{
 				hasFailedSheets = true;
 			}
 			
-			sheetResult.add(sheetStatus + Utils.STYLE_DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
-					Utils.STYLE_DELIMITTER + "backgroundlime" +
-					Utils.STYLE_DELIMITTER + "border");
+			sheetResult.add(sheetStatus + Utils.DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
+					Utils.DELIMITTER + "backgroundlime" +
+					Utils.DELIMITTER + "border");
 			
 			consolidatedSheedData.add(sheetResult);
 		}
-		EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.put("Consolidated Result" + Utils.STYLE_DELIMITTER +
+		EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.put("Consolidated Result" + Utils.DELIMITTER +
 				(hasFailedSheets ? "red" : "green"), consolidatedSheedData);
 	}
 }

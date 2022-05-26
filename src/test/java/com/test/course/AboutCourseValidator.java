@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.pompages.AboutCourseLocators;
@@ -97,7 +98,13 @@ public class AboutCourseValidator
 					exercisesToExplore(row.get(1));
 					break;
 				case "experts":
-					experts(row.get(1));
+					experts(row);
+					break;
+				case "startsOn":
+					startsOn(row.get(1));
+					break;
+				case "duration":
+					duration(row.get(1));
 					break;
 				case "flatPriceINRWithoutGST":
 					flatPriceINRWithoutGST(row.get(1));
@@ -105,7 +112,6 @@ public class AboutCourseValidator
 				case "flatPriceUSD":
 					flatPriceUSD(row.get(1));
 					break;	
-					
 				default:
 					break;
 			}
@@ -138,7 +144,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCourseTitle = aboutCourseLocators.getCourseTitleText();
-			if(!checkCourseTitle.equalsIgnoreCase(courseTitleFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("Title from excel : "+courseTitleFromExcel);
+			if(!checkCourseTitle.equals(courseTitleFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -154,6 +161,7 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCourseOrg = aboutCourseLocators.getCourseOrganizationImgAltText();
+			System.out.println("course org from Excel : "+courseOrganizationFromExcel);
 			if(!checkCourseOrg.contains(courseOrganizationFromExcel))
 			{
 				markProcessFailed();
@@ -169,8 +177,9 @@ public class AboutCourseValidator
 	{
 		try
 		{
-			String checkCourseDes = aboutCourseLocators.getCourseDescription();
-			if(!checkCourseDes.equalsIgnoreCase(courseDescriptionFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			String checkCourseDes = aboutCourseLocators.getCourseDescription(); 
+			System.out.println("Course description from excel : "+courseDescriptionFromExcel);
+			if(!checkCourseDes.equals(courseDescriptionFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -186,7 +195,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCourseType = aboutCourseLocators.getCourseType1();
-			if(!checkCourseType.equalsIgnoreCase(courseType1FromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("Course Type1 from excel : "+courseType1FromExcel);
+			if(!checkCourseType.equals(courseType1FromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -202,7 +212,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCourseType = aboutCourseLocators.getCourseType2();
-			if(!checkCourseType.equalsIgnoreCase(courseType2FromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("courseType2 from Excel : " +courseType2FromExcel);
+			if(!checkCourseType.equals(courseType2FromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -218,7 +229,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCourseLevel = aboutCourseLocators.getCourseLevel();
-			if(!checkCourseLevel.equalsIgnoreCase(courseLevelFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("Course level from excel : "+courseLevelFromExcel);
+			if(!checkCourseLevel.equals(courseLevelFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -243,9 +255,10 @@ public class AboutCourseValidator
 					for(int j = 2; j < infoValues.size(); j++)
 					{
 						String infoContentFromExcel = infoValues.get(j).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-						String infoContentFromBrowser = infoContentFromCourse.get(j - 2);
-						
-						if(!infoContentFromExcel.equals(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+						System.out.println("answer from excel : "+infoContentFromExcel);
+						String infoContentFromBrowser = infoContentFromCourse.get(j - 2).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						System.out.println("answer from Browser : "+infoContentFromBrowser);
+						if(!infoContentFromExcel.equalsIgnoreCase(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 						{
 							markColumnFailed(j);
 						}
@@ -291,6 +304,7 @@ public class AboutCourseValidator
 		try
 		{
 			String checkEarnYourCertificate = aboutCourseLocators.getEarnCertificateText(earnYourCertificateContentFromExcel);
+			System.out.println("earnYourCertificateContentFromExcel : "+titleName);
 			if(!checkEarnYourCertificate.contains(titleName.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
@@ -307,7 +321,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkEarnYourCertificate = aboutCourseLocators.getTypeofCertificate();
-			if(!checkEarnYourCertificate.equalsIgnoreCase(typeOfCertificateFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("typeofCertificate from excel : "+typeOfCertificateFromExcel);
+			if(!checkEarnYourCertificate.equals(typeOfCertificateFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -323,6 +338,7 @@ public class AboutCourseValidator
 		try
 		{
 			String checkAbout = aboutCourseLocators.getAboutCourse();
+			System.out.println("About Icon from Excel : "+aboutCourseFromExcel);
 			if(!checkAbout.contains(aboutCourseFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
@@ -339,7 +355,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkIncludes = aboutCourseLocators.getIncludes();
-			if(!checkIncludes.equalsIgnoreCase(includesFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("Includes from excel : "+includesFromExcel);
+			if(!checkIncludes.equals(includesFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -355,7 +372,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkCreate = aboutCourseLocators.getCreate();
-			if(!checkCreate.equalsIgnoreCase(createFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("create from Excel :"+checkCreate);
+			if(!checkCreate.equals(createFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -371,7 +389,8 @@ public class AboutCourseValidator
 		try
 		{
 			String checkExerciseToExplore = aboutCourseLocators.getExerciseToExplore();
-			if(!checkExerciseToExplore.equalsIgnoreCase(exerciseFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			System.out.println("exercisesToExplore from excel : "+exerciseFromExcel);
+			if(!checkExerciseToExplore.equals(exerciseFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
 				markProcessFailed();
 			}
@@ -382,12 +401,86 @@ public class AboutCourseValidator
 		}
 	}
 	
-	private void experts(String expertsFromExcel)
+	private void experts(ArrayList<String> expertsFromExcel)
 	{
+		HashMap<String, HashMap<String, String>> experts = aboutCourseLocators.getExperts();
+		System.out.println("expertsFromExcel : "+expertsFromExcel);
+		if(experts != null)
+		{
+			for(int i = 0; i < expertsFromExcel.size(); i++)
+			{
+				String cellData = expertsFromExcel.get(i).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+				try
+				{
+					if(cellData.equalsIgnoreCase("experts"))
+						continue;
+					String[] expertData = cellData.split("-split-");
+					String name = expertData[0].replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+					HashMap<String, String> expertReadFromBrowser = experts.get(name);
+					if(expertReadFromBrowser != null)
+					{
+						for(int j = 0; j < expertData.length; j++)
+						{
+							String expertInfo = expertData[j];
+							System.out.println("expert from browser :"+expertInfo);
+							boolean isExpertInfoFound = false;
+							for(Entry<String, String> entry: expertReadFromBrowser.entrySet())
+							{
+								if(entry.getValue().equalsIgnoreCase(expertInfo))
+								{
+									isExpertInfoFound = true;
+									break;
+								}
+							}
+							if(!isExpertInfoFound)
+							{
+								markColumnFailed(i);
+							}
+						}
+					}
+					else
+					{
+						markColumnFailed(i);
+					}
+				}
+				catch(Exception e)
+				{
+					markProcessFailed();
+					e.printStackTrace();
+				}
+			}
+		}
+		else
+		{
+			markProcessFailed();
+		}
+	}
+	
+	private void duration(String durationFromExcel)
+	{
+		String checkDuration = "success";
 		try
 		{
-			String checkExperts = aboutCourseLocators.getExperts();
-			if(!checkExperts.equalsIgnoreCase(expertsFromExcel.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			String checkDurationDetails = aboutCourseLocators.getDurationInfo(durationFromExcel);
+			System.out.println("duration from excel : "+durationFromExcel);
+			if(!checkDurationDetails.equals(checkDuration))
+			{
+				markProcessFailed();
+			}
+		}
+		catch(Exception e)
+		{
+			markProcessFailed();
+		}
+	}
+	
+	private void startsOn(String startsOnFromExcel)
+	{
+		String checkStartOn = "success";
+		try
+		{
+			String checkStartsOnDetails = aboutCourseLocators.getStartsOn(startsOnFromExcel);
+			if(!checkStartsOnDetails.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equals(checkStartOn))
 			{
 				markProcessFailed();
 			}
@@ -404,7 +497,7 @@ public class AboutCourseValidator
 		try
 		{
 			String checkFlatPrice = aboutCourseLocators.getflatPrice(flatPriceWithoutGSTFromExcel);
-			if(!checkFlatPrice.equalsIgnoreCase(checkPrice))
+			if(!checkFlatPrice.equals(checkPrice))
 			{
 				markProcessFailed();
 			}
@@ -431,6 +524,8 @@ public class AboutCourseValidator
 			markProcessFailed();
 		}
 	}
+	
+	
 	private void markColumnFailed(int columnIndex)
 	{
 		String cellValue = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);
@@ -445,40 +540,41 @@ public class AboutCourseValidator
 		String process = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
 		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - failed"));
 	}
+	
 	private void collectSheetResult()
 	{
 		ArrayList<String> emptyRow = new ArrayList<>();
 		emptyRow.add("");
 		
 		ArrayList<String> sheetStatusRow = new ArrayList<>();
-		sheetStatusRow.add("Status" + Utils.STYLE_DELIMITTER + "bold" + 
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
+		sheetStatusRow.add("Status" + Utils.DELIMITTER + "bold" + 
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
 		sheetStatusRow.add(sheetStatus + 
-				Utils.STYLE_DELIMITTER + "backgroundLT" + 
-				Utils.STYLE_DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
-				Utils.STYLE_DELIMITTER + "border");
+				Utils.DELIMITTER + "backgroundLT" + 
+				Utils.DELIMITTER + "color" + (sheetStatus.equalsIgnoreCase("Pass") ? "Green" : "Red") +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> startTimeRow = new ArrayList<>();
-		startTimeRow.add("Started Time" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		startTimeRow.add(startTime + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		startTimeRow.add("Started Time" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		startTimeRow.add(startTime + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> endTimeRow = new ArrayList<>();
-		endTimeRow.add("Ended Time" + Utils.STYLE_DELIMITTER + "bold" +
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		endTimeRow.add(endTime + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		endTimeRow.add("Ended Time" + Utils.DELIMITTER + "bold" +
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		endTimeRow.add(endTime + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		ArrayList<String> durationRow = new ArrayList<>();
-		durationRow.add("Execution Time" + Utils.STYLE_DELIMITTER + "bold" + 
-				Utils.STYLE_DELIMITTER + "backgroundlime" +
-				Utils.STYLE_DELIMITTER + "border");
-		durationRow.add(duration + Utils.STYLE_DELIMITTER + "backgroundLT" +
-				Utils.STYLE_DELIMITTER + "border");
+		durationRow.add("Execution Time" + Utils.DELIMITTER + "bold" + 
+				Utils.DELIMITTER + "backgroundlime" +
+				Utils.DELIMITTER + "border");
+		durationRow.add(duration + Utils.DELIMITTER + "backgroundLT" +
+				Utils.DELIMITTER + "border");
 		
 		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(emptyRow);
 		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(sheetStatusRow);

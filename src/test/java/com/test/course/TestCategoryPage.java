@@ -35,11 +35,11 @@ public class TestCategoryPage
 	{
 		softAssert = new SoftAssert();
 		categoryPageLocators = new CategoryPageLocators();
-		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourseEnrollment\\PL200_Enroll.xlsx";
-		this.aboutCourseEnrollmentPage(excelPath);
+		excelPath = "D:\\SkillUp_Testing\\SEO\\Category\\CloudComputing\\Cloud Computing.xlsx";
+		this.aboutCategoryPage(excelPath);
 	}
 	
-	public void aboutCourseEnrollmentPage(String excelPath)
+	public void aboutCategoryPage(String excelPath)
 	{
 		EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP = new LinkedHashMap<String, ArrayList<ArrayList<String>>>();
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());

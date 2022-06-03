@@ -3,9 +3,9 @@ package com.test.course;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.seo.pompages.AboutCourseEnrollmentLocators;
-import com.seo.pompages.AboutCourseLocators;
 import com.seo.utility.Utils;
 
 public class AboutCourceEnrollmentValidator
@@ -53,8 +53,8 @@ public class AboutCourceEnrollmentValidator
 				case "aboutCourseURL":
 					aboutCourseURL(row.get(1));
 					break;
-				case "flatPriceINRUSD":
-					flatPriceINRUSD(row.get(1), row.get(2));
+				case "plan":
+					checkCoursePayment(row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
 					break;
 				default:
 					break;
@@ -83,15 +83,14 @@ public class AboutCourceEnrollmentValidator
 		}
 	}
 	
-	private void flatPriceINRUSD(String flatPriceINR, String flatPriceUSD)
+	private void checkCoursePayment(String plan, String paymentMode, String price, String priceWithTax, String paymentSuccessText)
 	{
-		String checkAmout = "success";
 		try
 		{
-			String checkFlatPriceStatus = aboutCourseEnrollmentLocators.enrollCourse();
-			if(!(checkFlatPriceStatus).equalsIgnoreCase(checkAmout))
+			List<Integer> errorCells = aboutCourseEnrollmentLocators.enrollCourse(plan, paymentMode, price, priceWithTax, paymentSuccessText);
+			for(Integer cellIndex: errorCells)
 			{
-				markProcessFailed();
+				markColumnFailed(cellIndex);
 			}
 		}
 		catch(Exception e)

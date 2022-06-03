@@ -257,8 +257,10 @@ public class AboutCourseLocators
 			{
 				System.out.println(getEarnCertificateText);
 			}
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			WebElement clickEarnCertificate = driver.findElement(By.cssSelector("div[class='certificate_wrap'] a[id='certificate-preview-btn']"));
-			clickEarnCertificate.click();
+			((JavascriptExecutor)driver).executeScript("arguments[0].click();", clickEarnCertificate);
+		//	clickEarnCertificate.click();
 			Thread.sleep(1000);
 			String AboutCourseWindow = driver.getWindowHandle(); 
 			Set<String> certificatePopup = driver.getWindowHandles(); 

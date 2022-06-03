@@ -35,7 +35,7 @@ public class TestAboutCourseEnrollment
 	{
 		softAssert = new SoftAssert();
 		aboutCourseEnrollmentPage = new AboutCourseEnrollmentLocators();
-		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourseEnrollment\\PL200_Enroll.xlsx";
+		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourseEnrollment\\AZ801.xlsx";
 		this.aboutCourseEnrollmentPage(excelPath);
 	}
 	

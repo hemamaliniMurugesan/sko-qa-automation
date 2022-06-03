@@ -237,8 +237,8 @@ public class CourseDetailsPage
 				{
 					tableElement.click();
 					WebElement headingFromTableElement = driver.findElement(By.cssSelector("table.mdl-data-table tr:last-child td:last-child > div"));
-					String headingFromTable = headingFromTableElement.getText();
-					if(!headingFromTable.equalsIgnoreCase(heading))
+					String headingFromTable = headingFromTableElement.getText().replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").trim();
+					if(!headingFromTable.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").trim().contains(heading.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").trim()))
 					{
 						status = "Failed";
 					}

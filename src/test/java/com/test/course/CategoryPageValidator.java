@@ -316,8 +316,8 @@ public class CategoryPageValidator
 
 	private void markColumnFailed(int columnIndex)
 	{
-		String cellValue = TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex, (cellValue + " - failed"));
+		String cellValue = TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex, (cellValue + " - failed"));
 		
 		markProcessFailed();
 	}
@@ -325,8 +325,8 @@ public class CategoryPageValidator
 	private void markProcessFailed()
 	{
 		sheetStatus = "Fail";
-		String process = TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - failed"));
+		String process = TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - failed"));
 	}
 	
 	private void collectSheetResult()
@@ -364,11 +364,11 @@ public class CategoryPageValidator
 		durationRow.add(duration + Utils.DELIMITTER + "backgroundLT" +
 				Utils.DELIMITTER + "border");
 		
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(emptyRow);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(sheetStatusRow);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(startTimeRow);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(endTimeRow);
-		TestAboutCourseEnrollment.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(durationRow);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(emptyRow);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(sheetStatusRow);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(startTimeRow);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(endTimeRow);
+		TestCategoryPage.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(durationRow);
 	}
 
 	private HashMap<String, String> extractAttributesFromString(String str) 

@@ -153,16 +153,42 @@ public class ConfigFileReader
 		}
 	}
 	
-	public static String getProdPaymentMode()
+	public static String getDevPaymentMode()
 	{
-		String prodPaymentMode = properties.getProperty("prodPaymentMode");
-		if(prodPaymentMode != null)
+		String devPaymentMode = properties.getProperty("devPaymentmode");
+		if(devPaymentMode != null)
 		{
-			return prodPaymentMode;
+			return devPaymentMode;
 		}
 		else
 		{
-			throw new RuntimeException("prodPaymentMode is not available in property file");
+			throw new RuntimeException("devPaymentMode is not available in property file");
+		}
+	}
+	
+	public static String getNetBanking()
+	{
+		String nameOfNetBanking = properties.getProperty("nameOfNetBanking");
+		if(nameOfNetBanking != null)
+		{
+			return nameOfNetBanking;
+		}
+		else
+		{
+			throw new RuntimeException("nameOfNetBanking is not available in property file");
+		}
+	}
+	
+	public static String getPaymentMode()
+	{
+		String qaPaymentMode = properties.getProperty("qaPaymentMode");
+		if(qaPaymentMode != null)
+		{
+			return qaPaymentMode;
+		}
+		else
+		{
+			throw new RuntimeException("qaPaymentMode is not available in property file");
 		}
 	}
 }

@@ -32,7 +32,7 @@ public class CategoryPageLocators
 	}
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101 version\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101.0.4951.41version\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -130,27 +130,32 @@ public class CategoryPageLocators
 	{
 		ArrayList<String> ans = new ArrayList<String>();
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 3000)");
-		List<WebElement> listOfFAQ = driver.findElements(By.cssSelector("div#faq:nth-child(1) div[class='panel panel-default ibm-v2-accordion faq-accordion']"));
+		WebElement checkFAQ =  driver.findElement(By.xpath("//h2[contains(text(),\"FAQ\")]"));
+		js.executeScript("arguments[0].scrollIntoView(true);", checkFAQ);
+		WebElement HeadOfFAQSelector = driver.findElement(By.cssSelector("div[id*=\"accordion\"][class=\"panel-group\"]"));
+		List<WebElement> listOfFAQ = HeadOfFAQSelector.findElements(By.cssSelector(" div[class=\"panel-heading\"]"));
 		if(listOfFAQ.size()>0)
 		{
 			for(int i = 0; i < listOfFAQ.size(); i++)
 			{
-				WebElement faq = listOfFAQ.get(i);
-				WebElement question = faq.findElement(By.cssSelector(" div[class='panel-heading'] a"));
+				//WebElement faq = listOfFAQ.get(i);
+				WebElement question = listOfFAQ.get(i);
 				String questionText = question.getText().replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "");
 				if(questionText.equalsIgnoreCase(questionFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "")))
 				{
 					//question.click();
-					List<WebElement> FAQAnswers = faq.findElements(By.cssSelector(" div.panel-collapse > div"));
+					List<WebElement> FAQAnswers = HeadOfFAQSelector.findElements(By.cssSelector(" div[class=\"panel-collapse collapse\"] div"));
 					JavascriptExecutor executor = (JavascriptExecutor)driver;
 					executor.executeScript("arguments[0].click();", question);
 					for(int j = 0; j < FAQAnswers.size(); j++)
 					{
-						String answer = FAQAnswers.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-						System.out.println(questionText);
-						System.out.println(answer);
-						ans.add(answer);
+						if(i == j)
+						{
+							String answer = FAQAnswers.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+							System.out.println(questionText);
+							System.out.println(answer);
+							ans.add(answer);
+						}
 					}
 				}
 			}

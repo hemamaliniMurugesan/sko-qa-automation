@@ -1,4 +1,5 @@
 package com.seo.pompages;
+import java.io.File;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -7,8 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,6 +22,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
 import com.seo.utility.Utils;
+
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
 
 public class AboutCourseLocators
 {
@@ -80,7 +87,7 @@ public class AboutCourseLocators
 		return courseTitleText;
 	}
 	
-	public String getCourseOrganizationImgAltText()
+	public String getCourseOrganizationImgAltText(String courseOrganizationFromExcel)
 	{
 		String courseOrg = "";
 		try
@@ -242,8 +249,10 @@ public class AboutCourseLocators
 		return status;
 	}
 	
-	public String getEarnCertificateText(String earnYourCertificateContentFromExcel)
+	public ArrayList<Integer> getEarnCertificateText(String earnYourCertificateContentFromExcel, String titleName, String formatOfCertificate, String logo)
 	{
+		ArrayList<Integer> errorCells = new ArrayList<Integer>();
+		String statusOfCertificate = "fail";
 		String certificateName = "";
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("window.scrollBy(0, 700)");
@@ -257,10 +266,14 @@ public class AboutCourseLocators
 			{
 				System.out.println(getEarnCertificateText);
 			}
+			else
+			{
+				System.out.println("Earn certificate is not same");
+				errorCells.add(1);
+			}
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			WebElement clickEarnCertificate = driver.findElement(By.cssSelector("div[class='certificate_wrap'] a[id='certificate-preview-btn']"));
 			((JavascriptExecutor)driver).executeScript("arguments[0].click();", clickEarnCertificate);
-		//	clickEarnCertificate.click();
 			Thread.sleep(1000);
 			String AboutCourseWindow = driver.getWindowHandle(); 
 			Set<String> certificatePopup = driver.getWindowHandles(); 
@@ -271,11 +284,59 @@ public class AboutCourseLocators
 					driver.switchTo().window(popupWindow);
 					if(driver.findElement(By.xpath("//h5[contains(text(),\"Certificate Preview\")]")).isDisplayed())
 					{
-						WebElement checkCourseNameFromImage = driver.findElement(By.xpath("(//div[@id=\"social-icons-conatainer\"])[2]//img")); 
+						WebElement checkCourseNameFromImage = driver.findElement(By.xpath("(//div[@id=\"social-icons-conatainer\"])[2]//img"));
 						certificateName = checkCourseNameFromImage.getAttribute("alt").replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 						System.out.println("certificateName from browser : "+certificateName);
+						if(certificateName.contains(titleName.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+						{
+							System.out.println("certificate name and title is same");
+							statusOfCertificate = "success";
+						}
+						else
+						{
+							System.out.println("certificate name and title is not same");
+							statusOfCertificate = "fail";
+							errorCells.add(2);
+						}
+						WebElement getCertificateCaption = driver.findElement(By.xpath("//h5[contains(text(),\"Certificate Preview\")]"));
+						System.out.println(getCertificateCaption.getText());
+						TakesScreenshot scrShot =((TakesScreenshot)driver);
+						//Call getScreenshotAs method to create image file
+						File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
+						//Move image file to new destination
+						File DestFile=new File("D:\\AutomationTestingWorkspace\\com.practice.Automation\\img\\test.png");
+						//Copy file at destination
+						FileUtils.copyFile(SrcFile, DestFile);
+						ITesseract img = new Tesseract();
+						img.setDatapath("D:\\AutomationTestingWorkspace\\com.practice.Automation\\tesseract");
+						String result = img.doOCR(DestFile);
+						System.out.println(result);
+						WebElement orgImg = driver.findElement(By.cssSelector("div.ConTianer_ConTent > div:first-child > div:last-child > a > img"));
+						String courseOrg = orgImg.getAttribute("alt");
+						int orgText = logo.lastIndexOf(" ");
+						String getOrgText = logo.substring(0, orgText);
+						if(result.contains(formatOfCertificate))
+						{
+							statusOfCertificate = "success";
+						}
+						else
+						{
+							System.out.println("Format is not same");
+							statusOfCertificate = "fail";
+							errorCells.add(3);
+						}
+						if(result.contains(getOrgText))
+						{
+							System.out.println("Logo name is available :"+logo);
+							statusOfCertificate = "success";
+						}
+						else
+						{
+							System.out.println("Logo is not available");
+							statusOfCertificate = "fail";
+							errorCells.add(4);
+						}
 						Thread.sleep(500);
-						//WebElement closePopUp = driver.findElement(By.cssSelector("section[class=\"login\"] div#certificate-preview div[class=\"log-in-pop\"] div[class=\"modal-header\"] > button"));
 						wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("section[class=\"login\"] div#certificate-preview div[class=\"log-in-pop\"] div[class=\"modal-header\"] > button"))).click();
 						Thread.sleep(500);
 					}
@@ -285,7 +346,7 @@ public class AboutCourseLocators
 		{
 			e.printStackTrace();
 		}
-		return certificateName;
+		return errorCells;
 	}
 	
 	public String getTypeofCertificate()

@@ -53,7 +53,7 @@ public class AboutCourceEnrollmentValidator
 				case "aboutCourseURL":
 					aboutCourseURL(row.get(1));
 					break;
-				case "plan":
+				case "enroll":
 					checkCoursePayment(row.get(1), row.get(2), row.get(3), row.get(4), row.get(5));
 					break;
 				default:

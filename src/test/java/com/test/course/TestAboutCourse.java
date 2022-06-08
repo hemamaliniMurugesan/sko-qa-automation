@@ -33,7 +33,7 @@ public class TestAboutCourse
 	public TestAboutCourse(String excelPath) {
 		softAssert = new SoftAssert();
 		aboutCoursePage = new AboutCourseLocators();
-		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourse\\mahak\\MS-900 Microsoft 365 Fundamentals.xlsx";
+		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourse\\vipul\\Managing Information Security.xlsx";
 		this.aboutCoursePage(excelPath);
 	}
 

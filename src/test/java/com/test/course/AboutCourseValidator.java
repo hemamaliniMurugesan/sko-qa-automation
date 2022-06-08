@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.seo.dataProvider.ConfigFileReader;
@@ -80,7 +81,7 @@ public class AboutCourseValidator
 					courseOutline();
 					break;
 				case "earnYourCertificate":
-					earnYourCertificate(row.get(1), row.get(2));
+					earnYourCertificate(row.get(1), row.get(2), row.get(3), row.get(4));
 					break;	
 				case "typeofCertificate":
 					typeofCertificate(row.get(1));
@@ -160,7 +161,7 @@ public class AboutCourseValidator
 	{
 		try
 		{
-			String checkCourseOrg = aboutCourseLocators.getCourseOrganizationImgAltText();
+			String checkCourseOrg = aboutCourseLocators.getCourseOrganizationImgAltText(courseOrganizationFromExcel);
 			System.out.println("course org from Excel : "+courseOrganizationFromExcel);
 			if(!checkCourseOrg.contains(courseOrganizationFromExcel))
 			{
@@ -299,15 +300,15 @@ public class AboutCourseValidator
 		}
 	}
 	
-	private void earnYourCertificate(String earnYourCertificateContentFromExcel, String titleName)
-	{
+	private void earnYourCertificate(String earnYourCertificateContentFromExcel, String titleName, String formatOfCertificate, String logo)
+	{// validating logo, format of certificate
 		try
 		{
-			String checkEarnYourCertificate = aboutCourseLocators.getEarnCertificateText(earnYourCertificateContentFromExcel);
+			List<Integer> errorCells = aboutCourseLocators.getEarnCertificateText(earnYourCertificateContentFromExcel, titleName, formatOfCertificate, logo);
 			System.out.println("earnYourCertificateContentFromExcel : "+titleName);
-			if(!checkEarnYourCertificate.contains(titleName.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+			for(Integer cellIndex: errorCells)
 			{
-				markProcessFailed();
+				markColumnFailed(cellIndex);
 			}
 		}
 		catch(Exception e)

@@ -35,20 +35,18 @@ public class AboutCourseEnrollmentLocators {
 
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver",
-				"C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101.0.4951.41version\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101.0.4951.41version\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.setExperimentalOption("excludeSwitches", new String[] { "enable-automation" });
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
 		wait = new WebDriverWait(driver, Duration.ofSeconds(5000));
 	}
 
-	public void loginSEO() throws InterruptedException
+	public boolean loginSEO() throws InterruptedException
 	{
-
+		boolean loginStatus = false;
 		driver.get(ConfigFileReader.getSEOLoginURL());// open login page
 		WebElement clickLoginIcon = driver.findElement(By.xpath("//a[contains(text(), \"LOGIN\")]"));
 		wait.until(ExpectedConditions.visibilityOf(clickLoginIcon)).click();
@@ -57,7 +55,8 @@ public class AboutCourseEnrollmentLocators {
 		String parentWindow = driver.getWindowHandle();
 		Set<String> allWindows = driver.getWindowHandles();
 		Iterator<String> itr = allWindows.iterator();
-		while (itr.hasNext()) {
+		while (itr.hasNext())
+		{
 			String childWindow = itr.next();
 			driver.switchTo().window(childWindow);
 			String checkLoginScreen = driver.findElement(By.xpath("//h4[contains(text(),\"Log\")]")).getText();
@@ -68,39 +67,55 @@ public class AboutCourseEnrollmentLocators {
 			pwd.sendKeys(ConfigFileReader.getPassword());
 			WebElement LoginButton = driver.findElement(By.id("login_in"));
 			LoginButton.click();
-			try {
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+			Thread.sleep(1000);
+			try
+			{
 				List<WebElement> checkAlert = driver.findElements(By.cssSelector(
 						"div[class=\"NotificationTypeError spacing-mb16 status message submission-error is-shown\"]"));
-				if (checkAlert.size() != 0) {
+				if (checkAlert.size() != 0)
+				{
 					System.out.println("Validation message is displayed");
+					loginStatus = true;
 				} else {
 					System.out.println("Login successfully");
+					loginStatus= true;
+				}
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		Thread.sleep(1000);
+		return loginStatus;
+	}
+
+	public String getCourseCodeText(String code) throws InterruptedException
+	{
+		boolean checkLoginstatus = loginSEO();
+		String CourseCodeStatus = "false";
+		if(checkLoginstatus == true)
+		{
+			try {
+				getEnrollCourseURL = ConfigFileReader.getAboutCourseURL() + code + "about";
+				((JavascriptExecutor) driver).executeScript("window.open()");
+				ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+				driver.switchTo().window(tabs.get(1));
+				driver.get(getEnrollCourseURL);
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+				Thread.sleep(2000);
+				JavascriptExecutor scr = (JavascriptExecutor) driver;
+				scr.executeScript("window.scrollBy(0, 400)");
+				if (driver.getPageSource().contains(code))
+				{
+					CourseCodeStatus = "true";
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public String getCourseCodeText(String code) throws InterruptedException
-	{
-		loginSEO();
-		// String courseIDFromBrowser = "";
-		String CourseCodeStatus = "false";
-		try {
-			getEnrollCourseURL = ConfigFileReader.getAboutCourseURL() + code + "about";
-			((JavascriptExecutor) driver).executeScript("window.open()");
-			ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-			driver.switchTo().window(tabs.get(1));
-			driver.get(getEnrollCourseURL);
-			if (driver.getPageSource().contains(code))
-			{
-				CourseCodeStatus = "true";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return CourseCodeStatus;
+		// String courseIDFromBrowser = "";
 	}
 
 	public ArrayList<Integer> enrollCourse(String plan, String paymentMode, String price, String priceWithTax, String paymentSuccessText) throws InterruptedException
@@ -118,17 +133,15 @@ public class AboutCourseEnrollmentLocators {
 			{
 				if (driver.getCurrentUrl().contains("qa"))// prod
 				{
-					JavascriptExecutor scr = (JavascriptExecutor) driver;
-					scr.executeScript("window.scrollBy(0, 400)");
-					WebElement clickEnrollIcon = driver.findElement(
-							By.xpath("//div[@class=\"ConTianer_ConTent\"]//a[contains(text(),\"Enroll now\")]"));
+					WebElement clickEnrollIcon = driver.findElement(By.xpath("//div[@class=\"ConTianer_ConTent\"]//a[contains(text(),\"Enroll now\")]"));
+					wait.until(ExpectedConditions.visibilityOf(clickEnrollIcon));
 					System.out.println("Enrollment is present");
 
 					if (clickEnrollIcon.isDisplayed())
 					{
 						wait.until(ExpectedConditions.visibilityOf(clickEnrollIcon)).click();
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 					}
-					Thread.sleep(1000);
 					String parentCoursePage = driver.getWindowHandle();// 1st page
 					Set<String> popup = driver.getWindowHandles(); // it shows 2 popup
 					Iterator<String> iterate1 = popup.iterator();
@@ -144,51 +157,62 @@ public class AboutCourseEnrollmentLocators {
 					boolean isPlanAvailable = planSelection(plan);
 					if(isPlanAvailable)
 					{
-						razorpayProcess();
+						System.out.println("plan selected");
+					}
+					else
+					{
+						System.out.println("plan is not available");
+					}
+					boolean isRazorpayProcess = razorpayProcess();
+					if(isRazorpayProcess)
+					{
+						Thread.sleep(1000);
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 						if (driver.getCurrentUrl().contains("https://api.razorpay.com/v1/checkout/embedded")) // payment
 						{
 							String razorayPaymentPage = driver.getWindowHandle();
 							Set<String> thirdWindow = driver.getWindowHandles();
 							Iterator<String> iterate3 = thirdWindow.iterator();
-							while (iterate3.hasNext()) {
-								if (!razorayPaymentPage.equalsIgnoreCase(iterate3.next())) {
+							while (iterate3.hasNext())
+							{
+								if (!razorayPaymentPage.equalsIgnoreCase(iterate3.next()))
+								{
 									driver.switchTo().window(iterate3.next());
 									if (driver.getCurrentUrl()
-											.equalsIgnoreCase("https://api.razorpay.com/v1/checkout/embedded")) {
-										String paymentModeForQA = paymentMode;
-										switch (paymentModeForQA) {
-										case "card":
-											card(price, priceWithTax, paymentSuccessText, errorCells);
-											break;
-										case "Netbanking":
-											netbanking(price, priceWithTax, paymentSuccessText, errorCells);
-											break;
-										case "Wallet":
-											wallet(price, priceWithTax, paymentSuccessText, errorCells);
-											break;
-										case "UPI":
-											upi(price, priceWithTax, paymentSuccessText, errorCells);
-											break;
+											.equalsIgnoreCase("https://api.razorpay.com/v1/checkout/embedded"))
+										{
+											String paymentModeForQA = paymentMode;
+											switch (paymentModeForQA)
+											{
+											case "card":
+												card(price, priceWithTax, paymentSuccessText, errorCells);
+												break;
+											case "netbanking":
+												netbanking(price, priceWithTax, paymentSuccessText, errorCells);
+												break;
+											case "wallet":
+												wallet(price, priceWithTax, paymentSuccessText, errorCells);
+												break;
+											case "upi":
+												upi(price, priceWithTax, paymentSuccessText, errorCells);
+												break;
+											}
 										}
 									}
 								}
 							}
+						else
+						{
+							payWithCard(price, priceWithTax, paymentSuccessText, errorCells);
 						}
 					}
 					else
 					{
-						errorCells.add(1);
+						errorCells.add(0);
+					}
+					
 					}
 				}
-				else// us site
-				{
-					
-				}
-			} 
-			else if (driver.findElements(By.xpath("//a[contains(text(),\"Start Now\")]")).size() > 0)
-			{
-				
-			}
 		} 
 		catch (Exception e)
 		{
@@ -196,7 +220,59 @@ public class AboutCourseEnrollmentLocators {
 		}
 		return errorCells;
 	}
-
+	public String payWithCard(String price, String priceWithTax, String paymentSuccessText, ArrayList<Integer> errorCells)
+	{
+		System.out.println("US payment site");
+		String status = "success";
+		if(driver.getCurrentUrl().contains("checkout.stripe.com"))// us site
+		{
+			WebElement cardNumber = driver.findElement(By.cssSelector("input#cardNumber"));
+			cardNumber.sendKeys("4242424242424242");
+			WebElement cardExpiry = driver.findElement(By.cssSelector("input#cardExpiry"));
+			cardExpiry.sendKeys("09/23");
+			WebElement cvc = driver.findElement(By.cssSelector("input#cardCvc"));
+			cvc.sendKeys("123");
+			WebElement nameOfCard = driver.findElement(By.cssSelector("input#billingName"));
+			nameOfCard.sendKeys("test");
+			WebElement zipcode = driver.findElement(By.cssSelector("input#billingPostalCode"));
+			zipcode.sendKeys("12345");
+			WebElement payNow = driver.findElement(By.cssSelector("div[class=\"SubmitButton-IconContainer\"]"));
+			payNow.click();
+			Set<String> allwindows = driver.getWindowHandles();
+			Iterator<String> iterator = allwindows.iterator();
+			while(iterator.hasNext())
+			{
+				driver.switchTo().window(iterator.next());
+				if(driver.getCurrentUrl().contains("checkout"))
+				{
+					WebElement getCourseTextFromOrderDetails = driver.findElement(By.cssSelector("table tr[class=\"first_3_rows\"] td p"));
+					wait.until(ExpectedConditions.visibilityOf(getCourseTextFromOrderDetails));
+					courseText = getCourseTextFromOrderDetails.getText();
+					System.out.println(getCourseTextFromOrderDetails);
+					if(courseText.contains(paymentSuccessText))
+					{
+						System.out.println("completion certificate is available in receipt details : "+courseText);
+					}
+					else
+					{
+						errorCells.add(5);
+					}
+					WebElement getPrizeWithoutGST = driver.findElement(By.cssSelector("table tr[class=\"first_3_rows\"] td[class*=\"row_text\"]"));
+					prizeWithoutGST = getPrizeWithoutGST.getText().replaceAll("\\s", "").replaceAll("[^0-9?!\\.]","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+					if(prizeWithoutGST.contains(price.replaceAll("\\s", "").replaceAll("[^0-9?!\\.]","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+					{
+						System.out.println(prizeWithoutGST);
+					}
+					else
+					{
+						errorCells.add(3);
+					}
+				}
+			}
+		}
+		return status;
+	}
+	
 	public String card(String price, String priceWithTax, String paymentSuccessText, ArrayList<Integer> errorCells) throws InterruptedException
 	{
 		String status = "success";
@@ -216,7 +292,7 @@ public class AboutCourseEnrollmentLocators {
 				WebElement cardName = driver.findElement(By.cssSelector("input[name=\"card[name]\"]"));
 				cardName.sendKeys("testing");
 				WebElement payNow = driver.findElement(By.cssSelector("button#pay-now"));
-				payNow.click();
+				wait.until(ExpectedConditions.visibilityOf(payNow)).click();
 				Set<String> allwind = driver.getWindowHandles();
 				Iterator<String> itr = allwind.iterator();
 				while(itr.hasNext())
@@ -226,9 +302,9 @@ public class AboutCourseEnrollmentLocators {
 							.equalsIgnoreCase("https://api.razorpay.com/v1/payments/JcXhoGam1C1Zwn/dcc_info#"))
 					{
 						WebElement currency = driver.findElement(By.cssSelector("input#INR"));
-						currency.click();
+						wait.until(ExpectedConditions.visibilityOf(currency)).click();
 						WebElement payAmount = driver.findElement(By.cssSelector("form#dccForm button#submit-action"));
-						payAmount.click();
+						wait.until(ExpectedConditions.visibilityOf(payAmount)).click();
 					}
 					else if(driver.getCurrentUrl().equalsIgnoreCase("https://api.razorpay.com/v1/payments/create/checkout"))
 					{
@@ -385,7 +461,7 @@ public class AboutCourseEnrollmentLocators {
 				.findElements(By.cssSelector("div[class=\"content payment-form\"] li strong span"));
 		for (int i = 0; i < allPaymenets.size(); i++) 
 		{
-			if (allPaymenets.get(i).getText().replaceAll("\\s", "").trim().equalsIgnoreCase("Wallet"))
+			if (allPaymenets.get(i).getText().replaceAll("\\s", "").trim().equalsIgnoreCase("wallet"))
 			{
 				allPaymenets.get(i).click();
 			}
@@ -399,7 +475,11 @@ public class AboutCourseEnrollmentLocators {
 		while(itr.hasNext())
 		{
 			driver.switchTo().window(itr.next());
-			if (driver.getCurrentUrl()
+			if (driver.getCurrentUrl().contains("https://api.razorpay.com/v1/gateway/mocksharp/payment?key_id=rzp_test_bnV0zjfXCrrGmS")) {
+				driver.findElement(By.cssSelector("button[class=\"success\"]")).click();
+				break;
+			}
+			else if(driver.getCurrentUrl()
 					.equalsIgnoreCase("https://api.razorpay.com/v1/payments/JcXhoGam1C1Zwn/dcc_info#"))
 			{
 				WebElement currency = driver.findElement(By.cssSelector("input#INR"));
@@ -454,7 +534,7 @@ public class AboutCourseEnrollmentLocators {
 				.findElements(By.cssSelector("div[class=\"content payment-form\"] li strong span"));
 		for (int i = 0; i < allPaymenets.size(); i++)
 		{
-			if (allPaymenets.get(i).getText().replaceAll("\\s", "").trim().equalsIgnoreCase("UPI"))
+			if (allPaymenets.get(i).getText().replaceAll("\\s", "").trim().equalsIgnoreCase("upi"))
 			{
 				allPaymenets.get(i).click();
 			}
@@ -468,7 +548,11 @@ public class AboutCourseEnrollmentLocators {
 		while(itr.hasNext())
 		{
 			driver.switchTo().window(itr.next());
-			if (driver.getCurrentUrl()
+			if (driver.getCurrentUrl().contains("https://api.razorpay.com/v1/gateway/mocksharp/payment?key_id=rzp_test_bnV0zjfXCrrGmS")) {
+				driver.findElement(By.cssSelector("button[class=\"success\"]")).click();
+				break;
+			}
+			else if(driver.getCurrentUrl()
 					.equalsIgnoreCase("https://api.razorpay.com/v1/payments/JcXhoGam1C1Zwn/dcc_info#"))
 			{
 				WebElement currency = driver.findElement(By.cssSelector("input#INR"));
@@ -612,8 +696,7 @@ public class AboutCourseEnrollmentLocators {
 			Iterator<String> it = st.iterator();
 			while (it.hasNext()) {
 				driver.switchTo().window(it.next());
-				if (driver.getCurrentUrl().contains(
-						"https://api.razorpay.com/v1/gateway/mocksharp/payment?key_id=rzp_test_bnV0zjfXCrrGmS")) {
+				if (driver.getCurrentUrl().contains("https://api.razorpay.com/v1/gateway/mocksharp/payment?key_id=rzp_test_bnV0zjfXCrrGmS")) {
 					driver.findElement(By.cssSelector("button[class=\"success\"]")).click();
 					break;
 				}
@@ -666,6 +749,8 @@ public class AboutCourseEnrollmentLocators {
 			{
 				WebElement getplan = plans.get(i);
 				WebElement planName = getplan.findElement(By.cssSelector(" div[class*=\"plan_heading\"]"));
+				wait.until(ExpectedConditions.visibilityOf(planName)).click();
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 				String getPlanName = planName.getText();
 				System.out.println(getPlanName);
 				if (getPlanName.equalsIgnoreCase(plan))// validating plan
@@ -676,9 +761,13 @@ public class AboutCourseEnrollmentLocators {
 					System.out.println(getPrizeText);
 					WebElement clickSelectPlanButton = plans.get(i)
 							.findElement(By.cssSelector(" div[class=\"bttn\"] a"));
+					wait.until(ExpectedConditions.visibilityOf(clickSelectPlanButton));
 					clickSelectPlanButton.click();
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 					Thread.sleep(1000);
 					isPlanAvailable = true;
+					JavascriptExecutor js2 = (JavascriptExecutor) driver;
+					js2.executeScript("window.scrollBy(0, 500)");
 					break;
 				} // end of plan selection
 			}
@@ -686,28 +775,49 @@ public class AboutCourseEnrollmentLocators {
 		return isPlanAvailable;
 	}
 	
-	public void razorpayProcess()
+	public boolean razorpayProcess() throws InterruptedException
 	{
-		JavascriptExecutor js2 = (JavascriptExecutor) driver;
-		js2.executeScript("window.scrollBy(0, 500)");
+		boolean isRazorpayProcess = false;
 		String planWindow = driver.getWindowHandle();
 		Set<String> secondWindow = driver.getWindowHandles();
 		Iterator<String> iterate2 = secondWindow.iterator();
-		while (iterate2.hasNext())
+		while(iterate2.hasNext())
 		{
-			if (!planWindow.equalsIgnoreCase(iterate2.next())) {
-				driver.switchTo().window(iterate2.next());// 2nd popup after plan selection from 1st popup
-				WebElement checkAmountWithGST = driver
-						.findElement(By.cssSelector("div[class=\"selected-plan\"] div"));
-				System.out.println(checkAmountWithGST.getText());
-				String amountWithGSTFromBrowser = checkAmountWithGST.getText();
-				/*
-				 * if (flatPriceWithGSTFromExcel.equalsIgnoreCase(amountWithGSTFromBrowser)) {
-				 * payMentStatus = "success"; } else { payMentStatus = "fail"; }
-				 */
-				WebElement clickRazorayPayment = driver.findElement(By.cssSelector("#razorpay"));
-				clickRazorayPayment.click();
+			if(!planWindow.equalsIgnoreCase(iterate2.next()))
+			{
+				driver.switchTo().window(iterate2.next());
+				if(driver.getCurrentUrl().equalsIgnoreCase("https://qa-ecomm-in.skillup.online/basket/?logged=true"))
+				{
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+					WebElement checkAmountWithGST = driver.findElement(By.cssSelector("div[class=\"selected-plan\"] div"));
+					String amountWithGSTFromBrowser = checkAmountWithGST.getText();
+					System.out.println("Amount in razoray Payment : "+amountWithGSTFromBrowser);
+					//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+					Thread.sleep(5000);
+					WebElement clickRazorayPayment = driver.findElement(By.cssSelector("#razorpay"));
+					wait.until(ExpectedConditions.visibilityOf(clickRazorayPayment));
+					clickRazorayPayment.click();
+					System.out.println("after clicking razorpay button");
+					isRazorpayProcess = true;
+					Thread.sleep(7000);
+				}
+				else
+				{
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+					WebElement checkAmountWithGST = driver.findElement(By.cssSelector("div[class=\"selected-plan\"] div"));
+					String amountWithGSTFromBrowser = checkAmountWithGST.getText();
+					System.out.println("Amount in razoray Payment : "+amountWithGSTFromBrowser);
+					//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+					Thread.sleep(5000);
+					WebElement clickRazorayPayment = driver.findElement(By.cssSelector("button[class*=\"payment\"]"));
+					wait.until(ExpectedConditions.visibilityOf(clickRazorayPayment));
+					clickRazorayPayment.click();
+					System.out.println("after clicking razorpay button");
+					isRazorpayProcess = true;
+					Thread.sleep(7000);
+				}
 			}
 		}
+				return isRazorpayProcess;
 	}
 }

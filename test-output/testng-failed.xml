@@ -3,13 +3,12 @@
 <suite name="Failed suite [Testing Google Apps]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Regression(failed)">
     <classes>
-      <class name="com.test.course.TestCourseDetails">
+      <class name="com.skillup.sample.sampleWorkout">
         <methods>
-          <include name="validateCourseDetails"/>
-          <include name="readExcelData"/>
-          <include name="resultStatus"/>
+          <include name="setUpDriver"/>
+          <include name="start"/>
         </methods>
-      </class> <!-- com.test.course.TestCourseDetails -->
+      </class> <!-- com.skillup.sample.sampleWorkout -->
     </classes>
   </test> <!-- Regression(failed) -->
 </suite> <!-- Failed suite [Testing Google Apps] -->

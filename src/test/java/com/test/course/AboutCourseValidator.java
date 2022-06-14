@@ -24,7 +24,8 @@ public class AboutCourseValidator
 	
 	public AboutCourseValidator(String sheetName, ArrayList<ArrayList<String>> rows)
 	{
-		this.SHEET_NAME = sheetName; 
+		this.SHEET_NAME = sheetName
+				; 
 		this.ROWS = rows;
 		aboutCourseLocators = new AboutCourseLocators();
 	}
@@ -119,6 +120,7 @@ public class AboutCourseValidator
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			markProcessFailed();
 		}
 	}
@@ -255,9 +257,16 @@ public class AboutCourseValidator
 				{
 					for(int j = 2; j < infoValues.size(); j++)
 					{
-						String infoContentFromExcel = infoValues.get(j).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						String infoContentFromExcel = infoValues.get(j)/*
+																		 * .replaceAll("\\s", "").replaceAll("\u00A0",
+																		 * "").replaceAll("[^\\p{ASCII}]", "")
+																		 */;
 						System.out.println("answer from excel : "+infoContentFromExcel);
-						String infoContentFromBrowser = infoContentFromCourse.get(j - 2).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						String infoContentFromBrowser = infoContentFromCourse
+								.get(j - 2)/*
+											 * .replaceAll("\\s", "").replaceAll("\u00A0",
+											 * "").replaceAll("[^\\p{ASCII}]", "")
+											 */;
 						System.out.println("answer from Browser : "+infoContentFromBrowser);
 						if(!infoContentFromExcel.equalsIgnoreCase(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 						{

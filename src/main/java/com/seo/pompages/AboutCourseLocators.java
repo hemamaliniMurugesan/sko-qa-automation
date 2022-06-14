@@ -188,7 +188,10 @@ public class AboutCourseLocators
 					executor.executeScript("arguments[0].click();", infoHeading);
 					for(int j = 0; j < infoContent.size(); j++)
 					{
-						String content = infoContent.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						String content = infoContent.get(j).getAttribute("textContent")/*
+															 * .replaceAll("\\s", "").replaceAll("\u00A0",
+															 * "").replaceAll("[^\\p{ASCII}]", "")
+															 */;
 						System.out.println(infoHeadingText);
 						System.out.println(content);
 						courseInfoContent.add(content);
@@ -315,7 +318,7 @@ public class AboutCourseLocators
 						String courseOrg = orgImg.getAttribute("alt");
 						int orgText = logo.lastIndexOf(" ");
 						String getOrgText = logo.substring(0, orgText);
-						if(result.contains(formatOfCertificate))
+						if(formatOfCertificate.equalsIgnoreCase("-")|| result.contains(formatOfCertificate))
 						{
 							statusOfCertificate = "success";
 						}
@@ -325,7 +328,7 @@ public class AboutCourseLocators
 							statusOfCertificate = "fail";
 							errorCells.add(3);
 						}
-						if(result.contains(getOrgText))
+						if(getOrgText.equalsIgnoreCase("-")|| result.contains(getOrgText))
 						{
 							System.out.println("Logo name is available :"+logo);
 							statusOfCertificate = "success";
@@ -494,7 +497,7 @@ public class AboutCourseLocators
 					WebElement expertElement = expertsList.get(i);
 					String name = expertElement.findElement(By.cssSelector(".SideBarCoLMN_Right p")).getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 					expert.put("name", name);
-					List<WebElement> liTags = expertElement.findElements(By.cssSelector(".SideBarCoLMN_Right ul > li"));
+					List<WebElement> liTags = expertElement.findElements(By.cssSelector(" .SideBarCoLMN_Right ul > li"));
 					for(WebElement li: liTags)
 					{
 						//which means it has children node probably <a> tag
@@ -507,7 +510,7 @@ public class AboutCourseLocators
 							expert.put("role", li.getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", ""));
 						}
 					}
-					String styleOfImage = expertElement.findElement(By.cssSelector(".SideBarCoLMN_LeFT > span")).getAttribute("style");
+					String styleOfImage = expertElement.findElement(By.cssSelector(" .SideBarCoLMN_LeFT > span")).getAttribute("style");
 					expert.put("style", styleOfImage);
 					
 					experts.put(name, expert);

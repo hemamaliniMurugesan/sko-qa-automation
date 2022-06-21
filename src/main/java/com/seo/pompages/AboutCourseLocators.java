@@ -160,6 +160,8 @@ public class AboutCourseLocators
 			WebElement courseLevelName = driver.findElement(By.cssSelector("div.Sk_Content > ul li:nth-child(3) a"));
 			courseLevelText = courseLevelName.getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 			System.out.println("courseLevelText from browser : "+courseLevelText);
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			js.executeScript("window.scrollBy(0, 400)");
 		}
 		catch(Exception e)
 		{
@@ -171,9 +173,8 @@ public class AboutCourseLocators
 	public ArrayList<String> getInfoContentFromCourse(String courseInfoHeadingFromExcel)
 	{
 		ArrayList<String> courseInfoContent = new ArrayList<String>();
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 400)");
 		List<WebElement> listOfCourseInfo = driver.findElements(By.cssSelector("div#accordion div#accordion3 div[class='panel panel-default ibm-v2-accordion']"));
+		//js.executeScript("arguments[0].scrollIntoView();", listOfCourseInfo);
 		if(listOfCourseInfo.size() > 0)
 		{
 			for(int i = 0; i < listOfCourseInfo.size(); i++)
@@ -188,10 +189,8 @@ public class AboutCourseLocators
 					executor.executeScript("arguments[0].click();", infoHeading);
 					for(int j = 0; j < infoContent.size(); j++)
 					{
-						String content = infoContent.get(j).getAttribute("textContent")/*
-															 * .replaceAll("\\s", "").replaceAll("\u00A0",
-															 * "").replaceAll("[^\\p{ASCII}]", "")
-															 */;
+						String content = infoContent.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0","").replaceAll("[^\\p{ASCII}]", "")
+															 ;
 						System.out.println(infoHeadingText);
 						System.out.println(content);
 						courseInfoContent.add(content);
@@ -211,7 +210,7 @@ public class AboutCourseLocators
 	{
 		String status = "Success";
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, -600)");
+		js.executeScript("window.scrollBy(0, 700)");
 		
 		if(accordions == null)
 		{
@@ -252,13 +251,13 @@ public class AboutCourseLocators
 		return status;
 	}
 	
-	public ArrayList<Integer> getEarnCertificateText(String earnYourCertificateContentFromExcel, String titleName, String formatOfCertificate, String logo)
+	public ArrayList<Integer> getEarnCertificateText(String earnYourCertificateContentFromExcel, String titleName , String formatOfCertificate, String org)
 	{
 		ArrayList<Integer> errorCells = new ArrayList<Integer>();
 		String statusOfCertificate = "fail";
 		String certificateName = "";
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 700)");
+		js.executeScript("window.scrollBy(0, 500)");
 		String getEarnCertificateText = "";
 		try
 		{
@@ -276,7 +275,9 @@ public class AboutCourseLocators
 			}
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			WebElement clickEarnCertificate = driver.findElement(By.cssSelector("div[class='certificate_wrap'] a[id='certificate-preview-btn']"));
-			((JavascriptExecutor)driver).executeScript("arguments[0].click();", clickEarnCertificate);
+			js.executeScript("arguments[0].click();", clickEarnCertificate);
+		//	wait.until(ExpectedConditions.visibilityOf(clickEarnCertificate)).click();
+			//((JavascriptExecutor)driver).executeScript("arguments[0].click();", clickEarnCertificate);
 			Thread.sleep(1000);
 			String AboutCourseWindow = driver.getWindowHandle(); 
 			Set<String> certificatePopup = driver.getWindowHandles(); 
@@ -288,9 +289,12 @@ public class AboutCourseLocators
 					if(driver.findElement(By.xpath("//h5[contains(text(),\"Certificate Preview\")]")).isDisplayed())
 					{
 						WebElement checkCourseNameFromImage = driver.findElement(By.xpath("(//div[@id=\"social-icons-conatainer\"])[2]//img"));
-						certificateName = checkCourseNameFromImage.getAttribute("alt").replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						certificateName = checkCourseNameFromImage.getAttribute("alt");
+						String removeWord = "Certificate Preview";
+						certificateName = certificateName.replaceAll(removeWord, "");
+						certificateName = certificateName.trim();
 						System.out.println("certificateName from browser : "+certificateName);
-						if(certificateName.contains(titleName.replaceAll("\\s","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+						if(certificateName.equalsIgnoreCase(titleName))
 						{
 							System.out.println("certificate name and title is same");
 							statusOfCertificate = "success";
@@ -303,6 +307,7 @@ public class AboutCourseLocators
 						}
 						WebElement getCertificateCaption = driver.findElement(By.xpath("//h5[contains(text(),\"Certificate Preview\")]"));
 						System.out.println(getCertificateCaption.getText());
+						String parentWindow = driver.getWindowHandle();
 						TakesScreenshot scrShot =((TakesScreenshot)driver);
 						//Call getScreenshotAs method to create image file
 						File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
@@ -310,38 +315,79 @@ public class AboutCourseLocators
 						File DestFile=new File("D:\\AutomationTestingWorkspace\\com.practice.Automation\\img\\test.png");
 						//Copy file at destination
 						FileUtils.copyFile(SrcFile, DestFile);
-						ITesseract img = new Tesseract();
-						img.setDatapath("D:\\AutomationTestingWorkspace\\com.practice.Automation\\tesseract");
-						String result = img.doOCR(DestFile);
-						System.out.println(result);
-						WebElement orgImg = driver.findElement(By.cssSelector("div.ConTianer_ConTent > div:first-child > div:last-child > a > img"));
-						String courseOrg = orgImg.getAttribute("alt");
-						int orgText = logo.lastIndexOf(" ");
-						String getOrgText = logo.substring(0, orgText);
-						if(formatOfCertificate.equalsIgnoreCase("-")|| result.contains(formatOfCertificate))
+						((JavascriptExecutor) driver).executeScript("window.open()");
+						ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+						driver.switchTo().window(tabs.get(1));
+						driver.get("https://www.utilities-online.info/image-to-text");
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+						WebElement clickUploadPic = driver.findElement(By.cssSelector("#uploadFile"));
+						//clickUploadPic.click();
+						
+						clickUploadPic.sendKeys("D:\\AutomationTestingWorkspace\\com.practice.Automation\\img\\test.png");
+						js.executeScript("window.scrollBy(0, 100)");
+						WebElement clickConvertToText = driver.findElement(By.cssSelector("button#checkBtn"));
+						Thread.sleep(500);
+						if(clickConvertToText.isDisplayed())
 						{
+							clickConvertToText.click();
+						}
+						WebElement getImageText = driver.findElement(By.cssSelector("textArea#output"));
+						String ImageText = getImageText.getText();
+						System.out.println(ImageText);
+						//driver.close();
+						if(formatOfCertificate.equalsIgnoreCase("NA")||ImageText.contains(formatOfCertificate))
+						{ 
 							statusOfCertificate = "success";
 						}
 						else
 						{
-							System.out.println("Format is not same");
-							statusOfCertificate = "fail";
-							errorCells.add(3);
+						  System.out.println("Format is not same");
+						  statusOfCertificate = "fail";
+						  errorCells.add(3);
 						}
-						if(getOrgText.equalsIgnoreCase("-")|| result.contains(getOrgText))
+						if(ImageText.contains(org) || org.equalsIgnoreCase("NA"))
 						{
-							System.out.println("Logo name is available :"+logo);
+							System.out.println("Logo name is available :"+org);
 							statusOfCertificate = "success";
-						}
+						} 
 						else
-						{
+						{ 
 							System.out.println("Logo is not available");
 							statusOfCertificate = "fail";
 							errorCells.add(4);
 						}
-						Thread.sleep(500);
-						wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("section[class=\"login\"] div#certificate-preview div[class=\"log-in-pop\"] div[class=\"modal-header\"] > button"))).click();
-						Thread.sleep(500);
+						/*
+						 * ITesseract img = new Tesseract(); img.setDatapath(
+						 * "D:\\AutomationTestingWorkspace\\com.practice.Automation\\tesseract"); String
+						 * result = img.doOCR(DestFile);
+						 * 
+						 * 
+						 * System.out.println(result);
+						 * 
+						 * WebElement orgImg = driver.findElement(By.
+						 * cssSelector("div.ConTianer_ConTent > div:first-child > div:last-child > a > img"
+						 * )); String courseOrg = orgImg.getAttribute("alt");
+						 * 
+						 * 
+						 * int orgText = logo.lastIndexOf(" "); String getOrgText = logo.substring(0,
+						 * orgText); if(formatOfCertificate.equalsIgnoreCase("NA")||result.contains(
+						 * formatOfCertificate)) { statusOfCertificate = "success"; } else {
+						 * System.out.println("Format is not same"); statusOfCertificate = "fail";
+						 * errorCells.add(3); } if(result.contains(getOrgText)) {
+						 * System.out.println("Logo name is available :"+logo); statusOfCertificate =
+						 * "success"; } else { System.out.println("Logo is not available");
+						 * statusOfCertificate = "fail"; errorCells.add(4); } WebElement
+						 * closeCertificate = driver.findElement(By.
+						 * cssSelector("div#certificate-preview button[class=\"close\"]"));
+						 * wait.until(ExpectedConditions.visibilityOf(closeCertificate));
+						 */
+						driver.switchTo().window(parentWindow);
+						WebElement closeCertificate = driver.findElement(By.cssSelector("div#certificate-preview button[class=\"close\"]"));
+						if(closeCertificate.isDisplayed())
+						{
+						 js.executeScript("arguments[0].click();", closeCertificate);
+						 Thread.sleep(1000);
+						}
 					}
 				}
 		}
@@ -355,7 +401,7 @@ public class AboutCourseLocators
 	public String getTypeofCertificate()
 	{
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, -2400)");
+		js.executeScript("window.scrollBy(0, -2200)");
 		String checkCertificateContent = "";
 		try
 		{
@@ -378,6 +424,8 @@ public class AboutCourseLocators
 		String checkAboutCourseContent = "";
 		try
 		{
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			js.executeScript("window.scrollBy(0, 100)");
 			WebElement checkAboutCourse =  driver.findElement(By.cssSelector("div.SideBarMain > div:nth-child(2)"));
 			WebElement checkAboutIcon = checkAboutCourse.findElement(By.cssSelector(" img"));
 			checkAboutIcon.getAttribute("alt");
@@ -397,6 +445,8 @@ public class AboutCourseLocators
 		String checkIncludesContent = "";
 		try
 		{
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			js.executeScript("window.scrollBy(0, 100)");
 			WebElement checkIncludes =  driver.findElement(By.cssSelector("div.SideBarMain > div:nth-child(3)"));
 			WebElement checkIncludesIcon = checkIncludes.findElement(By.cssSelector(" img"));
 			checkIncludesIcon.getAttribute("alt");
@@ -415,7 +465,7 @@ public class AboutCourseLocators
 	{
 		String checkCreateContent = "";
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 500)");
+		js.executeScript("window.scrollBy(0, 100)");
 		try
 		{
 			WebElement checkCreate =  driver.findElement(By.cssSelector("div.SideBarMain > div:nth-child(4)"));
@@ -436,7 +486,7 @@ public class AboutCourseLocators
 	{
 		String checkExerciseToExploreContent = "";
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 800)");
+		js.executeScript("window.scrollBy(0, 100)");
 		try
 		{
 			List<WebElement> checkExerciseToExplore =  driver.findElements(By.cssSelector("div.SideBarMain > div"));
@@ -464,26 +514,19 @@ public class AboutCourseLocators
 		return checkExerciseToExploreContent;
 	}
 	
-	public String getAttributeOfTag(String selector, String attribute)
-	{
-		String attributeValue = null;
-		try
-		{
-			WebElement tag = driver.findElement(By.cssSelector(selector));
-			attributeValue = tag.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0", "").trim();
-			System.out.println(attributeValue);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return attributeValue;
-	}
+	/*
+	 * public String getAttributeOfTag(String selector, String attribute) { String
+	 * attributeValue = null; try { WebElement tag =
+	 * driver.findElement(By.cssSelector(selector)); attributeValue =
+	 * tag.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0",
+	 * "").trim(); System.out.println(attributeValue); } catch(Exception e) {
+	 * e.printStackTrace(); } return attributeValue; }
+	 */
 	
 	public HashMap<String, HashMap<String, String>> getExperts()
 	{
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 300)");
+		js.executeScript("window.scrollBy(0, 100)");
 		HashMap<String, HashMap<String, String>> experts = null;
 		try
 		{
@@ -495,7 +538,7 @@ public class AboutCourseLocators
 				{
 					HashMap<String, String> expert = new HashMap<>();
 					WebElement expertElement = expertsList.get(i);
-					String name = expertElement.findElement(By.cssSelector(".SideBarCoLMN_Right p")).getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+					String name = expertElement.findElement(By.cssSelector(" .SideBarCoLMN_Right p")).getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 					expert.put("name", name);
 					List<WebElement> liTags = expertElement.findElements(By.cssSelector(" .SideBarCoLMN_Right ul > li"));
 					for(WebElement li: liTags)
@@ -521,9 +564,10 @@ public class AboutCourseLocators
 		{
 			e.printStackTrace();
 		}
+		
+		JavascriptExecutor jse = (JavascriptExecutor)driver;
+		jse.executeScript("window.scrollBy(0, -1100)");
 		return experts;
-		
-		
 	}
 	
 	public String getStartsOn(String startsOnFromExcel)
@@ -563,8 +607,6 @@ public class AboutCourseLocators
 	public String getDurationInfo(String durationFromExcel)
 	{
 		String checkDuration = "";
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, -1400)");
 		try
 		{
 		List<WebElement> checkDurationImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img:not(td[width=\"2%\"]"));

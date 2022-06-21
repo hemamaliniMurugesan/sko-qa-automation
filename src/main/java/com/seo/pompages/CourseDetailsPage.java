@@ -83,7 +83,7 @@ public class CourseDetailsPage
 			}
 			else
 			{
-				checkVPNStatus = "success";
+				checkVPNStatus = "successInd";
 			}
 		}
 		catch(Exception e)

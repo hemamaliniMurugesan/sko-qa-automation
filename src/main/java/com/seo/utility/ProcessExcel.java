@@ -236,6 +236,12 @@ public class ProcessExcel
 						cell.setCellValue(originalValue);
 						errorCell(workbook, cell);
 					}
+					else if(cellValue.indexOf(" - ignored") >= 0)
+					{
+						String originalValue = cellValue.replaceAll(" - ignored", "");
+						cell.setCellValue(originalValue);
+						ignoreCell(workbook, cell);
+					}
 					else
 					{
 						cell.setCellValue((String) cellValue);
@@ -297,6 +303,14 @@ public class ProcessExcel
 		CellStyle style = cell.getCellStyle();
 		style.setFillForegroundColor(IndexedColors.RED.getIndex());
 		style.setFillBackgroundColor(IndexedColors.RED.getIndex());  
+        style.setFillPattern(CellStyle.BIG_SPOTS);
+        cell.setCellStyle(style);
+	}
+	
+	public static void ignoreCell(XSSFWorkbook wb, Cell cell) {
+		CellStyle style = cell.getCellStyle();
+		style.setFillForegroundColor(IndexedColors.GOLD.getIndex());
+		style.setFillBackgroundColor(IndexedColors.GOLD.getIndex());  
         style.setFillPattern(CellStyle.BIG_SPOTS);
         cell.setCellStyle(style);
 	}

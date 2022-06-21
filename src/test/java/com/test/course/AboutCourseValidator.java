@@ -82,7 +82,7 @@ public class AboutCourseValidator
 					courseOutline();
 					break;
 				case "earnYourCertificate":
-					earnYourCertificate(row.get(1), row.get(2), row.get(3), row.get(4));
+					earnYourCertificate(row.get(1), row.get(2) , row.get(3), row.get(4));
 					break;	
 				case "typeofCertificate":
 					typeofCertificate(row.get(1));
@@ -263,12 +263,9 @@ public class AboutCourseValidator
 																		 */;
 						System.out.println("answer from excel : "+infoContentFromExcel);
 						String infoContentFromBrowser = infoContentFromCourse
-								.get(j - 2)/*
-											 * .replaceAll("\\s", "").replaceAll("\u00A0",
-											 * "").replaceAll("[^\\p{ASCII}]", "")
-											 */;
+								.get(j - 2);
 						System.out.println("answer from Browser : "+infoContentFromBrowser);
-						if(!infoContentFromExcel.equalsIgnoreCase(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+						if(!infoContentFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 						{
 							markColumnFailed(j);
 						}
@@ -309,11 +306,13 @@ public class AboutCourseValidator
 		}
 	}
 	
-	private void earnYourCertificate(String earnYourCertificateContentFromExcel, String titleName, String formatOfCertificate, String logo)
+	private void earnYourCertificate(String earnYourCertificateContentFromExcel,
+			String titleName , String formatOfCertificate, String org )
 	{// validating logo, format of certificate
 		try
 		{
-			List<Integer> errorCells = aboutCourseLocators.getEarnCertificateText(earnYourCertificateContentFromExcel, titleName, formatOfCertificate, logo);
+			List<Integer> errorCells = aboutCourseLocators.getEarnCertificateText(earnYourCertificateContentFromExcel,
+					titleName , formatOfCertificate, org);
 			System.out.println("earnYourCertificateContentFromExcel : "+titleName);
 			for(Integer cellIndex: errorCells)
 			{

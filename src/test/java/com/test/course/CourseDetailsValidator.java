@@ -1,3 +1,4 @@
+
 package com.test.course;
 
 import java.text.SimpleDateFormat;
@@ -48,7 +49,7 @@ public class CourseDetailsValidator {
 	{
 		try
 		{
-			switch (process) 
+			switch (process.trim()) 
 			{
 				case "currentURL":
 					launchUrlAndTestRedirection(row.get(1), row.get(2));
@@ -116,7 +117,11 @@ public class CourseDetailsValidator {
 		try
 		{
 			String checkCanonicalURL = courseDetails.getCanonicalURL(canonicalURL);
-			if(!getCanonicalStatus.equalsIgnoreCase(checkCanonicalURL))
+			if(checkCanonicalURL.equalsIgnoreCase("successInd"))
+			{
+				markProcessIgnored();
+			}
+			else if(!getCanonicalStatus.equalsIgnoreCase(checkCanonicalURL))
 			{
 				markProcessFailed();
 			}
@@ -327,6 +332,12 @@ public class CourseDetailsValidator {
 		sheetStatus = "Fail";
 		String process = TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
 		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - failed"));
+	}
+	
+	private void markProcessIgnored()
+	{
+		String process = TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
+		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - ignored"));
 	}
 	
 	private void collectSheetResult()

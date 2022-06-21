@@ -91,8 +91,24 @@ public class CategoryPageLocators
 		String attributeValue = null;
 		try
 		{
-			WebElement tag = driver.findElement(By.cssSelector(selector));
-			attributeValue = tag.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0", "").trim();
+			List<WebElement> tags = driver.findElements(By.cssSelector(selector));
+			if(tags.size() > 1)
+			{
+				for(WebElement element: tags)
+				{
+					String value = element.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0", "").trim();
+					if(value != null && value != "")
+					{
+						attributeValue = value;
+						break;
+					}
+				}
+			}
+			else if(tags.size() == 1)
+			{
+				attributeValue = tags.get(0).getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0", "").trim();
+			}
+			
 			System.out.println(attributeValue);
 		}
 		catch(Exception e)

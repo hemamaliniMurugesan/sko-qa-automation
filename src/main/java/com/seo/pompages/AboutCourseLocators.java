@@ -473,6 +473,7 @@ public class AboutCourseLocators
 			checkCreateIcon.getAttribute("alt");
 			System.out.println("create from browser : "+checkCreateIcon.getAttribute("alt"));
 			WebElement checkCreateText = checkCreate.findElement(By.cssSelector(" div.SideBarCoLMN_Right ul"));
+			
 			checkCreateContent = checkCreateText.getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 		}
 		catch(Exception e)

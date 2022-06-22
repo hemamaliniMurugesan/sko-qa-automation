@@ -149,18 +149,19 @@ public class CategoryPageLocators
 		WebElement checkFAQ =  driver.findElement(By.xpath("//h2[contains(text(),\"FAQ\")]"));
 		js.executeScript("arguments[0].scrollIntoView(true);", checkFAQ);
 		WebElement HeadOfFAQSelector = driver.findElement(By.cssSelector("div[id*=\"accordion\"][class=\"panel-group\"]"));
-		List<WebElement> listOfFAQ = HeadOfFAQSelector.findElements(By.cssSelector(" div[class=\"panel-heading\"]"));
+		List<WebElement> listOfFAQ = HeadOfFAQSelector.findElements(By.cssSelector(" div[class*=\"panel-heading\"]"));
 		if(listOfFAQ.size()>0)
 		{
 			for(int i = 0; i < listOfFAQ.size(); i++)
 			{
 				//WebElement faq = listOfFAQ.get(i);
 				WebElement question = listOfFAQ.get(i);
+				js.executeScript("arguments[0].scrollIntoView();", question);
 				String questionText = question.getText().replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "");
 				if(questionText.equalsIgnoreCase(questionFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "")))
 				{
 					//question.click();
-					List<WebElement> FAQAnswers = HeadOfFAQSelector.findElements(By.cssSelector(" div[class=\"panel-collapse collapse\"] div"));
+					List<WebElement> FAQAnswers = HeadOfFAQSelector.findElements(By.cssSelector(" div[class*=\"panel-collapse collapse\"] div"));
 					JavascriptExecutor executor = (JavascriptExecutor)driver;
 					executor.executeScript("arguments[0].click();", question);
 					for(int j = 0; j < FAQAnswers.size(); j++)

@@ -35,7 +35,7 @@ public class TestCategoryPage
 	{
 		softAssert = new SoftAssert();
 		categoryPageLocators = new CategoryPageLocators();
-		excelPath = "D:\\SkillUp_Testing\\SEO\\Category\\NASSCOM US PAGE.xlsx";
+		excelPath = "C:\\Users\\Skillup 200\\Downloads\\NASSCOM GoI.xlsx";
 		this.aboutCategoryPage(excelPath);
 	}
 	

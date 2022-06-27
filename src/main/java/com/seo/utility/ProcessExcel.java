@@ -242,6 +242,12 @@ public class ProcessExcel
 						cell.setCellValue(originalValue);
 						ignoreCell(workbook, cell);
 					}
+					else if(cellValue.indexOf(" - header") >= 0)
+					{
+						String originalValue = cellValue.replaceAll(" - header", "");
+						cell.setCellValue(originalValue);
+						headerCell(workbook, cell);
+					}
 					else
 					{
 						cell.setCellValue((String) cellValue);
@@ -311,6 +317,14 @@ public class ProcessExcel
 		CellStyle style = cell.getCellStyle();
 		style.setFillForegroundColor(IndexedColors.GOLD.getIndex());
 		style.setFillBackgroundColor(IndexedColors.GOLD.getIndex());  
+        style.setFillPattern(CellStyle.BIG_SPOTS);
+        cell.setCellStyle(style);
+	}
+	
+	public static void headerCell(XSSFWorkbook wb, Cell cell) {
+		CellStyle style = cell.getCellStyle();
+		style.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+		style.setFillBackgroundColor(IndexedColors.PALE_BLUE.getIndex());  
         style.setFillPattern(CellStyle.BIG_SPOTS);
         cell.setCellStyle(style);
 	}

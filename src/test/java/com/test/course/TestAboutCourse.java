@@ -33,7 +33,7 @@ public class TestAboutCourse
 	public TestAboutCourse(String excelPath) {
 		softAssert = new SoftAssert();
 		aboutCoursePage = new AboutCourseLocators();
-		excelPath = "C:\\Users\\Skillup 200\\Downloads\\Deep Learning Tensor.xlsx";
+		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourse\\Test_AboutPage.xlsx";
 		this.aboutCoursePage(excelPath);
 	}
 

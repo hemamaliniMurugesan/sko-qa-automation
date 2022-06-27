@@ -69,6 +69,7 @@ public class CategoryPageValidator
 				checkImgSrcAndAlt(row); 
 				break;
 			case "FAQ": 
+
 				faq(row); 
 				break; 
 			case "validateSchemaHeading":
@@ -376,42 +377,61 @@ public class CategoryPageValidator
 		HashMap<String, String> stringProps = new HashMap<String, String>();
 		try
 		{
-			// str = name="title"-split-content="Blockchain Essentials | Learn Blockchain
+			// str = name="title"-split-content="Blockchain Essentials | Learn Blockchain?org=nasscom"
 			// Essentials Course Online - SkillUp Online"
-			String[] arr = str.split("-split-");
 			// arr = [name="title", content="Blockchain Essentials | Learn Blockchain Essentials
 			// Course Online - SkillUp Online"];
+			String[] arr = str.split("-split-");
 			boolean checkurl = false;
 			for (String keyValue : arr) 
 			{
-				// keyValue = "name="title""
-				String[] pair = keyValue.split("=");
-				// pari = [name, ""title""]
-				String value = null;
-				for(int j = 0; j < pair.length; j++)
+				int startIndex = keyValue.indexOf("\"");
+				int lastIndex = keyValue.lastIndexOf("\"");
+				String key = keyValue.substring(0, startIndex - 1);
+				String value = keyValue.substring(startIndex + 1, lastIndex);
+				
+				if(value.contains(":url") || value.contains(":image"))
 				{
-					
-					String attribute = pair[0]; //name
-					//value = pair[1].replaceAll("\"", "");
-					if(j == 1)
-					{
-						Thread.sleep(1000);
-						value = pair[j].replaceAll("\"", "");//title
-						if(value.contains(":url") || value.contains(":image"))
-						{
-							checkurl = true;
-						}
-						else
-						{
-							value = pair[j].replaceAll("\"", "");
-						}
-						if(checkurl == true && (!(value.contains("url") || value.contains("image"))))
-						{
-							value = ConfigFileReader.getMetaURL()+pair[j].replaceAll("\"", "");
-						}
-					}
-					stringProps.put(attribute, value);//(name,"title")
-				 }
+					checkurl = true;
+				}
+				else
+				{
+					value = value.replaceAll("\"", "");
+				}
+				if(checkurl == true && (!(value.contains("og:url") || value.contains("og:image") || value.contains("twitter:url") || value.contains("twitter:image"))))
+				{
+					value = ConfigFileReader.getMetaURL()+value.replaceAll("\"", "");
+				}
+				stringProps.put(key, value);
+				
+//				// keyValue = "name="title""
+//				String[] pair = keyValue.split("=");
+//				// pari = [name, ""title""]
+//				String value = null;
+//				for(int j = 0; j < pair.length; j++)
+//				{
+//					
+//					String attribute = pair[0]; //name
+//					//value = pair[1].replaceAll("\"", "");
+//					if(j == 1)
+//					{
+//						Thread.sleep(1000);
+//						value = pair[j].replaceAll("\"", "");//title
+//						if(value.contains(":url") || value.contains(":image"))
+//						{
+//							checkurl = true;
+//						}
+//						else
+//						{
+//							value = pair[j].replaceAll("\"", "");
+//						}
+//						if(checkurl == true && (!(value.contains("og:url") || value.contains("og:image") || value.contains("twitter:url") || value.contains("twitter:image"))))
+//						{
+//							value = ConfigFileReader.getMetaURL()+pair[j].replaceAll("\"", "");
+//						}
+//					}
+//					stringProps.put(attribute, value);//(name,"title")
+//				 }
 				// attribute = name
 				// pari[1] = ""title""
 				// pair[1].replaceAll("\"", "") = "title"

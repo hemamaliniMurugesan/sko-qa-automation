@@ -324,9 +324,6 @@ public class CourseDetailsPage
 		}
 		return faqFromValidator;
 		}
-		
-//		faqElement.click();
-		
 	
 	public String checkTableValidator(String tableValidatorURL, String tableHeading) throws MalformedURLException
 	{

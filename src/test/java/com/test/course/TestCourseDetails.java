@@ -35,7 +35,7 @@ public class TestCourseDetails
 	{
 		softAssert = new SoftAssert();
 		courseDetails = new CourseDetailsPage();
-		excelPath = "C:\\Users\\Skillup 200\\Downloads\\.xlsx";
+		excelPath = "C:\\Users\\Skillup 200\\Downloads\\Executive Presence for Professional Success-SEO.xlsx";
 		this.testCourseDetails(excelPath);
 	}
 	

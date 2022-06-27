@@ -24,8 +24,7 @@ public class AboutCourseValidator
 	
 	public AboutCourseValidator(String sheetName, ArrayList<ArrayList<String>> rows)
 	{
-		this.SHEET_NAME = sheetName
-				; 
+		this.SHEET_NAME = sheetName; 
 		this.ROWS = rows;
 		aboutCourseLocators = new AboutCourseLocators();
 	}
@@ -114,7 +113,11 @@ public class AboutCourseValidator
 				case "flatPriceUSD":
 					flatPriceUSD(row.get(1));
 					break;	
+				case "category":
+					category(row.get(1));
+					break;	
 				default:
+					markCellAsHeader();
 					break;
 			}
 		}
@@ -472,7 +475,11 @@ public class AboutCourseValidator
 		{
 			String checkDurationDetails = aboutCourseLocators.getDurationInfo(durationFromExcel);
 			System.out.println("duration from excel : "+durationFromExcel);
-			if(!checkDurationDetails.equals(checkDuration))
+			if(checkDurationDetails.equalsIgnoreCase("successIND"))
+			{
+				markProcessIgnored();
+			}
+			else if(!checkDurationDetails.equals(checkDuration))
 			{
 				markProcessFailed();
 			}
@@ -489,7 +496,11 @@ public class AboutCourseValidator
 		try
 		{
 			String checkStartsOnDetails = aboutCourseLocators.getStartsOn(startsOnFromExcel);
-			if(!checkStartsOnDetails.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equals(checkStartOn))
+			if(checkStartsOnDetails.equalsIgnoreCase("successIND"))
+			{
+				markProcessIgnored();
+			}
+			else if(!checkStartsOnDetails.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equals(checkStartOn))
 			{
 				markProcessFailed();
 			}
@@ -506,7 +517,11 @@ public class AboutCourseValidator
 		try
 		{
 			String checkFlatPrice = aboutCourseLocators.getflatPrice(flatPriceWithoutGSTFromExcel);
-			if(!checkFlatPrice.equals(checkPrice))
+			if(checkFlatPrice.equalsIgnoreCase("successIND"))
+			{
+				markProcessIgnored();
+			}
+			else if(!checkFlatPrice.equals(checkPrice))
 			{
 				markProcessFailed();
 			}
@@ -523,7 +538,11 @@ public class AboutCourseValidator
 		try
 		{
 			String checkUSDPriceStatus = aboutCourseLocators.getUSDPrice(priceUSDFromExcel);
-			if(!checkUSDPriceStatus.equalsIgnoreCase(checkUSDPrice))
+			if(checkUSDPriceStatus.equalsIgnoreCase("successIND"))
+			{
+				markProcessIgnored();
+			}
+			else if(!checkUSDPriceStatus.equalsIgnoreCase(checkUSDPrice))
 			{
 				markProcessFailed();
 			}
@@ -534,7 +553,26 @@ public class AboutCourseValidator
 		}
 	}
 	
-	
+	private void category(String courseName)
+	{
+		String checkCategoryStatus = "success";
+		try
+		{
+			String verifyCategory = aboutCourseLocators.category(courseName);
+			if(verifyCategory.equalsIgnoreCase("successIND"))
+			{
+				markProcessIgnored();
+			}
+			else if(!verifyCategory.equalsIgnoreCase(checkCategoryStatus))
+			{
+				markProcessFailed();
+			}
+		}
+		catch(Exception e)
+		{
+			markProcessFailed();
+		}
+	}
 	private void markColumnFailed(int columnIndex)
 	{
 		String cellValue = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);
@@ -548,6 +586,18 @@ public class AboutCourseValidator
 		sheetStatus = "Fail";
 		String process = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
 		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - failed"));
+	}
+	
+	private void markProcessIgnored()
+	{
+		String process = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
+		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - ignored"));
+	}
+	
+	private void markCellAsHeader()
+	{
+		String process = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(0);
+		TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(0, (process + " - header"));
 	}
 	
 	private void collectSheetResult()

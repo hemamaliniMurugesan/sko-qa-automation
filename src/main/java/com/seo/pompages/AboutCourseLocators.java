@@ -16,9 +16,11 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.google.j2objc.annotations.Property;
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
 import com.seo.utility.Utils;
@@ -325,16 +327,19 @@ public class AboutCourseLocators
 						
 						clickUploadPic.sendKeys("D:\\AutomationTestingWorkspace\\com.practice.Automation\\img\\test.png");
 						js.executeScript("window.scrollBy(0, 100)");
+						Thread.sleep(1000);
 						WebElement clickConvertToText = driver.findElement(By.cssSelector("button#checkBtn"));
 						Thread.sleep(500);
 						if(clickConvertToText.isDisplayed())
 						{
-							clickConvertToText.click();
+							//clickConvertToText.click();
+							Actions action =new Actions(driver);
+							action.moveToElement(clickConvertToText).click().build().perform();
+							driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 						}
 						WebElement getImageText = driver.findElement(By.cssSelector("textArea#output"));
 						String ImageText = getImageText.getText();
 						System.out.println(ImageText);
-						//driver.close();
 						if(formatOfCertificate.equalsIgnoreCase("NA")||ImageText.contains(formatOfCertificate))
 						{ 
 							statusOfCertificate = "success";
@@ -381,6 +386,7 @@ public class AboutCourseLocators
 						 * cssSelector("div#certificate-preview button[class=\"close\"]"));
 						 * wait.until(ExpectedConditions.visibilityOf(closeCertificate));
 						 */
+						driver.close();
 						driver.switchTo().window(parentWindow);
 						WebElement closeCertificate = driver.findElement(By.cssSelector("div#certificate-preview button[class=\"close\"]"));
 						if(closeCertificate.isDisplayed())
@@ -576,25 +582,38 @@ public class AboutCourseLocators
 		String checkStartson = "";
 		try
 		{
-			List<WebElement> checkStartsOnImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img:not(td[width=\"2%\"]"));
-			for(int i = 0; i < checkStartsOnImg.size(); i++)
+			if(startsOnFromExcel.equalsIgnoreCase("NA"))
 			{
-				if(checkStartsOnImg.get(i).getAttribute("alt").contains("Enrollment"))
-				{
-					System.out.println(checkStartsOnImg.get(i).getAttribute("alt"));
-				}
+				checkStartson = "successIND";
 			}
-			List<WebElement> checkStartOnText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:not(td[width=\"2%\"]):not(td[class=\"PADDLFT\"])"));
-			for(int j = 0; j < checkStartOnText.size(); j++)
+			else
 			{
-				WebElement getStartOnText = checkStartOnText.get(j).findElement(By.cssSelector(" [class=\"Sk-Currency evergreen-text\"]"));
-				if(getStartOnText.getText().equalsIgnoreCase("Starts on"))
+				List<WebElement> listOfRows = driver.findElements(By.cssSelector("td p[class=\"Sk-Currency evergreen-text\"]"));
+				for(int k = 0; k < listOfRows.size(); k++)
 				{
-					System.out.println(getStartOnText.getText());
-					WebElement getStartOnValue = checkStartOnText.get(j).findElement(By.cssSelector(" [class=\"evergreen-text\"]"));
-					String getStartsOn = getStartOnValue.getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-					System.out.println("startsOn from Browser :"+getStartsOn);
-					checkStartson = "success";
+					if(listOfRows.get(k).getText().equalsIgnoreCase("Starts On"))
+					{
+						List<WebElement> checkStartsOnImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img"));
+						for(int i = 0; i < checkStartsOnImg.size(); i++)
+						{
+							if(checkStartsOnImg.get(i).getAttribute("alt").contains("Enrollment"))
+							{
+								System.out.println("Starts on Icon is displayed : "+checkStartsOnImg.get(i).getAttribute("alt"));
+								break;
+							}
+						}
+						List<WebElement> checkStartOnText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td .evergreen-text"));
+						for(int j = 0; j < checkStartOnText.size(); j++)
+						{
+							if(checkStartOnText.get(j).getText().equalsIgnoreCase(startsOnFromExcel))
+							{
+								System.out.println(" Starts on value :"+checkStartOnText.get(j).getText());
+								checkStartson = "success";
+								break;
+							}
+						}
+						break;
+					}
 				}
 			}
 		}
@@ -607,33 +626,45 @@ public class AboutCourseLocators
 	
 	public String getDurationInfo(String durationFromExcel)
 	{
-		String checkDuration = "";
+		String checkDuration = "success";
 		try
 		{
-		List<WebElement> checkDurationImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img:not(td[width=\"2%\"]"));
-		for(int i = 0; i < checkDurationImg.size(); i++)
-		{
-			if(checkDurationImg.get(i).getAttribute("alt").contains("duration"))
+			if(durationFromExcel.equalsIgnoreCase("NA"))
 			{
-				System.out.println(checkDurationImg.get(i).getAttribute("alt"));
+				checkDuration = "successIND";
 			}
-		}
-				List<WebElement> getDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:not(td[width=\"2%\"]):not(td[class=\"PADDLFT\"]) [class=\"Sk-Currency evergreen-text\"]"));
-				for(int k = 0; k < getDurationText.size(); k++)
+			else
+			{
+				List<WebElement> listOfRows = driver.findElements(By.cssSelector("td p[class=\"Sk-Currency evergreen-text\"]"));
+				for(int k = 0; k < listOfRows.size(); k++)
 				{
-					if(getDurationText.get(k).getText().equalsIgnoreCase("duration"))
+					if(listOfRows.get(k).getText().equalsIgnoreCase("Duration"))
 					{
-						System.out.println(getDurationText.get(k).getText());
+						List<WebElement> checkDurationImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td>img"));
+						for(int i = 0; i < checkDurationImg.size(); i++)
+						{
+							if(checkDurationImg.get(i).getAttribute("alt").contains("duration"))
+							{
+								System.out.println("Duration icon is displayed :"+checkDurationImg.get(i).getAttribute("alt"));
+							}
+						}
+						List<WebElement> checkDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td .evergreen-text"));
+						for(int j = 0; j < checkDurationText.size(); j++)
+						{
+							String getDuration = checkDurationText.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+							System.out.println("duration from browser : "+getDuration);
+							if(getDuration.equalsIgnoreCase(durationFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+							{
+								checkDuration = "success";
+								break;
+							}
+							else
+							{
+								checkDuration = "fail";
+							}
+						}
+						break;
 					}
-				}
-				List<WebElement> checkDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:not(td[width=\"2%\"]):not(td[class=\"PADDLFT\"]) [class=\"evergreen-text\"]"));
-				for(int j = 0; j < checkDurationText.size(); j++)
-				{
-				String getDuration = checkDurationText.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-				System.out.println("duration from browser : "+getDuration);
-				if(getDuration.equalsIgnoreCase(durationFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
-				{
-					checkDuration = "success";
 				}
 			}
 		}
@@ -646,46 +677,54 @@ public class AboutCourseLocators
 	
 	public String getflatPrice(String flatPriceWithoutGSTFromExcel)
 	{
-		String checkPriceWOGST = "";
+		String checkPriceWOGST = "success";
 		
 		try
 		{
 			if(driver.getCurrentUrl().contains("in."))
 			{
-				List<WebElement> checkPriceWithoutGSTValue = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img:not(td[width=\"2%\"]"));
-				for(int i = 0; i < checkPriceWithoutGSTValue.size(); i++)
+				if(flatPriceWithoutGSTFromExcel.equalsIgnoreCase("NA"))
 				{
-					if(checkPriceWithoutGSTValue.get(i).getAttribute("alt").contains("Course Fee"))
-					{
-						System.out.println(checkPriceWithoutGSTValue.get(i).getAttribute("alt"));
-					}
-				}	
-				List<WebElement> checkFlatText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:not(td[width=\"2%\"]):not(td[class=\"PADDLFT\"])"));
-				for(int j = 0; j < checkFlatText.size(); j++)
+					checkPriceWOGST = "successIND";
+				}
+				else
 				{
-					WebElement getFlatText = checkFlatText.get(j).findElement(By.cssSelector(" [class=\"Sk-Currency evergreen-text\"]"));
-					if(getFlatText.getText().equalsIgnoreCase("Fee"))
-					{
-						System.out.println(getFlatText.getText());
-						WebElement getFlatValue = checkFlatText.get(j).findElement(By.cssSelector(" [class=\"evergreen-text\"]"));
-						String getFlat = getFlatValue.getAttribute("textContent").replaceAll("\\s", "").replaceAll("[^0-9?!\\.]","").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-						System.out.println("Flat price from excel : "+flatPriceWithoutGSTFromExcel);
-						System.out.println("Flat price from Browser : "+getFlat);
-						if(getFlat.equalsIgnoreCase(flatPriceWithoutGSTFromExcel))
-						{
-							checkPriceWOGST = "success";
-						}
-					}
-					else
+					WebElement currencyIcon = driver.findElement(By.cssSelector(".DESKTOPTABCOLUMN td:nth-last-child(2) > img"));
+					System.out.println("Fee is displayed : "+currencyIcon.getAttribute("alt"));
+					WebElement flatPrice = driver.findElement(By.cssSelector(".DESKTOPTABCOLUMN td:last-child > p.evergreen-text:last-child"));
+					System.out.println("Flat price without GST value :"+flatPrice.getText());
+					if(!flatPrice.getText().equalsIgnoreCase(flatPriceWithoutGSTFromExcel))
 					{
 						checkPriceWOGST = "fail";
 					}
 				}
 				
-			}
-			else
-			{
-				checkPriceWOGST = "success";
+				
+				
+				/*
+				 * List<WebElement> listOfRows = driver.findElements(By.
+				 * cssSelector("td p[class=\"Sk-Currency evergreen-text\"]")); for(int k = 0; k
+				 * < listOfRows.size(); k++) {
+				 * if(listOfRows.get(k).getText().equalsIgnoreCase("Fee")) { List<WebElement>
+				 * checkPriceWithoutGSTValue = driver.findElements(By.
+				 * cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td img:not(td[width=\"2%\"]"
+				 * )); for(int i = 0; i < checkPriceWithoutGSTValue.size(); i++) {
+				 * if(checkPriceWithoutGSTValue.get(i).getAttribute("alt").contains("Course Fee"
+				 * )) {
+				 * System.out.println(checkPriceWithoutGSTValue.get(i).getAttribute("alt")); } }
+				 * List<WebElement> checkFlatText = driver.findElements(By.
+				 * cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:not(td[width=\"2%\"]):not(td[class=\"PADDLFT\"]) [class=\"evergreen-text\"]"
+				 * )); for(int j = 0; j < checkFlatText.size(); j++) {
+				 * if(checkFlatText.get(j).getText().equalsIgnoreCase(
+				 * flatPriceWithoutGSTFromExcel)) { String getFlat =
+				 * checkFlatText.get(j).getText().replaceAll("\\s",
+				 * "").replaceAll("[^0-9?!\\.]","").replaceAll("\u00A0",
+				 * "").replaceAll("[^\\p{ASCII}]", "");
+				 * System.out.println("Flat price from excel : "+flatPriceWithoutGSTFromExcel);
+				 * System.out.println("Flat price from Browser : "+getFlat); checkPriceWOGST =
+				 * "success"; break; } else { checkPriceWOGST = "fail"; } } } else {
+				 * checkPriceWOGST = "successIND"; } }
+				 */
 			}
 		}
 		catch(Exception e)
@@ -702,34 +741,97 @@ public class AboutCourseLocators
 		{
 			if(!driver.getCurrentUrl().contains("in."))
 			{
-				JavascriptExecutor js = (JavascriptExecutor)driver;
-				js.executeScript("window.scrollBy(0, -1300)");
-				List<WebElement> checkPriceUSDValue = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td > p"));
-				for(int i = 0; i < checkPriceUSDValue.size(); i++)
+				if(priceUSDFromExcel.equalsIgnoreCase("NA"))
 				{
-					if(checkPriceUSDValue.get(i).getText().replaceAll("[^\\d.]", "").replaceAll("[^0-9?!\\.]","").replaceAll("\\s", "").equalsIgnoreCase(priceUSDFromExcel.replaceAll("[^\\d.]", "").replaceAll("\\s", "")))
+					checkUSDStatus = "successIND";
+				}
+				else
+				{
+					JavascriptExecutor js = (JavascriptExecutor)driver;
+					js.executeScript("window.scrollBy(0, -1300)");
+					List<WebElement> checkPriceUSDValue = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td > p"));
+					for(int i = 0; i < checkPriceUSDValue.size(); i++)
 					{
-						String checkFlatPriceUSD = checkPriceUSDValue.get(i).getText().replaceAll("[^0-9?!\\.]","").replaceAll("\\s", "");
-						System.out.println(checkFlatPriceUSD);
-						checkUSDStatus = "Success";
-					}
-					else
-					{
-						System.out.println("not same price");
+						if(checkPriceUSDValue.get(i).getText().replaceAll("[^\\d.]", "").replaceAll("[^0-9?!\\.]","").replaceAll("\\s", "").equalsIgnoreCase(priceUSDFromExcel.replaceAll("[^\\d.]", "").replaceAll("\\s", "")))
+						{
+							String checkFlatPriceUSD = checkPriceUSDValue.get(i).getText().replaceAll("[^0-9?!\\.]","").replaceAll("\\s", "");
+							System.out.println(checkFlatPriceUSD);
+							checkUSDStatus = "Success";
+						}
+						else
+						{
+							System.out.println("not same price");
+							checkUSDStatus = "fail";
+						}
 					}
 				}
 			}
 			else
 			{
-				checkUSDStatus = "success";
+				checkUSDStatus = "successIND";
 			}
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			System.out.println("This is india site. so USD wont check");
 		}
 		return checkUSDStatus;
 	}
+
+	public String category(String courseName)
+	{
+		String categoryStatus = "fail";
+		try
+		{
+			if(courseName.equalsIgnoreCase("NA"))
+			{
+				categoryStatus = "successIND";
+			}
+			else
+			{
+				((JavascriptExecutor) driver).executeScript("window.open()");
+				ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+				driver.switchTo().window(tabs.get(1));
+				driver.get(ConfigFileReader.getSEOLoginURL());
+				WebElement clickCourseDropdown = driver.findElement(By.cssSelector("a#NavMegamenu"));
+				clickCourseDropdown.click();
+				List<WebElement> dropdownList = driver.findElements(By.cssSelector("div#MMDroPDoWNMAiN ul[class=\"categorylist dropdown-submenu\"] li"));
+				for(int i = 0; i < dropdownList.size(); i++)
+				{
+					String getCategoryName = dropdownList.get(i).getText();
+					System.out.println("Category Name : "+getCategoryName);
+					dropdownList.get(i).click();
+					WebElement checkCatalogText = driver.findElement(By.xpath("//h2[contains(text(),'Browse Our Artificial Intelligence Learning Catalog ')]"));
+					if(checkCatalogText.isDisplayed())
+					{
+						List<WebElement> listOfCourseCard = driver.findElements(By.cssSelector("div[class=\"skills-card-filter-bx\"] div.CoLCOMN div[class=\"CoursHeadingSection\"] p"));
+						for(int k = 0; k < listOfCourseCard.size(); k++)
+						{
+							WebElement courseCard = listOfCourseCard.get(k);
+							String courseCardName = courseCard.getText();
+							System.out.println(courseCardName);
+							if(courseCardName.equalsIgnoreCase(courseName))
+							{
+								categoryStatus = "success";
+								System.out.println(""+courseName+" available in this category "+getCategoryName+" ");
+								driver.close();
+								break;
+							}
+						}
+					}
+					if(categoryStatus == "success")
+					{
+						break;
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+				return categoryStatus;
+	}
 	
 }
-

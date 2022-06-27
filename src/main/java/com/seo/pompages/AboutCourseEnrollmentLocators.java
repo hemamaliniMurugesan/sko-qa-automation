@@ -212,6 +212,10 @@ public class AboutCourseEnrollmentLocators {
 					}
 					
 					}
+				else
+				{
+					
+				}
 				}
 		} 
 		catch (Exception e)
@@ -739,38 +743,46 @@ public class AboutCourseEnrollmentLocators {
 	public boolean planSelection(String plan) throws InterruptedException
 	{
 		boolean isPlanAvailable = false;
-		if (driver.findElements(By.xpath("//h4[contains(text(),\"Select a plan to continue\")]"))
-				.size() != 0) // plan
+		if(plan.equalsIgnoreCase("NA"))
 		{
-			System.out.println("select a plan to continue pop up");
-			List<WebElement> plans = driver
-					.findElements(By.cssSelector("div#custom-plans1 div[class=\"owl-item active\"]"));
-			for (int i = 0; i < plans.size(); i++)
+			isPlanAvailable = true;
+		}
+		else
+		{
+			if (driver.findElements(By.xpath("//h4[contains(text(),\"Select a plan to continue\")]"))
+					.size() != 0) // plan
 			{
-				WebElement getplan = plans.get(i);
-				WebElement planName = getplan.findElement(By.cssSelector(" div[class*=\"plan_heading\"]"));
-				wait.until(ExpectedConditions.visibilityOf(planName)).click();
-				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
-				String getPlanName = planName.getText();
-				System.out.println(getPlanName);
-				if (getPlanName.equalsIgnoreCase(plan))// validating plan
+				System.out.println("select a plan to continue pop up");
+				List<WebElement> plans = driver
+						.findElements(By.cssSelector("div#custom-plans1 div[class=\"owl-item active\"]"));
+				for (int i = 0; i < plans.size(); i++)
 				{
-					WebElement planPrize = plans.get(i).findElement(By.cssSelector(
-							" h5[class*=\"prize\"]:not([class=\"prize_color discount\"])"));
-					String getPrizeText = planPrize.getText();
-					System.out.println(getPrizeText);
-					WebElement clickSelectPlanButton = plans.get(i)
-							.findElement(By.cssSelector(" div[class=\"bttn\"] a"));
-					wait.until(ExpectedConditions.visibilityOf(clickSelectPlanButton));
-					clickSelectPlanButton.click();
+					WebElement getplan = plans.get(i);
+					WebElement planName = getplan.findElement(By.cssSelector(" div[class*=\"plan_heading\"]"));
+					wait.until(ExpectedConditions.visibilityOf(planName)).click();
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
-					Thread.sleep(1000);
-					isPlanAvailable = true;
-					JavascriptExecutor js2 = (JavascriptExecutor) driver;
-					js2.executeScript("window.scrollBy(0, 500)");
-					break;
-				} // end of plan selection
+					String getPlanName = planName.getText();
+					System.out.println(getPlanName);
+					if (getPlanName.equalsIgnoreCase(plan))// validating plan
+					{
+						WebElement planPrize = plans.get(i).findElement(By.cssSelector(
+								" h5[class*=\"prize\"]:not([class=\"prize_color discount\"])"));
+						String getPrizeText = planPrize.getText();
+						System.out.println(getPrizeText);
+						WebElement clickSelectPlanButton = plans.get(i)
+								.findElement(By.cssSelector(" div[class=\"bttn\"] a"));
+						wait.until(ExpectedConditions.visibilityOf(clickSelectPlanButton));
+						clickSelectPlanButton.click();
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+						Thread.sleep(1000);
+						isPlanAvailable = true;
+						JavascriptExecutor js2 = (JavascriptExecutor) driver;
+						js2.executeScript("window.scrollBy(0, 500)");
+						break;
+					} // end of plan selection
+				}
 			}
+			
 		}
 		return isPlanAvailable;
 	}

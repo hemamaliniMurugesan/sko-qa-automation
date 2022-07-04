@@ -252,7 +252,7 @@ public class AboutCourseEnrollmentLocators {
 					WebElement getCourseTextFromOrderDetails = driver.findElement(By.cssSelector("table tr[class=\"first_3_rows\"] td p"));
 					wait.until(ExpectedConditions.visibilityOf(getCourseTextFromOrderDetails));
 					courseText = getCourseTextFromOrderDetails.getText();
-					System.out.println(getCourseTextFromOrderDetails);
+					System.out.println(courseText);
 					if(courseText.contains(paymentSuccessText))
 					{
 						System.out.println("completion certificate is available in receipt details : "+courseText);
@@ -280,8 +280,7 @@ public class AboutCourseEnrollmentLocators {
 	public String card(String price, String priceWithTax, String paymentSuccessText, ArrayList<Integer> errorCells) throws InterruptedException
 	{
 		String status = "success";
-		List<WebElement> allPaymenets = driver
-				.findElements(By.cssSelector("div[class=\"content payment-form\"] li strong span"));
+		List<WebElement> allPaymenets = driver.findElements(By.cssSelector("div[class=\"content payment-form\"] li strong span"));
 		for (int i = 0; i < allPaymenets.size(); i++) 
 		{
 			if (allPaymenets.get(i).getText().replaceAll("\\s", "").trim().contains("Card"))

@@ -1,8 +1,11 @@
 package com.seo.pompages;
 import java.io.File;
 import java.net.URL;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +28,7 @@ import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
 import com.seo.utility.Utils;
 
+import cucumber.deps.com.thoughtworks.xstream.io.binary.Token.Formatter;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 
@@ -73,9 +77,9 @@ public class AboutCourseLocators
 		return CourseCodeStatus;
 	}
 	
+	String courseTitleText = "";
 	public String getCourseTitleText()
 	{
-		String courseTitleText = "";
 		try
 		{
 			WebElement title = driver.findElement(By.xpath("//h1"));
@@ -602,14 +606,22 @@ public class AboutCourseLocators
 								break;
 							}
 						}
+						
 						List<WebElement> checkStartOnText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td .evergreen-text"));
 						for(int j = 0; j < checkStartOnText.size(); j++)
 						{
-							if(checkStartOnText.get(j).getText().equalsIgnoreCase(startsOnFromExcel))
+							String getText = checkStartOnText.get(j).getText();
+							if(getText.equalsIgnoreCase("Starts on"))
 							{
-								System.out.println(" Starts on value :"+checkStartOnText.get(j).getText());
-								checkStartson = "success";
-								break;
+								WebElement getStartsOnLocator = driver.findElement(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td:nth-child(2)"));
+								String getStartsOnText = getStartsOnLocator.getText();
+								String startsOnTextFromBrowser = getStartsOnText.replaceAll("Starts on", "").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+								if(startsOnTextFromBrowser.equalsIgnoreCase(startsOnFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+								{
+									System.out.println(" Starts on value :"+getStartsOnText);
+									checkStartson = "success";
+									break;
+								}
 							}
 						}
 						break;
@@ -648,7 +660,7 @@ public class AboutCourseLocators
 								System.out.println("Duration icon is displayed :"+checkDurationImg.get(i).getAttribute("alt"));
 							}
 						}
-						List<WebElement> checkDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td .evergreen-text"));
+						List<WebElement> checkDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td p"));
 						for(int j = 0; j < checkDurationText.size(); j++)
 						{
 							String getDuration = checkDurationText.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
@@ -693,7 +705,16 @@ public class AboutCourseLocators
 					System.out.println("Fee is displayed : "+currencyIcon.getAttribute("alt"));
 					WebElement flatPrice = driver.findElement(By.cssSelector(".DESKTOPTABCOLUMN td:last-child > p.evergreen-text:last-child"));
 					System.out.println("Flat price without GST value :"+flatPrice.getText());
-					if(!flatPrice.getText().equalsIgnoreCase(flatPriceWithoutGSTFromExcel))
+					
+					NumberFormat format = NumberFormat.getCurrencyInstance();
+					Number number = format.parse(flatPrice.getText());
+					String flatPriceFromBrowser = number.toString();
+					
+					String flatPriceFromExcel = flatPriceWithoutGSTFromExcel.replaceAll(",", "");
+					
+					System.out.println("Flat price from browser : "+flatPriceFromBrowser);
+					
+					if(!flatPriceFromBrowser.equalsIgnoreCase(flatPriceFromExcel))
 					{
 						checkPriceWOGST = "fail";
 					}
@@ -779,50 +800,62 @@ public class AboutCourseLocators
 		return checkUSDStatus;
 	}
 
-	public String category(String courseName)
+	public String category(String categoryName)
 	{
 		String categoryStatus = "fail";
 		try
 		{
-			if(courseName.equalsIgnoreCase("NA"))
+			if(categoryName.equalsIgnoreCase("NA"))
 			{
 				categoryStatus = "successIND";
 			}
 			else
 			{
+				String aboutPage = driver.getWindowHandle(); 
 				((JavascriptExecutor) driver).executeScript("window.open()");
 				ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
 				driver.switchTo().window(tabs.get(1));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 				driver.get(ConfigFileReader.getSEOLoginURL());
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 				WebElement clickCourseDropdown = driver.findElement(By.cssSelector("a#NavMegamenu"));
 				clickCourseDropdown.click();
 				List<WebElement> dropdownList = driver.findElements(By.cssSelector("div#MMDroPDoWNMAiN ul[class=\"categorylist dropdown-submenu\"] li"));
 				for(int i = 0; i < dropdownList.size(); i++)
 				{
-					String getCategoryName = dropdownList.get(i).getText();
+					WebElement categoryNameFromList = dropdownList.get(i);
+					/*
+					 * JavascriptExecutor js = (JavascriptExecutor)driver;
+					 * js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
+					 */
+					String getCategoryName = categoryNameFromList.getText();
 					System.out.println("Category Name : "+getCategoryName);
-					dropdownList.get(i).click();
-					WebElement checkCatalogText = driver.findElement(By.xpath("//h2[contains(text(),'Browse Our Artificial Intelligence Learning Catalog ')]"));
-					if(checkCatalogText.isDisplayed())
+					if(getCategoryName.equalsIgnoreCase(categoryName))
 					{
+						categoryNameFromList.click();
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+						Thread.sleep(500);
 						List<WebElement> listOfCourseCard = driver.findElements(By.cssSelector("div[class=\"skills-card-filter-bx\"] div.CoLCOMN div[class=\"CoursHeadingSection\"] p"));
 						for(int k = 0; k < listOfCourseCard.size(); k++)
 						{
 							WebElement courseCard = listOfCourseCard.get(k);
+							JavascriptExecutor js = (JavascriptExecutor)driver;
+							js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
 							String courseCardName = courseCard.getText();
 							System.out.println(courseCardName);
-							if(courseCardName.equalsIgnoreCase(courseName))
+							if(courseCardName.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(courseTitleText))
 							{
 								categoryStatus = "success";
-								System.out.println(""+courseName+" available in this category "+getCategoryName+" ");
+								System.out.println(""+courseCardName+" available in this category "+categoryName+" ");
 								driver.close();
+								driver.switchTo().window(aboutPage);
 								break;
 							}
 						}
-					}
-					if(categoryStatus == "success")
-					{
-						break;
+						if(categoryStatus == "success")
+						{
+							break;
+						}
 					}
 				}
 			}

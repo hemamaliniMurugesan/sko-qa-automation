@@ -3,7 +3,7 @@
 <suite name="Testing Google Apps">
     <test name="Regression">
          <classes>
-			 <class name="com.test.course.TestCourseDetails"/>
+			 <class name="com.test.course.TestAboutCourse"/>
           </classes>
      </test> <!-- Test -->
 </suite> <!-- Suite -->

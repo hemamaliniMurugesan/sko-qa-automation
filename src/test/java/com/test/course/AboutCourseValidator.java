@@ -114,7 +114,7 @@ public class AboutCourseValidator
 					flatPriceUSD(row.get(1));
 					break;	
 				case "category":
-					category(row.get(1));
+					category(row);
 					break;	
 				default:
 					markCellAsHeader();
@@ -310,7 +310,7 @@ public class AboutCourseValidator
 	}
 	
 	private void earnYourCertificate(String earnYourCertificateContentFromExcel,
-			String titleName , String formatOfCertificate, String org )
+			String titleName , String formatOfCertificate, String org)
 	{// validating logo, format of certificate
 		try
 		{
@@ -553,19 +553,23 @@ public class AboutCourseValidator
 		}
 	}
 	
-	private void category(String courseName)
+	private void category(ArrayList<String> categoryName)
 	{
 		String checkCategoryStatus = "success";
 		try
 		{
-			String verifyCategory = aboutCourseLocators.category(courseName);
-			if(verifyCategory.equalsIgnoreCase("successIND"))
+			ArrayList<String> verifyCategory = aboutCourseLocators.checkCategory(categoryName);
+			for(int i = 1; i < verifyCategory.size(); i++)
 			{
-				markProcessIgnored();
-			}
-			else if(!verifyCategory.equalsIgnoreCase(checkCategoryStatus))
-			{
-				markProcessFailed();
+				String getCategoryStatus = verifyCategory.get(i);
+				if(getCategoryStatus.equalsIgnoreCase("successIND"))
+				{
+					markProcessIgnored();
+				}
+				else if(!getCategoryStatus.equalsIgnoreCase(checkCategoryStatus))
+				{
+				  markProcessFailed();
+				}
 			}
 		}
 		catch(Exception e)

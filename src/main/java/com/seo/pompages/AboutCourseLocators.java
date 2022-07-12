@@ -800,63 +800,66 @@ public class AboutCourseLocators
 		return checkUSDStatus;
 	}
 
-	public String category(String categoryName)
+	public ArrayList<String> checkCategory(ArrayList<String> categoryName)
 	{
-		String categoryStatus = "fail";
+		ArrayList<String> categoryStatus = new ArrayList<String>();
 		try
 		{
-			if(categoryName.equalsIgnoreCase("NA"))
+			for(int j = 1; j < categoryName.size(); j++)
 			{
-				categoryStatus = "successIND";
-			}
-			else
-			{
-				String aboutPage = driver.getWindowHandle(); 
-				((JavascriptExecutor) driver).executeScript("window.open()");
-				ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-				driver.switchTo().window(tabs.get(1));
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-				driver.get(ConfigFileReader.getSEOLoginURL());
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-				WebElement clickCourseDropdown = driver.findElement(By.cssSelector("a#NavMegamenu"));
-				clickCourseDropdown.click();
-				List<WebElement> dropdownList = driver.findElements(By.cssSelector("div#MMDroPDoWNMAiN ul[class=\"categorylist dropdown-submenu\"] li"));
-				for(int i = 0; i < dropdownList.size(); i++)
+				if(categoryName.get(j).equalsIgnoreCase("NA"))
 				{
-					WebElement categoryNameFromList = dropdownList.get(i);
-					/*
-					 * JavascriptExecutor js = (JavascriptExecutor)driver;
-					 * js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
-					 */
-					String getCategoryName = categoryNameFromList.getText();
-					System.out.println("Category Name : "+getCategoryName);
-					if(getCategoryName.equalsIgnoreCase(categoryName))
+					//categoryStatus = "successIND";
+					categoryStatus.add("successIND");
+				}
+				else
+				{
+					String aboutPage = driver.getWindowHandle(); 
+					((JavascriptExecutor) driver).executeScript("window.open()");
+					ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+					driver.switchTo().window(tabs.get(1));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+					driver.get(ConfigFileReader.getSEOLoginURL());
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+					boolean isFoundCourse = false;
+					WebElement clickCourseDropdown = driver.findElement(By.cssSelector("a#NavMegamenu"));
+					clickCourseDropdown.click();
+					List<WebElement> dropdownList = driver.findElements(By.cssSelector("div#MMDroPDoWNMAiN ul[class=\"categorylist dropdown-submenu\"] li"));
+					for(int i = 0; (!isFoundCourse && i < dropdownList.size()); i++)
 					{
-						categoryNameFromList.click();
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-						Thread.sleep(500);
-						List<WebElement> listOfCourseCard = driver.findElements(By.cssSelector("div[class=\"skills-card-filter-bx\"] div.CoLCOMN div[class=\"CoursHeadingSection\"] p"));
-						for(int k = 0; k < listOfCourseCard.size(); k++)
+						WebElement categoryNameFromList = dropdownList.get(i);
+						/*
+						 * JavascriptExecutor js = (JavascriptExecutor)driver;
+						 * js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
+						 */
+						String getCategoryNameFromList = categoryNameFromList.getText();
+						System.out.println("Category Name : "+getCategoryNameFromList);
+						if(getCategoryNameFromList.equalsIgnoreCase(categoryName.get(j)))
 						{
-							WebElement courseCard = listOfCourseCard.get(k);
-							JavascriptExecutor js = (JavascriptExecutor)driver;
-							js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
-							String courseCardName = courseCard.getText();
-							System.out.println(courseCardName);
-							if(courseCardName.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(courseTitleText))
+							categoryNameFromList.click();
+							driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+							Thread.sleep(500);
+							List<WebElement> listOfCourseCard = driver.findElements(By.cssSelector("div[class=\"skills-card-filter-bx\"] div.CoLCOMN div[class=\"CoursHeadingSection\"] p"));
+							for(int k = 0; (!isFoundCourse && k < listOfCourseCard.size()); k++)
 							{
-								categoryStatus = "success";
-								System.out.println(""+courseCardName+" available in this category "+categoryName+" ");
-								driver.close();
-								driver.switchTo().window(aboutPage);
-								break;
+								WebElement courseCard = listOfCourseCard.get(k);
+								JavascriptExecutor js = (JavascriptExecutor)driver;
+								js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
+								String courseCardName = courseCard.getText();
+								System.out.println(courseCardName);
+								if(courseCardName.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(courseTitleText))
+								{
+									isFoundCourse = true;
+									//categoryStatus = "success";
+									categoryStatus.add("success");
+									System.out.println(""+courseCardName+" available in this category "+categoryName+" ");
+									driver.close();
+									driver.switchTo().window(aboutPage);
+								}
 							}
 						}
-						if(categoryStatus == "success")
-						{
-							break;
-						}
 					}
+					//driver.switchTo().window(aboutPage);
 				}
 			}
 		}

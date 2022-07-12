@@ -606,7 +606,6 @@ public class AboutCourseLocators
 								break;
 							}
 						}
-						
 						List<WebElement> checkStartOnText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td .evergreen-text"));
 						for(int j = 0; j < checkStartOnText.size(); j++)
 						{

@@ -827,10 +827,6 @@ public class AboutCourseLocators
 					for(int i = 0; (!isFoundCourse && i < dropdownList.size()); i++)
 					{
 						WebElement categoryNameFromList = dropdownList.get(i);
-						/*
-						 * JavascriptExecutor js = (JavascriptExecutor)driver;
-						 * js.executeScript("arguments[0].scrollIntoView(true);", courseCard);
-						 */
 						String getCategoryNameFromList = categoryNameFromList.getText();
 						System.out.println("Category Name : "+getCategoryNameFromList);
 						if(getCategoryNameFromList.equalsIgnoreCase(categoryName.get(j)))
@@ -849,7 +845,6 @@ public class AboutCourseLocators
 								if(courseCardName.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(courseTitleText))
 								{
 									isFoundCourse = true;
-									//categoryStatus = "success";
 									categoryStatus.add("success");
 									System.out.println(""+courseCardName+" available in this category "+categoryName+" ");
 									driver.close();

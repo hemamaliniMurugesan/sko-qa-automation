@@ -568,7 +568,7 @@ public class AboutCourseValidator
 				}
 				else if(!getCategoryStatus.equalsIgnoreCase(checkCategoryStatus))
 				{
-				  markProcessFailed();
+					markColumnFailed(i);
 				}
 			}
 		}

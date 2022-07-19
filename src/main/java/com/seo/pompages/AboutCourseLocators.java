@@ -651,31 +651,27 @@ public class AboutCourseLocators
 				{
 					if(listOfRows.get(k).getText().equalsIgnoreCase("Duration"))
 					{
-						List<WebElement> checkDurationImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td>img"));
-						for(int i = 0; i < checkDurationImg.size(); i++)
-						{
-							if(checkDurationImg.get(i).getAttribute("alt").contains("duration"))
-							{
-								System.out.println("Duration icon is displayed :"+checkDurationImg.get(i).getAttribute("alt"));
-							}
-						}
-						List<WebElement> checkDurationText = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td p"));
-						for(int j = 0; j < checkDurationText.size(); j++)
-						{
-							String getDuration = checkDurationText.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-							System.out.println("duration from browser : "+getDuration);
-							if(getDuration.equalsIgnoreCase(durationFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
-							{
-								checkDuration = "success";
-								break;
-							}
-							else
-							{
-								checkDuration = "fail";
-							}
-						}
-						break;
+						System.out.println("Duration is available");
 					}
+				}
+				List<WebElement> checkDurationImg = driver.findElements(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td>img"));
+				for(int i = 0; i < checkDurationImg.size(); i++)
+				{
+					if(checkDurationImg.get(i).getAttribute("alt").contains("duration"))
+					{
+						System.out.println("Duration icon is displayed :"+checkDurationImg.get(i).getAttribute("alt"));
+					}
+				}
+				WebElement checkDurationText = driver.findElement(By.cssSelector("div[class='TabLEColUN DESKTOPTABCOLUMN'] > table > tbody > tr > td ul"));
+				String getDuration = checkDurationText.getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+				System.out.println("duration from browser : "+getDuration);
+				if(getDuration.equalsIgnoreCase(durationFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
+				{
+					checkDuration = "success";
+				}
+				else
+				{
+					checkDuration = "fail";
 				}
 			}
 		}

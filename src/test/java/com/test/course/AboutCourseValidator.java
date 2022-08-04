@@ -577,6 +577,7 @@ public class AboutCourseValidator
 			markProcessFailed();
 		}
 	}
+	
 	private void markColumnFailed(int columnIndex)
 	{
 		String cellValue = TestAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);

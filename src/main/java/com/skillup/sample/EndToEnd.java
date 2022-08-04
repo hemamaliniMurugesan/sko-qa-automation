@@ -251,5 +251,5 @@ public class EndToEnd
 		Assert.assertEquals(Expected_FAQ4Answer, Selector_FAQ4Answer);
 		Thread.sleep(3000);
 		Selector_FAQ4.click();
-	}	
+	}
 }

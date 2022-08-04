@@ -30,7 +30,8 @@ public class TestAboutCourse
 	public static SoftAssert softAssert = null;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
 
-	public TestAboutCourse(String excelPath) {
+	public TestAboutCourse(String excelPath)
+	{
 		softAssert = new SoftAssert();
 		aboutCoursePage = new AboutCourseLocators();
 		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourse\\TestData_AboutCourse_PL100.xlsx";
@@ -106,7 +107,8 @@ public class TestAboutCourse
 		consolidatedSheedData.add(emptyRow);
 		consolidatedSheedData.add(courseResultHeader);
 		boolean hasFailedSheets = false;
-		for (Entry<String, String> entry : sheetsResult.entrySet()) {
+		for (Entry<String, String> entry : sheetsResult.entrySet())
+		{
 			String sheetName = entry.getKey();
 			String sheetStatus = entry.getValue();
 			ArrayList<String> sheetResult = new ArrayList<String>();

@@ -34,7 +34,7 @@ public class TestAboutCourse
 	{
 		softAssert = new SoftAssert();
 		aboutCoursePage = new AboutCourseLocators();
-		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourse\\TestData_AboutCourse_PL100.xlsx";
+		excelPath = "C:\\Users\\Skillup 200\\Downloads\\Data Analysis with Python.xlsx";
 		this.aboutCoursePage(excelPath);
 	}
 

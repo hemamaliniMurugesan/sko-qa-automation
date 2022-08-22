@@ -1,11 +1,10 @@
 package com.seo.pompages;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,24 +19,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.google.j2objc.annotations.Property;
-import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
-import com.seo.utility.Utils;
-
-import cucumber.deps.com.thoughtworks.xstream.io.binary.Token.Formatter;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
 
 public class AboutCourseLocators
 {
 	WebDriver driver;
 	WebDriverWait wait;
 	URL parentURL;
-	
+	String setHost;
+	String setLoginURL;
 	public WebDriver getDriver()
 	{
 		return driver;
@@ -53,21 +45,63 @@ public class AboutCourseLocators
 		wait = new WebDriverWait(driver, Duration.ofSeconds(5000));
 	}
 	
+	public String setEnvironment(String host)
+	{
+		if(!host.equalsIgnoreCase("prod"))
+		{
+			setHost = "https://"+host+"-in.skillup.online/courses/";
+		}
+		else
+		{
+			setHost = "https://"+host+".skillup.online";
+		}
+		return setHost;
+	}
+	
+	public String setSEOLoginURL(String host)
+	{
+		if(!host.equalsIgnoreCase("prod"))
+		{
+			setLoginURL = "https://"+host+"-in.skillup.online";
+		}
+		else
+		{
+			setLoginURL = "https://"+host+".skillup.online";
+		}
+		return setLoginURL;
+	}
+	
 	public String getCourseCodeText(String code)
 	{
 		String courseIDFromBrowser = "";
 		String CourseCodeStatus = "false";
+		HttpURLConnection huc = null;
+		int respCode = 200;
+		String addHosturl = this.setHost+code+"/about";
 		try
 		{
-			String addHosturl = ConfigFileReader.getAboutCourseURL()+code+"/about";
-			driver.get(addHosturl);
-			WebElement checkCourseCode = driver.findElement(By.xpath("(//script[contains(text(),\""+code+"\")])[1]"));
-			courseIDFromBrowser = checkCourseCode.getAttribute("textContent");
-			System.out.println("course ID from Browser : "+courseIDFromBrowser);
-			System.out.println("courseIDFrom Excel: "+code);
-			if(courseIDFromBrowser.contains(code))
+			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
+			huc.setRequestMethod("HEAD");
+			huc.connect();
+			respCode = huc.getResponseCode();
+			System.out.println(respCode);
+			if(respCode > 200)
 			{
-				CourseCodeStatus = "true";
+				System.out.println("broken link");
+				System.exit(0);
+			}
+			else
+			{
+				System.out.println("un broken link");
+				driver.get(addHosturl);
+				WebElement checkCourseCode = driver.findElement(By.xpath("(//script[contains(text(),\""+code+"\")])[1]"));
+				courseIDFromBrowser = checkCourseCode.getAttribute("textContent");
+				System.out.println("course ID from Browser : "+courseIDFromBrowser);
+				System.out.println("courseIDFrom Excel: "+code);
+				if(courseIDFromBrowser.contains(code))
+				{
+					CourseCodeStatus = "true";
+				}
 			}
 		}
 		catch(Exception e)
@@ -814,7 +848,7 @@ public class AboutCourseLocators
 					ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
 					driver.switchTo().window(tabs.get(1));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-					driver.get(ConfigFileReader.getSEOLoginURL());
+					driver.get(this.setLoginURL);
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 					boolean isFoundCourse = false;
 					WebElement clickCourseDropdown = driver.findElement(By.cssSelector("a#NavMegamenu"));

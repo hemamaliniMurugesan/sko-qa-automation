@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.seo.dataProvider.ConfigFileReader;
 import com.seo.pompages.AboutCourseLocators;
 import com.seo.utility.Utils;
 
@@ -53,6 +52,9 @@ public class AboutCourseValidator
 		{
 			switch (process) 
 			{
+				case "environment":
+					environment(row.get(1));
+					break;
 				case "courseCode":
 					courseCode(row.get(1));
 					break;
@@ -125,6 +127,19 @@ public class AboutCourseValidator
 		{
 			e.printStackTrace();
 			markProcessFailed();
+		}
+	}
+	String loginURL;
+	private void environment(String environmentFromExcel)
+	{
+		try
+		{
+			String checkEnvironment = aboutCourseLocators.setEnvironment(environmentFromExcel);
+			String loginURL = aboutCourseLocators.setSEOLoginURL(environmentFromExcel);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	

@@ -35,7 +35,7 @@ public class TestCourseDetails
 	{
 		softAssert = new SoftAssert();
 		courseDetails = new CourseDetailsPage();
-		excelPath = "C:\\Users\\Skillup 200\\Downloads\\DataAnalysisWithPython-SEO.xlsx";
+		excelPath = "D:\\SEO_InputData_FromTeam\\mahak\\ViewSourse\\AZ-801.xlsx";
 		this.testCourseDetails(excelPath);
 	}
 	

@@ -1,5 +1,6 @@
 package com.seo.pompages;
 
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -25,6 +26,8 @@ public class CourseDetailsPage
 	WebDriver driver;
 	WebDriverWait wait;
 	URL parentURL;
+	String setHostURL;
+	String setMetaHost;
 	
 	public WebDriver getDriver()
 	{
@@ -46,13 +49,54 @@ public class CourseDetailsPage
 
 	}
 	
+	public String setEnvironment(String host)
+	{
+		if(!host.equalsIgnoreCase("prod"))
+		{
+			setHostURL = "https://"+host+"-in.skillup.online";
+		}
+		else
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
+		return setHostURL;
+	}
+	
+	public String setMetaHost(String metaHost)
+	{
+		if(!metaHost.equalsIgnoreCase("prod"))
+		{
+			setMetaHost = "https://"+metaHost+".skillup.online";
+		}
+		else
+		{
+			setMetaHost = "https://skillup.online";
+		}
+		return setMetaHost;
+	}
+	
 	public String launchCourseURL(String url)
 	{
+		HttpURLConnection huc = null;
+		int respCode = 200;
+		String addHosturl = this.setHostURL+url;
 		try
 		{
-			String addHostURL = ConfigFileReader.getURL()+url;
-			//driver.get(addHostURL);
-			driver.get(addHostURL);
+			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
+			huc.setRequestMethod("HEAD");
+			huc.connect();
+			respCode = huc.getResponseCode();
+			System.out.println(respCode);
+			if(respCode > 200)
+			{
+				System.out.println("broken link");
+				System.exit(0);
+			}
+			else
+			{
+				System.out.println("un broken link");
+				driver.get(addHosturl);
+			}
 		}
 		catch(Exception e)
 		{
@@ -68,7 +112,7 @@ public class CourseDetailsPage
 		{
 			if(!driver.getCurrentUrl().contains("in."))
 			{
-				String addHost = ConfigFileReader.getURL()+canonicalURL;
+				String addHost = this.setHostURL+canonicalURL;
 				WebElement canonicalLocator = driver.findElement(By.cssSelector("link[rel='canonical']"));
 				String getCanonicalURLText = canonicalLocator.getAttribute("href");
 				if(addHost.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").equalsIgnoreCase(getCanonicalURLText.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "")))

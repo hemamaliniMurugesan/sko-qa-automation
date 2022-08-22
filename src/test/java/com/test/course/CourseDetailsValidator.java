@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.pompages.CourseDetailsPage;
 import com.seo.utility.Utils;
@@ -52,6 +51,9 @@ public class CourseDetailsValidator
 		{
 			switch (process.trim()) 
 			{
+				case "environment":
+					environment(row.get(1));
+					break;
 				case "currentURL":
 					launchUrlAndTestRedirection(row.get(1), row.get(2));
 					break;
@@ -95,7 +97,19 @@ public class CourseDetailsValidator
 			markProcessFailed();
 		}
 	}
-	
+	String getMetaHost;
+	private void environment(String environmentFromExcel)
+	{
+		try
+		{
+			String checkEnvironment = courseDetails.setEnvironment(environmentFromExcel);
+			getMetaHost = courseDetails.setMetaHost(environmentFromExcel);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	private void launchUrlAndTestRedirection(String url, String redirectURLFromData) 
 	{
 		try
@@ -382,7 +396,6 @@ public class CourseDetailsValidator
 		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(endTimeRow);
 		TestCourseDetails.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(durationRow);
 	}
-	
 	private HashMap<String, String> extractAttributesFromString(String str) 
 	{
 		HashMap<String, String> stringProps = new HashMap<String, String>();
@@ -411,7 +424,7 @@ public class CourseDetailsValidator
 				}
 				if(checkurl == true && (!(value.contains("og:url") || value.contains("og:image") || value.contains("twitter:url") || value.contains("twitter:image"))))
 				{
-					value = ConfigFileReader.getMetaURL()+value.replaceAll("\"", "");
+					value = this.getMetaHost+value.replaceAll("\"", "");
 				}
 				stringProps.put(key, value);
 				/*

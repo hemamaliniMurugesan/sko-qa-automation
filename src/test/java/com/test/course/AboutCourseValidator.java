@@ -73,7 +73,7 @@ public class AboutCourseValidator
 				case "courseType2":
 					courseType2(row.get(1));
 					break;
-				case "courseLevel ":
+				case "courseLevel":
 					courseLevel(row.get(1));
 					break;
 				case "courseInformation":
@@ -275,13 +275,9 @@ public class AboutCourseValidator
 				{
 					for(int j = 2; j < infoValues.size(); j++)
 					{
-						String infoContentFromExcel = infoValues.get(j)/*
-																		 * .replaceAll("\\s", "").replaceAll("\u00A0",
-																		 * "").replaceAll("[^\\p{ASCII}]", "")
-																		 */;
+						String infoContentFromExcel = infoValues.get(j);
 						System.out.println("answer from excel : "+infoContentFromExcel);
-						String infoContentFromBrowser = infoContentFromCourse
-								.get(j - 2);
+						String infoContentFromBrowser = infoContentFromCourse.get(j - 2);
 						System.out.println("answer from Browser : "+infoContentFromBrowser);
 						if(!infoContentFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equalsIgnoreCase(infoContentFromBrowser.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 						{

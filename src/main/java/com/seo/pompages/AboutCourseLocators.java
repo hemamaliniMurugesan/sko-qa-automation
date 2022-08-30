@@ -212,37 +212,36 @@ public class AboutCourseLocators
 	
 	public ArrayList<String> getInfoContentFromCourse(String courseInfoHeadingFromExcel)
 	{
-		ArrayList<String> courseInfoContent = new ArrayList<String>();
-		List<WebElement> listOfCourseInfo = driver.findElements(By.cssSelector("div#accordion div#accordion3 div[class='panel panel-default ibm-v2-accordion']"));
-		//js.executeScript("arguments[0].scrollIntoView();", listOfCourseInfo);
-		if(listOfCourseInfo.size() > 0)
-		{
-			for(int i = 0; i < listOfCourseInfo.size(); i++)
+			ArrayList<String> courseInfoContent = new ArrayList<String>();
+			List<WebElement> listOfCourseInfo = driver.findElements(By.cssSelector("div#accordion div#accordion3 div[class='panel panel-default ibm-v2-accordion']"));
+			//js.executeScript("arguments[0].scrollIntoView();", listOfCourseInfo);
+			if(listOfCourseInfo.size() > 0)
 			{
-				WebElement info = listOfCourseInfo.get(i);
-				WebElement infoHeading = info.findElement(By.cssSelector(" div a"));
-				String infoHeadingText = infoHeading.getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-				if(infoHeadingText.equalsIgnoreCase(courseInfoHeadingFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "")))
+				for(int i = 0; i < listOfCourseInfo.size(); i++)
 				{
-					List<WebElement> infoContent =  info.findElements(By.cssSelector(" div.panel-collapse > div"));
-					JavascriptExecutor executor = (JavascriptExecutor)driver;
-					executor.executeScript("arguments[0].click();", infoHeading);
-					for(int j = 0; j < infoContent.size(); j++)
+					WebElement info = listOfCourseInfo.get(i);
+					WebElement infoHeading = info.findElement(By.cssSelector(" div a"));
+					String infoHeadingText = infoHeading.getText().replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+					if(infoHeadingText.equalsIgnoreCase(courseInfoHeadingFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "")))
 					{
-						String content = infoContent.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0","").replaceAll("[^\\p{ASCII}]", "")
-															 ;
-						System.out.println(infoHeadingText);
-						System.out.println(content);
-						courseInfoContent.add(content);
+						List<WebElement> infoContent =  info.findElements(By.cssSelector(" div.panel-collapse > div"));
+						JavascriptExecutor executor = (JavascriptExecutor)driver;
+						executor.executeScript("arguments[0].click();", infoHeading);
+						for(int j = 0; j < infoContent.size(); j++)
+						{
+							String content = infoContent.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("\u00A0","").replaceAll("[^\\p{ASCII}]", "");
+							System.out.println(infoHeadingText);
+							System.out.println(content);
+							courseInfoContent.add(content);
+						}
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 					}
-					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 				}
 			}
-		}
-		else
-		{
-			System.out.println("Excel Data of FAQ is not same as UI");
-		}
+			else
+			{
+				System.out.println("Excel Data of course overview is not same as UI");
+			}
 		return courseInfoContent;
 	}
 	

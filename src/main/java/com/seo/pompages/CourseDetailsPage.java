@@ -36,7 +36,7 @@ public class CourseDetailsPage
 
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_103.0.5060.53 version\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_105.0.5195.52 version\\chromedriver_win32\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         options.addArguments("disable-infobars");
@@ -51,13 +51,29 @@ public class CourseDetailsPage
 	
 	public String setEnvironment(String host)
 	{
-		if(!host.equalsIgnoreCase("prod"))
-		{
-			setHostURL = "https://"+host+"-in.skillup.online";
-		}
-		else
+		if(host.equalsIgnoreCase("prod-in"))
 		{
 			setHostURL = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("dev-in"))
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("qa-in"))
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("qa"))
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("dev"))
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("prod"))
+		{
+			setHostURL = "https://skillup.online";
 		}
 		return setHostURL;
 	}

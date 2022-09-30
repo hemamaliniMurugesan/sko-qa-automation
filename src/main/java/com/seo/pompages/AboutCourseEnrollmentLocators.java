@@ -35,7 +35,7 @@ public class AboutCourseEnrollmentLocators {
 
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_win32_101.0.4951.41version\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_105.0.5195.52 version\\chromedriver_win32\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.setExperimentalOption("excludeSwitches", new String[] { "enable-automation" });
 		driver = new ChromeDriver();
@@ -142,11 +142,13 @@ public class AboutCourseEnrollmentLocators {
 						wait.until(ExpectedConditions.visibilityOf(clickEnrollIcon)).click();
 						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 					}
+					
 					String parentCoursePage = driver.getWindowHandle();// 1st page
 					Set<String> popup = driver.getWindowHandles(); // it shows 2 popup
 					Iterator<String> iterate1 = popup.iterator();
 					while (iterate1.hasNext())
 					{
+						
 						if (!parentCoursePage.equalsIgnoreCase(iterate1.next()))
 						{
 							driver.switchTo().window(iterate1.next());// 1st popup

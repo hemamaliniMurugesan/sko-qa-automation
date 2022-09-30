@@ -37,7 +37,7 @@ public class AboutCourseLocators
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Skillup 200\\Downloads\\chromedriver_103.0.5060.53 version\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_105.0.5195.52 version\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -213,7 +213,7 @@ public class AboutCourseLocators
 	public ArrayList<String> getInfoContentFromCourse(String courseInfoHeadingFromExcel)
 	{
 			ArrayList<String> courseInfoContent = new ArrayList<String>();
-			List<WebElement> listOfCourseInfo = driver.findElements(By.cssSelector("div#accordion div#accordion3 div[class='panel panel-default ibm-v2-accordion']"));
+			List<WebElement> listOfCourseInfo = driver.findElements(By.cssSelector("div#overview div[class=\"CourseOverview_accordionItem__9k4Ix accordion-item\"]"));
 			//js.executeScript("arguments[0].scrollIntoView();", listOfCourseInfo);
 			if(listOfCourseInfo.size() > 0)
 			{
@@ -557,15 +557,6 @@ public class AboutCourseLocators
 		}
 		return checkExerciseToExploreContent;
 	}
-	
-	/*
-	 * public String getAttributeOfTag(String selector, String attribute) { String
-	 * attributeValue = null; try { WebElement tag =
-	 * driver.findElement(By.cssSelector(selector)); attributeValue =
-	 * tag.getAttribute(attribute).replaceAll("\\s", "").replaceAll("\u00A0",
-	 * "").trim(); System.out.println(attributeValue); } catch(Exception e) {
-	 * e.printStackTrace(); } return attributeValue; }
-	 */
 	
 	public HashMap<String, HashMap<String, String>> getExperts()
 	{

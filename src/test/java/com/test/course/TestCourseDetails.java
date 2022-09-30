@@ -35,7 +35,7 @@ public class TestCourseDetails
 	{
 		softAssert = new SoftAssert();
 		courseDetails = new CourseDetailsPage();
-		excelPath = "D:\\SEO_InputData_FromTeam\\mahak\\ViewSourse\\AZ-801.xlsx";
+		excelPath = "D:\\SEO_InputData_FromTeam\\mahak\\PL-400 Microsoft Power Platform Developer-SEO.xlsx";
 		this.testCourseDetails(excelPath);
 	}
 	

@@ -55,6 +55,10 @@ public class CourseDetailsPage
 		{
 			setHostURL = "https://"+host+".skillup.online";
 		}
+		else if(host.equalsIgnoreCase("stage-in"))
+		{
+			setHostURL = "https://"+host+".skillup.online";
+		}
 		else if(host.equalsIgnoreCase("dev-in"))
 		{
 			setHostURL = "https://"+host+".skillup.online";

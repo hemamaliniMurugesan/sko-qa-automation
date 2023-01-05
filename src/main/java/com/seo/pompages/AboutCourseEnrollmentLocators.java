@@ -19,7 +19,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
 
-public class AboutCourseEnrollmentLocators {
+public class AboutCourseEnrollmentLocators
+{
 	WebDriver driver;
 	WebDriverWait wait;
 	URL parentURL;

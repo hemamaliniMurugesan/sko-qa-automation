@@ -248,6 +248,12 @@ public class ProcessExcel
 						cell.setCellValue(originalValue);
 						headerCell(workbook, cell);
 					}
+					else if(cellValue.indexOf(" - webElementNotFound") >= 0)
+					{
+						String originalValue = cellValue.replaceAll(" - webElementNotFound", "");
+						cell.setCellValue(originalValue);
+						webElementNotFoundCell(workbook, cell);
+					}
 					else
 					{
 						cell.setCellValue((String) cellValue);
@@ -313,6 +319,14 @@ public class ProcessExcel
         cell.setCellStyle(style);
 	}
 	
+	public static void webElementNotFoundCell(XSSFWorkbook wb, Cell cell)
+	{
+		CellStyle style = cell.getCellStyle();
+		style.setFillForegroundColor(IndexedColors.ORCHID.getIndex());
+		style.setFillBackgroundColor(IndexedColors.ORCHID.getIndex());  
+        style.setFillPattern(CellStyle.BIG_SPOTS);
+        cell.setCellStyle(style);
+	}
 	public static void ignoreCell(XSSFWorkbook wb, Cell cell) {
 		CellStyle style = cell.getCellStyle();
 		style.setFillForegroundColor(IndexedColors.GOLD.getIndex());

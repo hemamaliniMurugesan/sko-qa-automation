@@ -3,6 +3,9 @@ package com.seo.regression.testing;
 import java.sql.Driver;
 import java.util.ArrayList;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 public class RegressionTestLogin 
 {
 	String result = "failed";
@@ -36,6 +39,9 @@ public class RegressionTestLogin
 					break;
 				case "ValidCredentials":
 					ValidCredentials();
+					break;
+				case "logOut":
+					checkLogout();
 					break;
 			}
 		}
@@ -91,9 +97,19 @@ public class RegressionTestLogin
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
 		status = processLogin.login(userName, passWord);
-		if(!status.equalsIgnoreCase("Failed"))
+		if(status.equalsIgnoreCase("Failed"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(4).set(0, "ValidCredentials - failed");
+		}
+	}
+	
+	public void checkLogout()
+	{
+		String status = "Failed";
+		status = processLogin.verifyLogOut();
+		if(status.equalsIgnoreCase("Failed"))
+		{
+			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(5).set(0, "checkLogOut - failed");
 		}
 	}
 }

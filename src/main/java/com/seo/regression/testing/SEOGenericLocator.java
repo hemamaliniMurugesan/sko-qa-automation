@@ -85,7 +85,7 @@ public class SEOGenericLocator
 		String CourseCodeStatus = "false";
 		HttpURLConnection huc = null;
 		int respCode = 200;
-		String addHosturl = this.setHost+"/courses/"+code+"";
+		String addHosturl = this.setEnvironment(RegressionTesting.ENV_TO_USE)+"/courses/"+code+"";
 		try
 		{
 			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
@@ -104,8 +104,8 @@ public class SEOGenericLocator
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 				driver.get(addHosturl);
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
-				WebElement checkCourseCode = driver.findElement(By.cssSelector("input#share-url"));
-				String getCourseID = checkCourseCode.getAttribute("value");
+				WebElement checkCourseCode = driver.findElement(By.cssSelector("div[class='CourseDescription_buttonsContent__qPhJg '] button[class*='enrollNowBtn']"));
+				String getCourseID = checkCourseCode.getAttribute("href");
 				courseIDFromBrowser = getCourseID;
 				System.out.println("course ID from Browser : "+courseIDFromBrowser);
 				System.out.println("courseIDFrom Excel: "+code);

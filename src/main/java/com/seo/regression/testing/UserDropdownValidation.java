@@ -2,7 +2,7 @@ package com.seo.regression.testing;
 
 import java.util.ArrayList;
 
-public class UserDropdownValidation extends OpenWebsite
+public class UserDropdownValidation
 {
 	String result = "failed";
 	ArrayList<ArrayList<String>> sheetData = null;
@@ -45,13 +45,12 @@ public class UserDropdownValidation extends OpenWebsite
 	}
 	
 	public void login(String userName, String password)
-	
 	{
 		this.userName = userName;
 		String status = userDropdownList.login(userName, password);
 		if(status.equalsIgnoreCase("Failed"))
 		{
-			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "ValidCredentials - failed");
+			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "Login - failed");
 		}
 	}
 	

@@ -76,7 +76,7 @@ public class SEOGenericValidator
 				navigation();
 				break;
 			case "enroll":
-				enroll(row);
+				enrollment(row);
 				break;
 			default:
 				markCellAsHeader();
@@ -131,7 +131,6 @@ public class SEOGenericValidator
 			}
 			else if(checkFreeConsultation.equals("notProcessed"))
 			{
-				
 				markProcessIgnored();
 			}
 		}
@@ -141,21 +140,27 @@ public class SEOGenericValidator
 		}
 	}
 	
-	private void enroll(ArrayList<String> enrollDataFromExcel)
+	private void enrollment(ArrayList<String> enrollDataFromExcel)
 	{
+		String statusOfEnrollment = "true";
 		try
 		{
 			ArrayList<String> verifyEnrollmentProcess = enrollDataFromExcel;
 			if(!verifyEnrollmentProcess.contains("NA"))
 			{
 				verifyEnrollmentProcess = seoGenericLocator.enroll(enrollDataFromExcel);
+				for(int i = 0; i < verifyEnrollmentProcess.size(); i++)
+				{
+					if(!verifyEnrollmentProcess.get(i).equalsIgnoreCase(statusOfEnrollment))
+					{
+						markColumnFailed(i);
+					}
+				}
 			}
 			else
 			{
 				markProcessIgnored();
 			}
-			
-					
 		}
 		catch(Exception e)
 		{
@@ -370,4 +375,5 @@ public class SEOGenericValidator
 		TestSEOGeneric.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(endTimeRow);
 		TestSEOGeneric.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).add(durationRow);
 	}
+
 }

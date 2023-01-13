@@ -83,11 +83,23 @@ public class RegressionTesting
 //								}
 							}
 							break;
-							case "ErrorCodeValidation":
+							case "urlValidation":
 								new ErrorCodeValidation(sheetData);
 								break;
 							case"UserDropdown":
 								new UserDropdownValidation(sheetData);
+								break;
+							case"SignUp":
+								new SignUpValidation(sheetData);
+								break;
+							case"ForGotPwd":
+								new ForgotPasswordValidation(sheetData);
+								break;
+							case"FooterSection":
+								new FooterSectionValidation(sheetData);
+								break;
+							case"HeaderSection":
+								new HeaderSectionValidation(sheetData);
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");

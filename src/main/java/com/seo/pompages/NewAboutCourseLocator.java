@@ -62,13 +62,33 @@ public class NewAboutCourseLocator
 		{
 			setHost = "https://in.skillup.online";
 		}
-		else if(!host.isEmpty())
+		else if(host.equalsIgnoreCase("stagecourses-in"))
 		{
 			setHost = "https://"+host+".skillup.online";
 		}
-		else
+		else if(host.equalsIgnoreCase("qa-in"))
+		{
+			setHost = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("qa"))
+		{
+			setHost = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("stagecourses"))
+		{
+			setHost = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("prod"))
 		{
 			setHost = "https://skillup.online";
+		}
+		else if(host.equalsIgnoreCase("stage-in"))
+		{
+			setHost = "https://"+host+".skillup.online";
+		}
+		else if(host.equalsIgnoreCase("stage"))
+		{
+			setHost = "https://"+host+".skillup.online";
 		}
 		return setHost;
 	}

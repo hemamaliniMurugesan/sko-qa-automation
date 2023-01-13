@@ -22,10 +22,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.seo.regression.testing.ProcessLogin;
 import com.seo.utility.TestUtil;
 
-public class SEOGenericLocator extends ProcessLogin
+public class SEOGenericLocator 
 {
 	WebDriver driver;
 	WebDriverWait wait;

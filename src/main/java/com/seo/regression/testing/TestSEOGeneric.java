@@ -14,7 +14,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.asserts.SoftAssert;
 
 import com.seo.dataProvider.ConfigFileReader;
-import com.seo.pompages.SEOGenericLocator;
+import com.seo.regression.testing.*;
 import com.seo.utility.ProcessExcel;
 import com.seo.utility.Utils;
 

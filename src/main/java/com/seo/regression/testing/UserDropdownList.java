@@ -8,7 +8,6 @@ import org.openqa.selenium.interactions.Actions;
 
 public class UserDropdownList extends ProcessLogin
 {
-	
 	public String userProfile()
 	{
 		String checkUsernameFromBrowser = null;//
@@ -116,3 +115,5 @@ public class UserDropdownList extends ProcessLogin
 		return checkUserOrderDetails;
 	}
 }
+
+

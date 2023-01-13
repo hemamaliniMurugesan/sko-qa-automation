@@ -33,16 +33,27 @@ public class ProcessLogin extends OpenWebsite
 	
 	public String launchCourse(String urlFromExcel)
 	{
-		String url = this.setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
-		this.openDriver();
-		driver.get(url);
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		if(urlFromExcel.equals("null"))
+		{
+			String url = this.setEnvironment(RegressionTesting.ENV_TO_USE);
+			this.openDriver();
+			driver.get(url);
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		}
+		else
+		{
+			String url = this.setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
+			this.openDriver();
+			driver.get(url);
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		}
 		return driver.getCurrentUrl();
+		
 	}
 	
+	String loginStatus = "Failed";
 	public String login(String userName, String Pwd)
 	{
-		String loginStatus = "Failed";
 		try
 		{
 			JavascriptExecutor js = (JavascriptExecutor)driver;
@@ -77,11 +88,13 @@ public class ProcessLogin extends OpenWebsite
 						if(checkLoggedName.getText().contains("Hello"))
 						{
 							loginStatus = "Success";
+							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
+							clickSignOut.click();
 						}
 						else
 						{
 							loginStatus = "Failed";
-						}	
+						}
 					}
 				}
 			}
@@ -90,6 +103,28 @@ public class ProcessLogin extends OpenWebsite
 		{
 			e.printStackTrace();
 			loginStatus = "Failed";
+		}
+		return loginStatus;
+	}
+	
+	public String verifyLogOut()
+	{
+		try
+		{
+			if(loginStatus.equalsIgnoreCase("Success"))
+			{
+				WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
+				clickSignOut.click();
+			}
+			else
+			{
+				System.out.println("Log In is not done. so unable to do logOut");
+				loginStatus = "Failed";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		return loginStatus;
 	}

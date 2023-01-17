@@ -24,7 +24,8 @@ public class RegressionTesting
 	SEOGenericValidator seoGenericValidator;
 	public static String ENV_TO_USE = "";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		new RegressionTesting().startTesting();
 	}
 	

@@ -11,13 +11,15 @@ import com.seo.utility.TestUtil;
 
 public class ViewCourseFeature extends ProcessLogin
 {
-	public String clickViewCourse()
+	public String clickViewCourse() throws InterruptedException
 	{
 		String viewCourseStatus = "Failed";
 		WebElement clickDashboard = driver.findElement(By.cssSelector("ul[class='dropdown-menu Primary02_Blue'] li:nth-child(2) a"));
 		clickDashboard.click();
+		Thread.sleep(1000);
 		WebElement clickViewCourse = driver.findElement(By.cssSelector("div[class='course-actions'] a[class*='enter-course']"));
 		clickViewCourse.click();
+		Thread.sleep(1000);
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 		/*String parentwindow = driver.getWindowHandle();
 		Set<String> allWindows = driver.getWindowHandles();

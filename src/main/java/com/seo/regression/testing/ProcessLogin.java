@@ -30,25 +30,15 @@ public class ProcessLogin extends OpenWebsite
 	public String setEnvironment(String host) {
 		return super.setEnvironment(host);
 	}
-	
-	public String launchCourse(String urlFromExcel)
+	String url ;
+	public String launchCourse() throws InterruptedException
 	{
-		if(urlFromExcel.equals("null"))
-		{
-			String url = this.setEnvironment(RegressionTesting.ENV_TO_USE);
-			this.openDriver();
-			driver.get(url);
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
-		}
-		else
-		{
-			String url = this.setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
-			this.openDriver();
-			driver.get(url);
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
-		}
+		url = this.setEnvironment(RegressionTesting.ENV_TO_USE);
+		this.openDriver();
+		driver.get(url);
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+		Thread.sleep(1000);
 		return driver.getCurrentUrl();
-		
 	}
 	
 	String loginStatus = "Failed";
@@ -90,6 +80,7 @@ public class ProcessLogin extends OpenWebsite
 							loginStatus = "Success";
 							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
 							clickSignOut.click();
+							Thread.sleep(1000);
 						}
 						else
 						{
@@ -115,6 +106,8 @@ public class ProcessLogin extends OpenWebsite
 			{
 				WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
 				clickSignOut.click();
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+				Thread.sleep(300);
 			}
 			else
 			{

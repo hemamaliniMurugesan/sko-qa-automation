@@ -44,7 +44,8 @@ public class ErrorCodeValidation
 		{
 			if(checkURL.get(i).equalsIgnoreCase("Failed"))
 			{
-				
+				RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("urlValidation").get(1).set(i, "url - failed");
+				status = "Failed";
 			}
 		}
 	}

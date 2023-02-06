@@ -58,7 +58,7 @@ public class RegressionTestLogin
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
 		status = processLogin.login(userName, passWord);
-		if(!status.equalsIgnoreCase("success"))
+		if(status.equalsIgnoreCase("success"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(1).set(0, "InvalidUsername - failed");
 		}
@@ -71,7 +71,7 @@ public class RegressionTestLogin
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
 		status = processLogin.login(userName, passWord);
-		if(!status.equalsIgnoreCase("Success"))
+		if(status.equalsIgnoreCase("Success"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(2).set(0, "InvalidPassword - failed");
 		}
@@ -84,7 +84,7 @@ public class RegressionTestLogin
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
 		status = processLogin.login(userName, passWord);
-		if(!status.equalsIgnoreCase("Success"))
+		if(status.equalsIgnoreCase("Success"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "InvalidUserNameAndPassword - failed");
 		}

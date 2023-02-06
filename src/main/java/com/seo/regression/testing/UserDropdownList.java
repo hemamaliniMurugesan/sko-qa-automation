@@ -32,7 +32,7 @@ public class UserDropdownList extends ProcessLogin
 	
 	public String orderHistory(String orderNumberFromExcel)
 	{
-		SEOGenericLocator generic = new SEOGenericLocator();
+		RegressionGenericLocator generic = new RegressionGenericLocator();
 		String checkOrderNumber = generic.orderNumber;
 		String checkUserOrderDetails = null;
 		Actions a = new Actions(driver);

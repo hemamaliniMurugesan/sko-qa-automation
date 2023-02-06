@@ -21,7 +21,7 @@ public class RegressionTesting
 	public static LinkedHashMap<String, ArrayList<ArrayList<String>>> EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
 	NewAboutCourseValidator newAboutCourseValidator;
-	SEOGenericValidator seoGenericValidator;
+	RegressionGenericValidator regressionGenericValidator;
 	public static String ENV_TO_USE = "";
 	
 	public static void main(String[] args)
@@ -62,12 +62,6 @@ public class RegressionTesting
 							{
 								newAboutCourseValidator = new NewAboutCourseValidator(sheetName, sheetData);
 								newAboutCourseValidator.processSheetData();
-//								for (int i = 0; i < sheetData.size(); i++)
-//								{
-//									ArrayList<String> currentRow = sheetData.get(i);
-//									String process = currentRow.get(0);
-//									newAboutCourseValidator.executeProcess(process, currentRow);
-//								}
 							}
 							break;
 							case "ViewCourse":
@@ -75,13 +69,8 @@ public class RegressionTesting
 							break;
 							case "GenericProcess":
 							{
-								seoGenericValidator = new SEOGenericValidator(sheetName, sheetData);
-								seoGenericValidator.processSheetData();
-//								for (int i = 0; i < sheetData.size(); i++) {
-//									ArrayList<String> currentRow = sheetData.get(i);
-//									String process = currentRow.get(0);
-//									seoGenericValidator.executeProcess(process, currentRow);
-//								}
+								regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData);
+								regressionGenericValidator.processSheetData();
 							}
 							break;
 							case "urlValidation":
@@ -101,6 +90,12 @@ public class RegressionTesting
 								break;
 							case"HeaderSection":
 								new HeaderSectionValidation(sheetData);
+								break;
+							case"Dashboard":
+								new DashboardValidator(sheetData);
+								break;
+							case "ContactInfo":
+								new ContactInfoValidation(sheetData);
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");

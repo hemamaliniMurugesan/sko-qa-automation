@@ -36,7 +36,8 @@ public class OpenWebsite
 	{
 		if(host.equalsIgnoreCase("prod-in"))
 		{
-			setHost = "https://in.skillup.online";
+			String convertURL = "courses-in";
+			setHost = "https://"+convertURL+".skillup.online";
 		}
 		else if(host.equalsIgnoreCase("stagecourses-in"))
 		{
@@ -44,7 +45,8 @@ public class OpenWebsite
 		}
 		else if(host.equalsIgnoreCase("stage-in"))
 		{
-			setHost = "https://"+host+".skillup.online";
+			String converturl = "stage-in";
+			setHost = "https://"+converturl+".skillup.online";
 		}
 		else if(host.equalsIgnoreCase("qa-in"))
 		{
@@ -60,14 +62,17 @@ public class OpenWebsite
 		}
 		else if(host.equalsIgnoreCase("prod"))
 		{
-			setHost = "https://skillup.online";
+			String convertURL = "courses";
+			setHost = "https://"+convertURL+"skillup.online";
 		}
 		return setHost;
 	}
 	
 	public String launchCourse(String urlFromExcel)
 	{
-		String setURL = setHost+urlFromExcel;
+		String setURL = this.setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
+		this.openDriver();
+		driver.get(setURL);
 		return setURL;
 	}
 }

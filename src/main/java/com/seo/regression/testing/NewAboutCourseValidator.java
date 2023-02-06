@@ -32,7 +32,8 @@ public class NewAboutCourseValidator
 	public String processSheetData() {
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		newAboutCourseLocators.openDriver();
-		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++) {
+		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++) 
+		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
 			executeProcess(process, currentRow);
@@ -817,11 +818,11 @@ public class NewAboutCourseValidator
 				.get(columnIndex);
 		TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex,
 				(cellValue + " - failed"));
-
 		markProcessFailed();
 	}
 
-	private void markProcessFailed() {
+	private void markProcessFailed() 
+	{
 		sheetStatus = "Fail";
 		if(null != TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP)
 		{

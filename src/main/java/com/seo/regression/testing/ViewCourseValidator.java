@@ -10,12 +10,12 @@ public class ViewCourseValidator extends OpenWebsite
 	ArrayList<ArrayList<String>> sheetData = null;
 	ViewCourseFeature viewCourseFeature = new ViewCourseFeature();
 	
-	public ViewCourseValidator(ArrayList<ArrayList<String>> sheetData)
+	public ViewCourseValidator(ArrayList<ArrayList<String>> sheetData) throws InterruptedException
 	{
 		this.sheetData = sheetData;
 		this.start();
 	}
-	public void start()
+	public void start() throws InterruptedException
 	{
 		for(int i = 0; i < this.sheetData.size(); i++)
 		{
@@ -52,7 +52,7 @@ public class ViewCourseValidator extends OpenWebsite
 		}
 	}
 	
-	public void verifyViewCourse()
+	public void verifyViewCourse() throws InterruptedException
 	{
 		String status = "Failed";
 		status = viewCourseFeature.clickViewCourse();

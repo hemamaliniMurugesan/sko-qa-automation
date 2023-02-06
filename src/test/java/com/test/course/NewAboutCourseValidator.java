@@ -812,12 +812,12 @@ public class NewAboutCourseValidator
 			markColumnFailed(3);
 		}
 	}
-	private void markColumnFailed(int columnIndex) {
+	private void markColumnFailed(int columnIndex)
+	{
 		String cellValue = TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW)
 				.get(columnIndex);
 		TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex,
 				(cellValue + " - failed"));
-
 		markProcessFailed();
 	}
 

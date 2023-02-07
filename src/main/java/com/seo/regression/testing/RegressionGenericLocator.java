@@ -976,11 +976,14 @@ public class RegressionGenericLocator
 				JavascriptExecutor js = (JavascriptExecutor)driver;
 				js.executeScript("window.scrollBy(0,-2000)", "");
 				WebElement clickShareLink = driver.findElement(By.cssSelector("button[class='CourseDescription_shareBtn__0vLDp ']"));
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
+				wait.until(ExpectedConditions.elementToBeClickable(clickShareLink));
 				clickShareLink.click();
+				Thread.sleep(1000);
 				WebElement copyLink = driver.findElement(By.cssSelector("button[class='btn shadow-none ShareCourse_copyButton___ztrR']"));
 				String getLinkText = copyLink.getText();
 				copyLink.click();
-				List<WebElement> share = driver.findElements(By.cssSelector("ul[class='social_sharing-sko'] li i"));
+				List<WebElement> share = driver.findElements(By.cssSelector("a[class='ShareCourse_socialIcon__f7x_3'] img[alt =icon]"));
 				for(int i = 0; i < share.size(); i++)
 				{
 					if(share.get(i).getAttribute("class").contains(shareFromExcel))
@@ -1084,9 +1087,10 @@ public class RegressionGenericLocator
 	public void validationProcess()
 	{
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
-		if(driver.findElement(By.cssSelector("p[class='mt-2  NewsAndUpdates_inputMessage___Y1G_ mt-1']")).isDisplayed())
+		List<WebElement> errorMsg = driver.findElements(By.cssSelector("p[class='mt-2 NewsAndUpdates_inputMessage___Y1G_ ']"));
+		if(errorMsg.size()>0)
 		{
-			System.out.println("validation message shown");
+				System.out.println("validation message shown");
 		}
 		else
 		{

@@ -3,6 +3,7 @@ package com.seo.regression.testing;
 import java.util.ArrayList;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class ViewCourseValidator extends OpenWebsite
 {
@@ -35,17 +36,18 @@ public class ViewCourseValidator extends OpenWebsite
 			}
 		}
 	}
+	String getURL;
 	public String url(String urlFromExcel)
 	{
 		return viewCourseFeature.launchCourse(urlFromExcel);
 	}
 	
-	public void login(ArrayList<String> row)
+	public void login(ArrayList<String> row) throws InterruptedException
 	{
 		String status = "Failed";
 		String userName = row.get(1);
 		String passWord = row.get(2);
-		status = viewCourseFeature.login(userName, passWord);
+		status = viewCourseFeature.loginFunction(userName, passWord);
 		if(status.equalsIgnoreCase("Failed"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "ValidCredentials - failed");

@@ -2,6 +2,8 @@ package com.seo.regression.testing;
 
 import java.util.ArrayList;
 
+import org.openqa.selenium.WebElement;
+
 public class UserDropdownValidation
 {
 	String result = "failed";
@@ -9,13 +11,13 @@ public class UserDropdownValidation
 	UserDropdownList userDropdownList = new UserDropdownList();
 	String userName;
 	
-	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData)
+	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData) throws InterruptedException
 	{
 		this.sheetData = sheetData;
 		this.start();
 	}
 	
-	public void start()
+	public void start() throws InterruptedException
 	{
 		for(int i = 0; i < this.sheetData.size(); i++)
 		{
@@ -23,9 +25,6 @@ public class UserDropdownValidation
 			String firstColumn = row.get(0);
 			switch(firstColumn)
 			{
-				case "url":
-					url(row.get(1));
-				break;
 				case "login":
 					login(row.get(1), row.get(2));
 				break;
@@ -39,22 +38,17 @@ public class UserDropdownValidation
 		}
 	}
 	
-	public String url(String urlFromExcel)
-	{
-		return userDropdownList.launchCourse(urlFromExcel);
-	}
-	
-	public void login(String userName, String password)
+	public void login(String userName, String password) throws InterruptedException
 	{
 		this.userName = userName;
-		String status = userDropdownList.login(userName, password);
+		String status = userDropdownList.loginFunction(userName, password);
 		if(status.equalsIgnoreCase("Failed"))
 		{
-			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "Login - failed");
+			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(1).set(0, "Login - failed");
 		}
 	}
 	
-	public void userProfile()
+	public void userProfile() throws InterruptedException
 	{
 		String status = "Failed";
 		userName = userName.replace("@skillup.tech", "");
@@ -69,13 +63,18 @@ public class UserDropdownValidation
 		}
 		if(status.equalsIgnoreCase("Failed"))
 		{
-			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("userProfile").get(0).set(0, "userProfile - failed");
+			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("userProfile").get(2).set(0, "userProfile - failed");
 		}
 	}
 	
-	public void orderHistory(String orderNumberFromExcel)
+	public void orderHistory(String orderNumberFromExcel) throws InterruptedException
 	{
 		String status = "Failed";
 		String verifyOrderHistory = userDropdownList.orderHistory(orderNumberFromExcel);
+		if(verifyOrderHistory.equalsIgnoreCase(status))
+		{
+			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("userProfile").get(3).set(0, "orderHistory - failed");
+
+		}
 	}
 }

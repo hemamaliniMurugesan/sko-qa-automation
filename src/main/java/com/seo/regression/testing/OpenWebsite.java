@@ -62,7 +62,7 @@ public class OpenWebsite
 		}
 		else if(host.equalsIgnoreCase("prod"))
 		{
-			String convertURL = "courses";
+			String convertURL = "stage.";
 			setHost = "https://"+convertURL+"skillup.online";
 		}
 		return setHost;

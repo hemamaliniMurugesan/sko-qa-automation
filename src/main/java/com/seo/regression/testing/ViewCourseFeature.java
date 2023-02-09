@@ -61,6 +61,7 @@ public class ViewCourseFeature extends ProcessLogin
 					driver.close();
 				}
 			}
+			driver.quit();
 		}
 		return viewCourseStatus;
 	}

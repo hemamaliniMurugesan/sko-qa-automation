@@ -36,7 +36,7 @@ public class OpenWebsite
 	{
 		if(host.equalsIgnoreCase("prod-in"))
 		{
-			String convertURL = "courses-in";
+			String convertURL = "in";
 			setHost = "https://"+convertURL+".skillup.online";
 		}
 		else if(host.equalsIgnoreCase("stagecourses-in"))
@@ -62,8 +62,7 @@ public class OpenWebsite
 		}
 		else if(host.equalsIgnoreCase("prod"))
 		{
-			String convertURL = "stage.";
-			setHost = "https://"+convertURL+"skillup.online";
+			setHost = "https://skillup.online";
 		}
 		return setHost;
 	}
@@ -74,5 +73,9 @@ public class OpenWebsite
 		this.openDriver();
 		driver.get(setURL);
 		return setURL;
+	}
+	public void closeBrowser()
+	{
+		driver.quit();
 	}
 }

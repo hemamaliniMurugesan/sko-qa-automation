@@ -53,7 +53,7 @@ public class RegressionGenericLocator
 	{
 		if(host.equalsIgnoreCase("prod-in"))
 		{
-			setHost = "https://"+host+".skillup.online";
+			setHost = "https://in.skillup.online";
 		}
 		else if(host.equalsIgnoreCase("stage-in"))
 		{
@@ -983,10 +983,10 @@ public class RegressionGenericLocator
 				WebElement copyLink = driver.findElement(By.cssSelector("button[class='btn shadow-none ShareCourse_copyButton___ztrR']"));
 				String getLinkText = copyLink.getText();
 				copyLink.click();
-				List<WebElement> share = driver.findElements(By.cssSelector("a[class='ShareCourse_socialIcon__f7x_3'] img[alt =icon]"));
+				List<WebElement> share = driver.findElements(By.cssSelector("a[class='ShareCourse_socialIcon__f7x_3']"));
 				for(int i = 0; i < share.size(); i++)
 				{
-					if(share.get(i).getAttribute("class").contains(shareFromExcel))
+					if(share.get(i).getAttribute("href").contains(shareFromExcel))
 					{
 						share.get(i).click();
 						String parentWindow = driver.getWindowHandle();

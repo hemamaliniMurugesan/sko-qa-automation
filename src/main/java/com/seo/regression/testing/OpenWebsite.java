@@ -24,7 +24,7 @@ public class OpenWebsite
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_108\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_110\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));

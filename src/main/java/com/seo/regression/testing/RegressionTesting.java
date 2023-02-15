@@ -97,6 +97,12 @@ public class RegressionTesting
 							case "ContactInfo":
 								new ContactInfoValidation(sheetData);
 								break;
+							case "LoginWithSocialAcc":
+								new LoginSocialAccValidation(sheetData);
+								break;
+							case "ContactUSForm":
+								new ContactUsValidation(sheetData);
+								break;
 							default:
 								System.out.println("Not class found to work with the sheet");
 						}

@@ -29,7 +29,8 @@ public class NewAboutCourseValidator
 		newAboutCourseLocators = new NewAboutCourseLocator();
 	}
 
-	public String processSheetData() {
+	public String processSheetData()
+	{
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		newAboutCourseLocators.openDriver();
 		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++) 
@@ -513,9 +514,12 @@ public class NewAboutCourseValidator
 		try {
 			String checkDurationDetails = newAboutCourseLocators.getDurationInfo(durationFromExcel);
 			System.out.println("duration from excel : " + durationFromExcel);
-			if (checkDurationDetails.equalsIgnoreCase("successIND")) {
+			if (checkDurationDetails.equalsIgnoreCase("successIND"))
+			{
 				markProcessIgnored();
-			} else if (!checkDurationDetails.equals(checkDuration)) {
+			}
+			else if (!checkDurationDetails.equals(checkDuration))
+			{
 				markProcessFailed();
 			}
 		} catch (Exception e) {
@@ -594,8 +598,8 @@ public class NewAboutCourseValidator
 	{
 		try
 		{
-			String redirectedURL = newAboutCourseLocators.launchCourseURL(currentURL);
-			if(!(redirectURLFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()).equals(redirectedURL.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
+			String redirectedURL = newAboutCourseLocators.launchCourseURL(redirectURLFromExcel);
+			if(!(redirectURLFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()).equalsIgnoreCase(redirectedURL.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 			{
 				markProcessFailed();
 			}

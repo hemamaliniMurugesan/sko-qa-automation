@@ -14,6 +14,7 @@ public class UserDropdownValidation
 	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData) throws InterruptedException
 	{
 		this.sheetData = sheetData;
+		userDropdownList.openDriver();
 		this.start();
 	}
 	

@@ -1,6 +1,7 @@
 package com.seo.regression.testing;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -12,10 +13,10 @@ import com.seo.utility.TestUtil;
 
 public class ViewCourseFeature extends ProcessLogin
 {
-	public String clickViewCourse() throws InterruptedException
+	public ArrayList<String> clickViewCourse() throws InterruptedException
 	{
 		
-		String viewCourseStatus = "Failed";
+		ArrayList<String> viewCourseStatus = new ArrayList<String>();
 		String parentWindow = driver.getWindowHandle();
 		Set<String> windows = driver.getWindowHandles();
 		for(String window : windows)
@@ -35,8 +36,11 @@ public class ViewCourseFeature extends ProcessLogin
 				WebElement clickDropDown = driver.findElement(By.cssSelector("li[class='SigNUP open'] img[class='dPaRoW']"));
 				clickDropDown.click();
 				WebElement clickDashboard = driver.findElement(By.cssSelector("ul[class='dropdown-menu Primary02_Blue'] li:nth-child(2) a"));
-				clickDashboard.click();
-				Thread.sleep(1000);
+				if(clickDashboard.isDisplayed())
+				{
+					clickDashboard.click();
+					Thread.sleep(1000);
+				}
 				WebElement clickViewCourse = driver.findElement(By.cssSelector("div[class='course-actions'] a[class*='enter-course']"));
 				clickViewCourse.click();
 				Thread.sleep(1000);
@@ -66,4 +70,22 @@ public class ViewCourseFeature extends ProcessLogin
 		return viewCourseStatus;
 	}
 	
+	public void courses() throws InterruptedException
+	{
+		List<WebElement> courses = driver.findElements(By.cssSelector("ul[class='listing-courses'] li[class='course-item']"));
+		for(int i = 0; i < courses.size(); i++)
+		{
+			WebElement courseNameLocator = courses.get(i).findElement(By.cssSelector(" h3 a"));
+			String getCourseName = courseNameLocator.getText();
+			System.out.println("list of Course Name in user dashboard: "+getCourseName);
+			WebElement getActiveCourse = courseNameLocator.findElement(By.cssSelector(":not([class='disable-look'])"));
+			System.out.println("Active courses in user dashboard : "+getActiveCourse.getText());
+			getActiveCourse.click();
+			Thread.sleep(1000);
+		}
+	}
+	public void shareCourse()
+	{
+		
+	}
 }

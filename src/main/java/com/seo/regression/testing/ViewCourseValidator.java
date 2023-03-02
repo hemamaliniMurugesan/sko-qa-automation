@@ -39,6 +39,7 @@ public class ViewCourseValidator extends OpenWebsite
 	String getURL;
 	public String url(String urlFromExcel)
 	{
+		viewCourseFeature.openDriver();
 		return viewCourseFeature.launchCourse(urlFromExcel);
 	}
 	
@@ -56,8 +57,8 @@ public class ViewCourseValidator extends OpenWebsite
 	
 	public void verifyViewCourse() throws InterruptedException
 	{
-		String status = "Failed";
-		status = viewCourseFeature.clickViewCourse();
+		ArrayList<String> status = new ArrayList<String>();
+		viewCourseFeature.clickViewCourse();
 		if(status.equalsIgnoreCase("Failed"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "verifyViewCourse - failed");

@@ -82,7 +82,10 @@ public class ProcessLogin extends OpenWebsite
 			WebElement clickLogin = driver.findElement(By.cssSelector("ul[class='list-unstyled navbar-nav nav Header_navButtons__3h4Rp'] li[class='Header_loginBtn__3Xv3A'] a"));
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 			wait.until(ExpectedConditions.elementToBeClickable(clickLogin));
-			clickLogin.click();
+			if(clickLogin.isDisplayed())
+			{
+				clickLogin.click();
+			}
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(90));
 			Thread.sleep(2000);
 			JavascriptExecutor js = (JavascriptExecutor)driver;
@@ -183,7 +186,6 @@ public void logOutFunction() throws InterruptedException
 	WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Primary02_Blue'] li:nth-child(5) a"));
 	clickSignOut.click();
 	System.out.println("logout successfully");
-	driver.quit();
 	Thread.sleep(1000);
 }
 	public String checkInvalidUsername(String uName, String pwd) throws InterruptedException
@@ -225,8 +227,10 @@ public void logOutFunction() throws InterruptedException
 			ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
 			driver.switchTo().window(w.get(1));
 			this.loginFunction(uName, pwd);
+			this.logOutFunction();
 			driver.close();
 			driver.switchTo().window(w.get(0));
+			driver.quit();
 			Thread.sleep(500);
 		}
 		catch(Exception e)

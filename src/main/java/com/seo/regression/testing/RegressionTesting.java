@@ -135,7 +135,7 @@ public class RegressionTesting
 		ArrayList<String> testEnvRow = new ArrayList<>();
 		testEnvRow.add("Test environment" + Utils.DELIMITTER + "bold" + Utils.DELIMITTER + "backgroundlime"
 				+ Utils.DELIMITTER + "border");
-		testEnvRow.add(ConfigFileReader.getURL() + Utils.DELIMITTER + "backgroundLT" + Utils.DELIMITTER
+		testEnvRow.add(ENV_TO_USE + Utils.DELIMITTER + "backgroundLT" + Utils.DELIMITTER
 				+ "border");
 
 		ArrayList<String> executionStartsOn = new ArrayList<>();

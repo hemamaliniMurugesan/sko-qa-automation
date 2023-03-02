@@ -56,7 +56,7 @@ public class OpenWebsite
 		{
 			setHost = "https://"+host+".skillup.online";
 		}
-		else if(host.equalsIgnoreCase("stagecourses"))
+		else if(host.equalsIgnoreCase("stage"))
 		{
 			setHost = "https://"+host+".skillup.online";
 		}
@@ -70,7 +70,7 @@ public class OpenWebsite
 	public String launchCourse(String urlFromExcel)
 	{
 		String setURL = this.setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
-		this.openDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		driver.get(setURL);
 		return setURL;
 	}

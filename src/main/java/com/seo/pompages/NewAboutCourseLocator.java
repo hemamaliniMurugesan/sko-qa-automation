@@ -48,7 +48,7 @@ public class NewAboutCourseLocator
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_108\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_110\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -150,14 +150,16 @@ public class NewAboutCourseLocator
 			{
 				System.out.println("un broken link");
 				driver.get(addHosturl);
-				WebElement checkCourseCode = driver.findElement(By.xpath("(//*[contains(@href,'"+code+"')])[1]"));
-				courseIDFromBrowser = checkCourseCode.getAttribute("href");
-				int index = courseIDFromBrowser.lastIndexOf("/");
-				String getCourseID = courseIDFromBrowser.substring(index+0);
-				getCourseID = getCourseID.replace("/", "");
-				System.out.println("course ID from Browser : "+getCourseID);
+				List<WebElement> checkCourseCode = driver.findElements(By.cssSelector("button[class*='enroll']"));
+				courseIDFromBrowser = checkCourseCode.get(0).getAttribute("href");
+				/*
+				 * int index = courseIDFromBrowser.lastIndexOf("/"); String getCourseID =
+				 * courseIDFromBrowser.substring(index+0); getCourseID =
+				 * getCourseID.replace("/", "");
+				 */
+				System.out.println("course ID from Browser : "+courseIDFromBrowser);
 				System.out.println("courseIDFrom Excel: "+code);
-				if(getCourseID.contains(code))
+				if(courseIDFromBrowser.contains(code))
 				{
 					CourseCodeStatus = "true";
 				}
@@ -1014,46 +1016,41 @@ String addHosturl;
 	
 	public String getStartsOn(String startsOnFromExcel)
 	{
-		String checkStartson = "";
+		String checkStartsOnStatus = "fail";
 		try
 		{
 			if(startsOnFromExcel.equalsIgnoreCase("NA"))
 			{
-				checkStartson = "successIND";
+				checkStartsOnStatus = "successIND";
 			}
 			else
 			{
-				List<WebElement> listOfRows = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp'] div[class='d-flex gap-2']"));
-				for(int k = 0; k < listOfRows.size(); k++)
+				List<WebElement> focus_StartsOn = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class*='CourseDescription_durationAndPriceSection'] div[class='d-flex gap-2'] img[alt]"));
+				for(int i = 0; i < focus_StartsOn.size(); i++)
 				{
-					WebElement startsOnImage = listOfRows.get(k).findElement(By.cssSelector(" img[alt='Enrollment']"));
-					if(startsOnImage.isDisplayed())
+					String verifyStartsOnIcon = focus_StartsOn.get(i).getAttribute("alt");
+					if(verifyStartsOnIcon.equalsIgnoreCase("flag-icon"))
 					{
-						System.out.println("Starts on image is available");
+						System.out.println("StartsOn icon is present");
 					}
-					else
+				}
+				List<WebElement> StartsOnHeader = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2']  div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
+				for(int i = 0; i < StartsOnHeader.size(); i++)
+				{
+					WebElement checkHeader = StartsOnHeader.get(i).findElement(By.cssSelector(" h2"));
+					if(checkHeader.getText().equalsIgnoreCase("Starts On"))
 					{
-						System.out.println("Starts on image is not available");
+						System.out.println("StartsOn is present");
 					}
-					
-					WebElement startsOnText = listOfRows.get(k).findElement(By.cssSelector(" div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
-					String getStartsOnText = startsOnText.getText();
-					String remove = "Duration";
-					getStartsOnText = getStartsOnText.replaceAll(remove, "").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-					String getStartsOnFromExcel = startsOnFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-					if(getStartsOnText.equals(getStartsOnFromExcel))
+				}
+				List<WebElement> StartsOnContent = driver.findElements(By.xpath("//div[@class='col-12 CourseDescription_breakContent__EUpfp ']//div[@class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5']//div[@class='d-flex gap-2']//div[@class='CourseDescription_courseAboutTextSection__8_6ac']/h2/parent::div"));
+				for(int i = 0; i < StartsOnContent.size(); i++)
+				{
+					String getStartsOnText = StartsOnContent.get(i).getText();
+					if(getStartsOnText.equalsIgnoreCase(startsOnFromExcel))
 					{
-						checkStartson = "pass";
-						System.out.println("start on from browser"+getStartsOnText);
-						System.out.println("start on from Excel"+getStartsOnFromExcel);
-						break;
-					}
-					else
-					{
-						checkStartson = "fail";
-						System.out.println("start on from browser"+getStartsOnText);
-						System.out.println("start on from Excel"+getStartsOnFromExcel);
-						break;
+						System.out.println("Starts On is correct");
+						checkStartsOnStatus = "pass";
 					}
 				}
 			}
@@ -1062,12 +1059,12 @@ String addHosturl;
 		{
 			e.printStackTrace();
 		}
-		return checkStartson;
+		return checkStartsOnStatus;
 	}
 	
 	public String getDurationInfo(String durationFromExcel)
 	{
-		String checkDurationStatus = "success";
+		String checkDurationStatus = "fail";
 		try
 		{
 			if(durationFromExcel.equalsIgnoreCase("NA"))
@@ -1076,37 +1073,32 @@ String addHosturl;
 			}
 			else
 			{
-				List<WebElement> listOfRows = driver.findElements(By.cssSelector("div[class*='CourseDescription_durationAndPriceSection']"));
-				for(int k = 0; k < listOfRows.size(); k++)
+				List<WebElement> focus_Duration = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2'] img[alt]"));
+				for(int i = 0; i < focus_Duration.size(); i++)
 				{
-					WebElement durationImage = listOfRows.get(k).findElement(By.cssSelector(" img[alt='time-icon']"));
-					if(durationImage.isDisplayed())
+					String verifyDurationIcon = focus_Duration.get(i).getAttribute("alt");
+					if(verifyDurationIcon.equalsIgnoreCase("time-icon"))
 					{
-						System.out.println("duration image is available");
+						System.out.println("Duration icon is present");
 					}
-					else
+				}
+				List<WebElement> durationHeader = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2']  div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
+				for(int i = 0; i < durationHeader.size(); i++)
+				{
+					WebElement checkHeader = durationHeader.get(i).findElement(By.cssSelector(" h2"));
+					if(checkHeader.getText().equalsIgnoreCase("Duration"))
 					{
-						System.out.println("duration image is not available");
+						System.out.println("Duration is present");
 					}
-					
-					WebElement durationText = listOfRows.get(k).findElement(By.cssSelector(" div[class='CourseDescription_courseAboutTextSection__8_6ac'] p"));
-					String getDurationText = durationText.getText();
-					String remove = "Duration";
-				//	getDurationText = getDurationText.replaceAll(remove, "").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-					String getDurationFromExcel = durationFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-					if(getDurationText.equals(getDurationFromExcel))
+				}
+				List<WebElement> durationContent = driver.findElements(By.xpath("//div[@class='col-12 CourseDescription_breakContent__EUpfp ']//div[@class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5']//div[@class='d-flex gap-2']//div[@class='CourseDescription_courseAboutTextSection__8_6ac']/h2/parent::div"));
+				for(int i = 0; i < durationContent.size(); i++)
+				{
+					String getDurationText = durationContent.get(i).getText();
+					if(getDurationText.equalsIgnoreCase(durationFromExcel))
 					{
+						System.out.println("Duration is correct");
 						checkDurationStatus = "pass";
-						System.out.println("duration from browser : "+getDurationText);
-						System.out.println("duration from Excel : "+getDurationFromExcel);
-						break;
-					}
-					else
-					{
-						checkDurationStatus = "fail";
-						System.out.println("duration from browser : "+getDurationText);
-						System.out.println("duration from Excel : "+getDurationFromExcel);
-						break;
 					}
 				}
 			}
@@ -1120,47 +1112,41 @@ String addHosturl;
 	
 	public String getflatPrice(String flatPriceWithoutGSTFromExcel)
 	{
-		String checkPriceWOGSTStatus = "success";
-		
+		String checkPriceWOGSTStatus = "fail";
 		try
 		{
-			if(driver.getCurrentUrl().contains("in."))
+			if(flatPriceWithoutGSTFromExcel.equalsIgnoreCase("NA"))
 			{
-				if(flatPriceWithoutGSTFromExcel.equalsIgnoreCase("NA"))
+				checkPriceWOGSTStatus = "successIND";
+			}
+			else
+			{
+				List<WebElement> focus_Fee = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2'] img[alt]"));
+				for(int i = 0; i < focus_Fee.size(); i++)
 				{
-					checkPriceWOGSTStatus = "successIND";
+					String verifyFeeIcon = focus_Fee.get(i).getAttribute("alt");
+					if(verifyFeeIcon.equalsIgnoreCase("fee-icon"))
+					{
+						System.out.println("Fee icon is present");
+					}
 				}
-				else
+				List<WebElement> FeeHeader = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2']  div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
+				for(int i = 0; i < FeeHeader.size(); i++)
 				{
-					WebElement feeImage = driver.findElement(By.cssSelector("div[class='d-flex gap-2'] img"));
-					if(feeImage.getAttribute("alt").equalsIgnoreCase("fee-icon"))
+					WebElement checkFee = FeeHeader.get(i).findElement(By.cssSelector(" h2"));
+					if(checkFee.getText().equalsIgnoreCase("StartsOn"))
 					{
-						System.out.println("fee image is available");
+						System.out.println("fee header is present");
 					}
-					else
+				}
+				List<WebElement> feeContent = driver.findElements(By.xpath("//div[@class='col-12 CourseDescription_breakContent__EUpfp ']//div[@class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5']//div[@class='d-flex gap-2']//div[@class='CourseDescription_courseAboutTextSection__8_6ac']/h2/parent::div"));
+				for(int i = 0; i < feeContent.size(); i++)
+				{
+					String getStartsOnText = feeContent.get(i).getText();
+					if(getStartsOnText.equalsIgnoreCase(flatPriceWithoutGSTFromExcel))
 					{
-						System.out.println("fee image is not available");
-					}
-					List<WebElement> listOfRows = driver.findElements(By.cssSelector("div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
-					for(int k = 0; k < listOfRows.size(); k++)
-					{
-						WebElement flatPriceLocator = listOfRows.get(k).findElement(By.cssSelector(" p"));
-						String getFlatPriceText = flatPriceLocator.getText();
-						String remove = "Fee";
-						//getFlatPriceText = getFlatPriceText.replaceAll(remove, "").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-						String getFlatPriceTextFromExcel = flatPriceWithoutGSTFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
-						if(getFlatPriceText.equals(getFlatPriceTextFromExcel))
-						{
-							checkPriceWOGSTStatus = "pass";
-							System.out.println("flat price from browser :"+getFlatPriceText);
-							System.out.println("flat price from excel :"+getFlatPriceTextFromExcel);
-						}
-						else
-						{
-							checkPriceWOGSTStatus = "fail";
-							System.out.println("flat price from browser :"+getFlatPriceText);
-							System.out.println("flat price from excel :"+getFlatPriceTextFromExcel);
-						}
+						System.out.println("Starts On is correct");
+						checkPriceWOGSTStatus = "pass";
 					}
 				}
 			}
@@ -1301,15 +1287,18 @@ String addHosturl;
 	
 	public String launchCourseURL(String url)
 	{
+		String getPathFromURL = null;
 		try
 		{
 			System.out.println("SEO Page Validation started");
+			String getpath = driver.getCurrentUrl();
+			getPathFromURL = getpath.replace(setHost, "");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return driver.getCurrentUrl();
+		return getPathFromURL;
 	}
 	
 	public String getCanonicalURL(String canonicalURL)

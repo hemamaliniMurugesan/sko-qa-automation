@@ -41,7 +41,7 @@ public class RegressionGenericLocator
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_108\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_110\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -978,8 +978,12 @@ public class RegressionGenericLocator
 				WebElement clickShareLink = driver.findElement(By.cssSelector("button[class='CourseDescription_shareBtn__0vLDp ']"));
 				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 				wait.until(ExpectedConditions.elementToBeClickable(clickShareLink));
-				clickShareLink.click();
-				Thread.sleep(1000);
+				if(clickShareLink.isDisplayed())
+				{
+					Thread.sleep(2000);
+					clickShareLink.click();
+				}
+				Thread.sleep(2000);
 				WebElement copyLink = driver.findElement(By.cssSelector("button[class='btn shadow-none ShareCourse_copyButton___ztrR']"));
 				String getLinkText = copyLink.getText();
 				copyLink.click();
@@ -1000,15 +1004,24 @@ public class RegressionGenericLocator
 								driver.switchTo().window(childWindow);
 								if(driver.getCurrentUrl().contains("twitter"))
 								{
+									driver.switchTo().window(childWindow);
 									System.out.println("twitter screen");
+									driver.close();
+									driver.switchTo().window(parentWindow);
 								}
-								else if(driver.getCurrentUrl().equalsIgnoreCase("facebook"))
+								if(driver.getCurrentUrl().equalsIgnoreCase("facebook"))
 								{
+									driver.switchTo().window(childWindow);
 									System.out.println("facebook screen");
+									driver.close();
+									driver.switchTo().window(parentWindow);
 								}
-								else if(driver.getCurrentUrl().equalsIgnoreCase("linked"))
+								if(driver.getCurrentUrl().equalsIgnoreCase("linked"))
 								{
+									driver.switchTo().window(childWindow);
 									System.out.println("linkedIn Screen");
+									driver.close();
+									driver.switchTo().window(parentWindow);
 								}
 							}
 						}
@@ -1139,7 +1152,8 @@ public class RegressionGenericLocator
 						e.printStackTrace();
 						checkSubscribeProcess.add("fail");
 					}
-					if(driver.findElement(By.cssSelector("p[class='mt-2  NewsAndUpdates_inputMessage___Y1G_ mt-1']")).isDisplayed())
+					List<WebElement> checkValidationLocator = driver.findElements(By.cssSelector("p[class='mt-2  NewsAndUpdates_inputMessage___Y1G_ mt-1']"));
+					if(checkValidationLocator.size()>0)
 					{
 						System.out.println("validation message shown");
 						checkSubscribeProcess.add("fail");

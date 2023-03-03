@@ -21,7 +21,7 @@ public class ViewCourseFeature extends ProcessLogin
 		Set<String> windows = driver.getWindowHandles();
 		for(String window : windows)
 		{
-			if(driver.getCurrentUrl().equalsIgnoreCase("https://stagecourses-in.skillup.online/dashboard"))
+			if(driver.getCurrentUrl().contains("dashboard"))
 			{
 				driver.switchTo().window(window);
 				List<WebElement> listOfCourse = driver.findElements(By.cssSelector("ul[class='listing-courses'] li[class='course-item'] section[class='details'] div[class='wrapper-course-details'] h3 a"));
@@ -29,7 +29,7 @@ public class ViewCourseFeature extends ProcessLogin
 				{
 					System.out.println("List of course names in dashboard : "+listOfCourse.get(i).getText());
 				}
-				viewCourseStatus = "success";
+				viewCourseStatus.add("success");
 			}
 			else
 			{
@@ -50,18 +50,18 @@ public class ViewCourseFeature extends ProcessLogin
 					System.out.println("Course ID contains IBM");
 					if(driver.getCurrentUrl().contains("-dev.skillsnetwork.site"))
 					{
-						viewCourseStatus = "Success";
+						viewCourseStatus.add("Success");
 						driver.close();
 					}
 					else
 					{
-						viewCourseStatus = "Failed";
+						viewCourseStatus.add("Failed");
 						driver.close();
 					}
 				}
 				else
 				{
-					viewCourseStatus = "Failed";
+					viewCourseStatus.add("Failed");
 					driver.close();
 				}
 			}
@@ -78,9 +78,16 @@ public class ViewCourseFeature extends ProcessLogin
 			WebElement courseNameLocator = courses.get(i).findElement(By.cssSelector(" h3 a"));
 			String getCourseName = courseNameLocator.getText();
 			System.out.println("list of Course Name in user dashboard: "+getCourseName);
-			WebElement getActiveCourse = courseNameLocator.findElement(By.cssSelector(":not([class='disable-look'])"));
-			System.out.println("Active courses in user dashboard : "+getActiveCourse.getText());
-			getActiveCourse.click();
+			List<WebElement> getActiveCourse = courseNameLocator.findElements(By.cssSelector(":not([class='disable-look'])"));
+			if(getActiveCourse.size()>0)
+			{
+				for(int j = 0; j < getActiveCourse.size(); j++)
+				{
+					System.out.println("Name of Active courses in user dashboard : "+getActiveCourse.get(j).getText());
+					getActiveCourse.get(j).click();
+				}
+				
+			}
 			Thread.sleep(1000);
 		}
 	}

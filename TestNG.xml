@@ -2,8 +2,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Testing Google Apps">
     <test name="Regression">
+<parameter name = "browser" value = "firefox"/>
          <classes>
-			 <class name="com.test.course.TestSEOGeneric"/>
+			 <class name="com.seo.regression.testing.RegressionTesting"/>
           </classes>
      </test> <!-- Test -->
 </suite> <!-- Suite -->

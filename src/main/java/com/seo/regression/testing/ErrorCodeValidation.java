@@ -11,13 +11,16 @@ import org.openqa.selenium.WebElement;
 public class ErrorCodeValidation
 {
 	ArrayList<ArrayList<String>> sheetData = null;
-	ErrorCodeLocator errorCodeLocator = new ErrorCodeLocator();
+	WebDriver driver;
+	ErrorCodeLocator errorCodeLocator;
 	
-	
-	public ErrorCodeValidation(ArrayList<ArrayList<String>> sheetData)
+	public ErrorCodeValidation(ArrayList<ArrayList<String>> sheetData,WebDriver driver)
 	{
+		this.driver = driver;
 		this.sheetData = sheetData;
+		errorCodeLocator = new ErrorCodeLocator(driver);
 		this.start();
+		driver.quit();
 	}
 	
 	public void start()

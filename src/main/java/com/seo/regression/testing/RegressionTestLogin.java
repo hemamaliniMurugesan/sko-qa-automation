@@ -4,19 +4,22 @@ import java.sql.Driver;
 import java.util.ArrayList;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class RegressionTestLogin 
 {
+	WebDriver driver;
 	String result = "failed";
 	ArrayList<ArrayList<String>> sheetData = null;
-	ProcessLogin processLogin = new ProcessLogin();
-
-	public RegressionTestLogin(ArrayList<ArrayList<String>> sheetData) throws InterruptedException
+	ProcessLogin processLogin;
+	public RegressionTestLogin(ArrayList<ArrayList<String>> sheetData, WebDriver driver) throws InterruptedException
 	{
 		this.sheetData = sheetData;
-		processLogin.openDriver();
+		this.driver = driver;
+		processLogin = new ProcessLogin(driver);
 		this.start();
+		driver.quit();
 	}
 	public void start() throws InterruptedException
 	{
@@ -38,9 +41,9 @@ public class RegressionTestLogin
 				case "ValidCredentials":
 					ValidCredentials();
 					break;
-				case "checkLogout":
-					checkLogout();
-					break;
+				/*
+				 * case "checkLogout": checkLogout(); break;
+				 */
 			}
 		}
 	}

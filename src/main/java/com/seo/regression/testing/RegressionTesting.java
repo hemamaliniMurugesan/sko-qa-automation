@@ -5,13 +5,21 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.ProcessExcel;
 import com.seo.utility.Utils;
 
-public class RegressionTesting
+public class RegressionTesting 
 {
 	String CURRENT_SHEET = "";
 	int CURRENT_ROW = 0;
@@ -23,10 +31,33 @@ public class RegressionTesting
 	NewAboutCourseValidator newAboutCourseValidator;
 	RegressionGenericValidator regressionGenericValidator;
 	public static String ENV_TO_USE = "";
+	WebDriver driver;
 	
-	public static void main(String[] args)
+	OpenWebsite openWebsite = new OpenWebsite(driver);
+	
+	@BeforeTest
+	@Parameters("browser")
+	public void setup(String browserName) throws Exception
 	{
-		new RegressionTesting().startTesting();
+	    if (browserName.equalsIgnoreCase("Firefox"))
+	    {
+	    	driver = openWebsite.openDriver(browserName);
+	    }
+	    else if (browserName.equalsIgnoreCase("Chrome"))
+	    {
+	    	driver = openWebsite.openDriver(browserName);
+	    }
+	    else
+	    {
+	    	throw new Exception("Browser is not correct");
+	    }
+	}
+	@Test(priority = 1)
+	public void startTest()
+	{
+		System.out.println(driver);
+		//new RegressionTesting().startTesting();
+		this.startTesting();
 	}
 	
 	public void startTesting()
@@ -40,9 +71,9 @@ public class RegressionTesting
 			EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP = ProcessExcel.readExcelFileAsRows(excelPath);
 			
 			ArrayList<ArrayList<String>> master = data.get("Master");// Master sheet in excel
-		
 			ArrayList<String> environment = master.get(1);// Environment row in excel
 			ENV_TO_USE = environment.get(1);//Use envToUse appropriately
+			ArrayList<String> browser = master.get(1);
 			ArrayList<String> pages = master.get(0);// Pages row in excel
 			for(int j = 0; j < pages.size(); j++)// iterating the pages row
 			{
@@ -53,10 +84,11 @@ public class RegressionTesting
 					newAboutCourseValidator = new NewAboutCourseValidator(sheetName, sheetData);
 					try
 					{
+						//Get Started
 						switch(sheetName)
 						{
 							case "Login":
-								new RegressionTestLogin(sheetData);
+								new RegressionTestLogin(sheetData, driver);
 							break;
 							case "AboutCourse":
 							{
@@ -65,43 +97,44 @@ public class RegressionTesting
 							}
 							break;
 							case "ViewCourse":
-								new ViewCourseValidator(sheetData);
+								new ViewCourseValidator(sheetData, driver);
 							break;
 							case "GenericProcess":
 							{
-								regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData);
+								regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData, driver);
 								regressionGenericValidator.processSheetData();
+								driver.quit();
 							}
 							break;
 							case "urlValidation":
-								new ErrorCodeValidation(sheetData);
+								new ErrorCodeValidation(sheetData, driver);
 								break;
 							case"UserDropdown":
-								new UserDropdownValidation(sheetData);
+								new UserDropdownValidation(sheetData, driver);
 								break;
 							case"SignUp":
-								new SignUpValidation(sheetData);
+								new SignUpValidation(sheetData, driver);
 								break;
 							case"ForGotPwd":
-								new ForgotPasswordValidation(sheetData);
+								new ForgotPasswordValidation(sheetData, driver);
 								break;
 							case"FooterSection":
-								new FooterSectionValidation(sheetData);
+								new FooterSectionValidation(sheetData, driver);
 								break;
 							case"HeaderSection":
-								new HeaderSectionValidation(sheetData);
+								new HeaderSectionValidation(sheetData, driver);
 								break;
 							case"Dashboard":
-								new DashboardValidator(sheetData);
+								new DashboardValidator(sheetData, driver);
 								break;
 							case "ContactInfo":
-								new ContactInfoValidation(sheetData);
+								new ContactInfoValidation(sheetData, driver);
 								break;
 							case "LoginWithSocialAcc":
-								new LoginSocialAccValidation(sheetData);
+								new LoginSocialAccValidation(sheetData, driver);
 								break;
 							case "ContactUSForm":
-								new ContactUsValidation(sheetData);
+								new ContactUsValidation(sheetData, driver);
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");

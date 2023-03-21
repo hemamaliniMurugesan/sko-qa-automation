@@ -34,9 +34,9 @@ public class RegressionGenericLocator
 	String courseCode;
 	String orderNumber = "";
 	
-	public WebDriver getDriver()
+	public RegressionGenericLocator(WebDriver driver)
 	{
-		return driver;
+		this.driver = driver;
 	}
 	
 	public void openDriver()

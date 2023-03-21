@@ -16,25 +16,25 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.seo.utility.TestUtil;
-
-public class ProcessLogin extends OpenWebsite
+public class ProcessLogin 
 {
-	@Override
-	public WebDriver getDriver() {
-		return super.getDriver();
-	}
-	@Override
-	public void openDriver() {
-		super.openDriver();
-	}
-	@Override
-	public String setEnvironment(String host)
-	{
-		return super.setEnvironment(host);
-	}
+	WebDriver driver;
 	String url = "";
 	String loginStatus;
+	OpenWebsite openWebsite;
+	WebDriver checkBrowserName;
+	public ProcessLogin(WebDriver driver)
+	{
+		this.driver = driver;
+		System.out.println(driver);
+		checkBrowserName = driver;
+		openWebsite = new OpenWebsite(driver);
+	}
+	public String setEnvironment(String host)
+	{
+		
+		return openWebsite.setEnvironment(host);
+	}
 	
 	public String launchCourse() throws InterruptedException
 	{
@@ -49,7 +49,7 @@ public class ProcessLogin extends OpenWebsite
 	{
 		try
 		{
-			List<WebElement> getMessage = driver.findElements(By.cssSelector("div[class='NotificationTypeError spacing-mb16 status message submission-error is-shown'] div[class*='fiederror message-title']"));
+			List<WebElement> getMessage = driver.findElements(By.cssSelector("div[class='fielderror']"));
 			if(getMessage.size()>0)
 			{
 				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
@@ -131,26 +131,35 @@ public class ProcessLogin extends OpenWebsite
 						WebDriverWait wait2 =  new WebDriverWait(driver, Duration.ofSeconds(30));
 						wait2.until(ExpectedConditions.elementToBeClickable(clickBeginProfile));
 						clickBeginProfile.click();
+						Thread.sleep(1000);
 						WebElement clickDropdownIcon = driver.findElement(By.cssSelector("li[class='Header_SigNUP__cUzCw'] img[alt='icon']"));
 						clickDropdownIcon.click();
-						if(driver.getCurrentUrl().equalsIgnoreCase("https://stage-in.skillup.online/interested/"))
+						Thread.sleep(1000);
+						String parentWindow1 = driver.getWindowHandle();
+						Set<String> listOfWindow1 = driver.getWindowHandles();
+						for(String windows1 : listOfWindow1)
 						{
-							driver.switchTo().window(windows);
-							WebElement checkLoggedName = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(1) a"));
-							if(checkLoggedName.getText().contains("Hello"))
+							Thread.sleep(1000);
+							driver.switchTo().window(windows1);
+							if(driver.getCurrentUrl().equalsIgnoreCase("https://stage-in.skillup.online/interested/"))
 							{
-								loginStatus = "Success";
-								System.out.println("logged in successfully");
-								Thread.sleep(1000);
-							}
-							else
-							{
-								loginStatus = "Failed";
-								System.out.println("not logged in ");
-							}
-							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Primary02_Blue'] li:nth-child(5) a"));
+								driver.switchTo().window(windows1);
+								WebElement checkLoggedName = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(1) a"));
+								if(checkLoggedName.getText().contains("Hello"))
+								{
+									loginStatus = "Success";
+									System.out.println("logged in successfully");
+									Thread.sleep(1000);
+								}
+								else
+								{
+									loginStatus = "Failed";
+									System.out.println("not logged in ");
+								}
+							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
 							clickSignOut.click();
 							Thread.sleep(1000);
+						}
 						}
 					 }
 					else if(driver.getCurrentUrl().contains("dashboard"))
@@ -159,7 +168,7 @@ public class ProcessLogin extends OpenWebsite
 						WebElement clickDropDown = driver.findElement(By.cssSelector("li[class='SigNUP'] img[class='dPaRoW']"));
 						clickDropDown.click();
 						Thread.sleep(1000);
-						WebElement checkLoggedName = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Primary02_Blue'] li:nth-child(1) a"));
+						WebElement checkLoggedName = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
 						if(checkLoggedName.getText().contains("Hello"))
 						{
 							loginStatus = "Success";
@@ -181,13 +190,17 @@ public class ProcessLogin extends OpenWebsite
 		}
 		return loginStatus;
 	}
-public void logOutFunction() throws InterruptedException
-{
-	WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Primary02_Blue'] li:nth-child(5) a"));
-	clickSignOut.click();
-	System.out.println("logout successfully");
-	Thread.sleep(1000);
-}
+	public void logOutFunction() throws InterruptedException
+	{
+		Thread.sleep(2000);
+		WebElement clickDropdown = driver.findElement(By.cssSelector("img[class='dPaRoW']"));
+		clickDropdown.click();
+		Thread.sleep(2000);
+		WebElement clickSignOut = driver.findElement(By.cssSelector("li[class*='SigNUP'] ul[class*='dropdown-menu']:nth-child(2) li:nth-child(5) a"));
+		clickSignOut.click();
+		System.out.println("logout successfully");
+		Thread.sleep(1000);
+	}
 	public String checkInvalidUsername(String uName, String pwd) throws InterruptedException
 	{
 		System.out.println("Invalid Email Process started");
@@ -201,7 +214,10 @@ public void logOutFunction() throws InterruptedException
 		ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
 		driver.switchTo().window(w.get(1));
 		this.loginFunction(uName, pwd);
-		driver.close();
+		if(!checkBrowserName.toString().contains("Firefox")|| !checkBrowserName.toString().contains("firefox"))
+		{
+			driver.close();
+		}
 		driver.switchTo().window(w.get(0));
 		Thread.sleep(500);
 		return loginStatus;
@@ -213,7 +229,10 @@ public void logOutFunction() throws InterruptedException
 		ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
 		driver.switchTo().window(w.get(1));
 		this.loginFunction(uName, pwd);
-		driver.close();
+		if(!checkBrowserName.toString().contains("Firefox")|| !checkBrowserName.toString().contains("firefox"))
+		{
+			driver.close();
+		}
 		driver.switchTo().window(w.get(0));
 		Thread.sleep(500);
 		return loginStatus;
@@ -228,7 +247,10 @@ public void logOutFunction() throws InterruptedException
 			driver.switchTo().window(w.get(1));
 			this.loginFunction(uName, pwd);
 			this.logOutFunction();
-			driver.close();
+			if(!checkBrowserName.toString().contains("Firefox")|| !checkBrowserName.toString().contains("firefox"))
+			{
+				driver.close();
+			}
 			driver.switchTo().window(w.get(0));
 			driver.quit();
 			Thread.sleep(500);

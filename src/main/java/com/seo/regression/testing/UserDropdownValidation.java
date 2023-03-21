@@ -2,6 +2,7 @@ package com.seo.regression.testing;
 
 import java.util.ArrayList;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class UserDropdownValidation
@@ -10,11 +11,12 @@ public class UserDropdownValidation
 	ArrayList<ArrayList<String>> sheetData = null;
 	UserDropdownList userDropdownList = new UserDropdownList();
 	String userName;
-	
-	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData) throws InterruptedException
+	WebDriver driver;
+	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData, WebDriver driver) throws InterruptedException
 	{
 		this.sheetData = sheetData;
-		userDropdownList.openDriver();
+		//userDropdownList.openDriver();
+		this.driver = driver;
 		this.start();
 	}
 	

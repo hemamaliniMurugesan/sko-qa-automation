@@ -3,6 +3,9 @@ package com.seo.regression.testing;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import org.openqa.selenium.WebDriver;
+
 import com.seo.utility.Utils;
 
 public class RegressionGenericValidator 
@@ -16,12 +19,14 @@ public class RegressionGenericValidator
 	private String startTime = "";
 	private String endTime = "";
 	private String duration = "";
-	
-	public RegressionGenericValidator(String sheetName, ArrayList<ArrayList<String>> rows)
+	WebDriver driver;
+	public RegressionGenericValidator(String sheetName, ArrayList<ArrayList<String>> rows,WebDriver driver)
 	{
+		this.driver = driver;
 		this.SHEET_NAME = sheetName; 
 		this.ROWS = rows;
-		regressionGenericLocator = new RegressionGenericLocator();
+		regressionGenericLocator = new RegressionGenericLocator(driver);
+		
 	}
 	
 	public String processSheetData()
@@ -35,7 +40,7 @@ public class RegressionGenericValidator
 			String process = currentRow.get(0);
 			executeProcess(process, currentRow);
 		}
-		regressionGenericLocator.getDriver().quit();
+	//	regressionGenericLocator.getDriver().quit();
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		duration = Utils.findDifference(startTime, endTime);
 		collectSheetResult();

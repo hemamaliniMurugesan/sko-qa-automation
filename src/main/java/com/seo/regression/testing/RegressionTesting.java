@@ -26,14 +26,14 @@ public class RegressionTesting
 	String startTime = "";
 	String endTime = "";
 	String duration = "";
+	
 	public static LinkedHashMap<String, ArrayList<ArrayList<String>>> EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
 	NewAboutCourseValidator newAboutCourseValidator;
 	RegressionGenericValidator regressionGenericValidator;
 	public static String ENV_TO_USE = "";
-	WebDriver driver;
 	
-	OpenWebsite openWebsite = new OpenWebsite(driver);
+	WebDriver driver;
 	
 	@BeforeTest
 	@Parameters("browser")
@@ -41,18 +41,19 @@ public class RegressionTesting
 	{
 	    if (browserName.equalsIgnoreCase("Firefox"))
 	    {
-	    	driver = openWebsite.openDriver(browserName);
+	    	driver = OpenWebsite.openDriver(browserName);
 	    }
 	    else if (browserName.equalsIgnoreCase("Chrome"))
 	    {
-	    	driver = openWebsite.openDriver(browserName);
+	    	driver = OpenWebsite.openDriver(browserName);
 	    }
 	    else
 	    {
 	    	throw new Exception("Browser is not correct");
 	    }
 	}
-	@Test(priority = 1)
+	
+	@Test
 	public void startTest()
 	{
 		System.out.println(driver);
@@ -62,7 +63,7 @@ public class RegressionTesting
 	
 	public void startTesting()
 	{
-		String excelPath = "D:\\RegressionTesting.xlsx";
+		String excelPath = "D:\\Doc\\RegressionTesting.xlsx";
 		EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP = new LinkedHashMap<String, ArrayList<ArrayList<String>>>();
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		try
@@ -88,7 +89,7 @@ public class RegressionTesting
 						switch(sheetName)
 						{
 							case "Login":
-								new RegressionTestLogin(sheetData, driver);
+								new RegressionTestLogin(driver, ENV_TO_USE, sheetData);
 							break;
 							case "AboutCourse":
 							{
@@ -103,7 +104,6 @@ public class RegressionTesting
 							{
 								regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData, driver);
 								regressionGenericValidator.processSheetData();
-								driver.quit();
 							}
 							break;
 							case "urlValidation":
@@ -232,13 +232,14 @@ public class RegressionTesting
 
 	        //Do something here
 	        System.out.println("passed **********");
+	        driver.quit();
 	    }
 
 	    else if(result.getStatus() == ITestResult.FAILURE)
 	    {
 	         //Do something here
 	        System.out.println("Failed ***********");
-
+	        driver.quit();
 	    }
 
 	     else if(result.getStatus() == ITestResult.SKIP ){

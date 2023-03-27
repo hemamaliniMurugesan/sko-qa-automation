@@ -1,26 +1,33 @@
 package com.seo.regression.testing;
 
-import java.sql.Driver;
 import java.util.ArrayList;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
 
-public class RegressionTestLogin 
+public class RegressionTestLogin
 {
 	WebDriver driver;
 	String result = "failed";
 	ArrayList<ArrayList<String>> sheetData = null;
 	ProcessLogin processLogin;
-	public RegressionTestLogin(ArrayList<ArrayList<String>> sheetData, WebDriver driver) throws InterruptedException
+	public RegressionTestLogin(WebDriver driver, String host, ArrayList<ArrayList<String>> sheetData) throws Exception
 	{
-		this.sheetData = sheetData;
-		this.driver = driver;
-		processLogin = new ProcessLogin(driver);
-		this.start();
-		driver.quit();
+		try
+		{
+			this.driver = driver;
+			this.sheetData = sheetData;
+			this.processLogin = new ProcessLogin(this.driver);
+			OpenWebsite.openSite(driver);
+			this.start();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
+	
 	public void start() throws InterruptedException
 	{
 		for(int i = 0; i < this.sheetData.size(); i++)
@@ -41,9 +48,6 @@ public class RegressionTestLogin
 				case "ValidCredentials":
 					ValidCredentials();
 					break;
-				/*
-				 * case "checkLogout": checkLogout(); break;
-				 */
 			}
 		}
 	}
@@ -54,7 +58,7 @@ public class RegressionTestLogin
 		ArrayList<String> credsRow = sheetData.get(0);
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
-		status = processLogin.checkInvalidUsername(userName, passWord);
+		status = this.processLogin.checkInvalidUsername(userName, passWord);
 		if(status.equalsIgnoreCase("success"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(0).set(0, "InvalidUsername - failed");

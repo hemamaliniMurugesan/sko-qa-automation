@@ -9,42 +9,59 @@ public class UserDropdownValidation
 {
 	String result = "failed";
 	ArrayList<ArrayList<String>> sheetData = null;
-	UserDropdownList userDropdownList = new UserDropdownList();
+	UserDropdownList userDropdownList;
+	ProcessLogin processLogin;
 	String userName;
 	WebDriver driver;
 	public UserDropdownValidation(ArrayList<ArrayList<String>> sheetData, WebDriver driver) throws InterruptedException
 	{
-		this.sheetData = sheetData;
-		//userDropdownList.openDriver();
-		this.driver = driver;
-		this.start();
+		try
+		{
+			this.sheetData = sheetData;
+			//userDropdownList.openDriver();
+			this.driver = driver;
+			processLogin = new ProcessLogin(driver);
+			userDropdownList = new UserDropdownList(driver);
+			this.start();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public void start() throws InterruptedException
 	{
-		for(int i = 0; i < this.sheetData.size(); i++)
+		try
 		{
-			ArrayList<String> row = this.sheetData.get(i);
-			String firstColumn = row.get(0);
-			switch(firstColumn)
+			for(int i = 0; i < this.sheetData.size(); i++)
 			{
+				ArrayList<String> row = this.sheetData.get(i);
+				String firstColumn = row.get(0);
+				switch(firstColumn)
+				{
 				case "login":
 					login(row.get(1), row.get(2));
-				break;
+					break;
 				case "userProfile":
 					userProfile();
-				break;
+					break;
 				case "orderHistory":
 					orderHistory(row.get(1));
-				break;
+					break;
+				}
 			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
 	public void login(String userName, String password) throws InterruptedException
 	{
 		this.userName = userName;
-		String status = userDropdownList.loginFunction(userName, password);
+		String status = processLogin.loginFunction(userName, password);
 		if(status.equalsIgnoreCase("Failed"))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(1).set(0, "Login - failed");
@@ -77,7 +94,6 @@ public class UserDropdownValidation
 		if(verifyOrderHistory.equalsIgnoreCase(status))
 		{
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("userProfile").get(3).set(0, "orderHistory - failed");
-
 		}
 	}
 }

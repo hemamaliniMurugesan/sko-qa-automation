@@ -15,12 +15,6 @@ import com.seo.utility.TestUtil;
 
 public class OpenWebsite
 {
-	WebDriverWait wait;
-	URL parentURL;
-	String setLoginURL;
-	String courseCode;
-	WebDriver getDriverName; 
-	
 	
 	public static WebDriver openDriver(String browserName)
 	{
@@ -31,13 +25,9 @@ public class OpenWebsite
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--disable notifications");
-			DesiredCapabilities cp = new DesiredCapabilities();
-			cp.setCapability(ChromeOptions.CAPABILITY, options);
-			options.merge(cp);
 			driver = new ChromeDriver(options);
 			driver.manage().window().maximize();
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
 		}
 		else if(browserName.equalsIgnoreCase("firefox"))
 		{
@@ -49,9 +39,10 @@ public class OpenWebsite
 		}
 		return driver;
 	}
+	
+	static String setHost = null;
 	public static String setEnvironment(String host)
 	{
-		String setHost = null;
 		if(host.equalsIgnoreCase("prod-in"))
 		{
 			String convertURL = "in";
@@ -92,13 +83,13 @@ public class OpenWebsite
 		driver.get(setURL);
 		return setURL;
 	}
-	
+	static String setURL;
 	public static String openSite(WebDriver driver)
 	{
-			String setURL;
-			setURL = setEnvironment(RegressionTesting.ENV_TO_USE);
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
-			driver.get(setURL);
+		String setURL;
+		setURL = setEnvironment(RegressionTesting.ENV_TO_USE);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
+		driver.get(setURL);
 		return setURL;
 	}
 	

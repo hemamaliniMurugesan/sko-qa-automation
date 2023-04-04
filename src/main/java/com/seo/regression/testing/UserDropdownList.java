@@ -22,7 +22,7 @@ public class UserDropdownList
 		this.driver = driver;
 		checkUserOrderDetails="";
 		checkBrowserName = driver;
-		processLogin = new ProcessLogin(driver);
+		this.processLogin = new ProcessLogin(driver);
 	}
 	public String userProfile() throws InterruptedException
 	{

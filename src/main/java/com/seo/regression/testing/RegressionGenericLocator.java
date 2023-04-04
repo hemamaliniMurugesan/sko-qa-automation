@@ -41,7 +41,7 @@ public class RegressionGenericLocator
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_110\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\ChromeDriver_111\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -100,16 +100,29 @@ public class RegressionGenericLocator
 			}
 			else
 			{
+				String getCourseID = null;
 				System.out.println("un broken link");
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 				driver.get(addHosturl);
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
-				WebElement checkCourseCode = driver.findElement(By.cssSelector("div[class='CourseDescription_buttonsContent__qPhJg '] button[class*='enrollNowBtn']"));
-				String getCourseID = checkCourseCode.getAttribute("href");
+				List<WebElement> checkCourseCode = driver.findElements(By.cssSelector("div[class='CourseDescription_buttonsContent__qPhJg '] button[class*='enrollNowBtn']"));
+				List<WebElement> checkCourseContent = driver.findElements(By.cssSelector("meta[property='og:title']"));
+				if(checkCourseCode.size()>0)
+				{
+					getCourseID = checkCourseCode.get(0).getAttribute("href");
+				}
+				else
+				{
+					checkCourseContent.get(0).getText();
+				}
 				courseIDFromBrowser = getCourseID;
 				System.out.println("course ID from Browser : "+courseIDFromBrowser);
 				System.out.println("courseIDFrom Excel: "+code);
 				if(courseIDFromBrowser.contains(code))
+				{
+					CourseCodeStatus = "true";
+				}
+				else if(checkCourseContent.get(0).getText().contains(code))
 				{
 					CourseCodeStatus = "true";
 				}

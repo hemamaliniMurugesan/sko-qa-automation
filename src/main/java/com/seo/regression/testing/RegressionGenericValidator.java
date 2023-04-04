@@ -20,19 +20,19 @@ public class RegressionGenericValidator
 	private String endTime = "";
 	private String duration = "";
 	WebDriver driver;
-	public RegressionGenericValidator(String sheetName, ArrayList<ArrayList<String>> rows,WebDriver driver)
+	public RegressionGenericValidator(WebDriver driver, String sheetName, ArrayList<ArrayList<String>> rows)
 	{
 		this.driver = driver;
 		this.SHEET_NAME = sheetName; 
 		this.ROWS = rows;
-		regressionGenericLocator = new RegressionGenericLocator(driver);
+		this.regressionGenericLocator = new RegressionGenericLocator(driver);
 		
 	}
 	
 	public String processSheetData()
 	{
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
-		regressionGenericLocator.openDriver();
+	//	regressionGenericLocator.openDriver();
 
 		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++)
 		{

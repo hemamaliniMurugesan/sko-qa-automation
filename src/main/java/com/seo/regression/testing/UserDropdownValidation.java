@@ -20,8 +20,8 @@ public class UserDropdownValidation
 			this.sheetData = sheetData;
 			//userDropdownList.openDriver();
 			this.driver = driver;
-			processLogin = new ProcessLogin(driver);
-			userDropdownList = new UserDropdownList(driver);
+			this.processLogin = new ProcessLogin(driver);
+			this.userDropdownList = new UserDropdownList(driver);
 			this.start();
 		}
 		catch(Exception e)

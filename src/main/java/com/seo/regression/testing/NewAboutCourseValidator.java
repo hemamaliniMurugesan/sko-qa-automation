@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.openqa.selenium.WebDriver;
+
 import com.seo.pompages.NewAboutCourseLocator;
 import com.seo.utility.Utils;
 
@@ -22,24 +24,25 @@ public class NewAboutCourseValidator
 	private String endTime = "";
 	private String duration = "";
 	String getMetaHost;
-
-	public NewAboutCourseValidator(String sheetName, ArrayList<ArrayList<String>> rows) {
+	WebDriver driver;
+	public NewAboutCourseValidator(WebDriver driver, String sheetName, ArrayList<ArrayList<String>> rows) {
 		this.SHEET_NAME = sheetName;
 		this.ROWS = rows;
-		newAboutCourseLocators = new NewAboutCourseLocator();
+		this.driver = driver;
+		this.newAboutCourseLocators = new NewAboutCourseLocator(driver);
 	}
 
 	public String processSheetData()
 	{
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
-		newAboutCourseLocators.openDriver();
+		//newAboutCourseLocators.openDriver();
 		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++) 
 		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
 			executeProcess(process, currentRow);
 		}
-		newAboutCourseLocators.getDriver().quit();
+	//	newAboutCourseLocators.getDriver().quit();
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		duration = Utils.findDifference(startTime, endTime);
 		collectSheetResult();

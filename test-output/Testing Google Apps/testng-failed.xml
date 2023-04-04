@@ -5,12 +5,13 @@
     <parameter name="hostName" value="stage-in"/>
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="com.example.workout.TestWorkout">
+      <class name="com.seo.regression.testing.RegressionTesting">
         <methods>
-          <include name="processSwitchMethod"/>
-          <include name="method1"/>
+          <include name="startTest"/>
+          <include name="setup"/>
+          <include name="afterMethod"/>
         </methods>
-      </class> <!-- com.example.workout.TestWorkout -->
+      </class> <!-- com.seo.regression.testing.RegressionTesting -->
     </classes>
   </test> <!-- Regression(failed) -->
 </suite> <!-- Failed suite [Testing Google Apps] -->

@@ -48,8 +48,7 @@ public class ViewCourseValidator
 		String status = "Failed";
 		String userName = row.get(1);
 		String passWord = row.get(2);
-		ProcessLogin processLogin = new ProcessLogin(driver);
-		processLogin.launchCourse();
+		OpenWebsite.openSite(driver);
 		viewCourseFeature = new ViewCourseFeature(driver);
 		status = viewCourseFeature.login(userName, passWord);
 		if(status.equalsIgnoreCase("Failed"))

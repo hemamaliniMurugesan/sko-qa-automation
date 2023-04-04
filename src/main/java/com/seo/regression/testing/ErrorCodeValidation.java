@@ -16,11 +16,9 @@ public class ErrorCodeValidation
 	
 	public ErrorCodeValidation(ArrayList<ArrayList<String>> sheetData,WebDriver driver)
 	{
-		this.driver = driver;
 		this.sheetData = sheetData;
-		errorCodeLocator = new ErrorCodeLocator(driver);
+		this.errorCodeLocator = new ErrorCodeLocator(driver);
 		this.start();
-		driver.quit();
 	}
 	
 	public void start()

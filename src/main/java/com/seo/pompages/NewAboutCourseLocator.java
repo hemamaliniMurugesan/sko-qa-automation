@@ -26,6 +26,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.seo.dataProvider.ConfigFileReader;
+import com.seo.regression.testing.OpenWebsite;
 import com.seo.utility.TestUtil;
 
 
@@ -46,9 +47,14 @@ public class NewAboutCourseLocator
 		return driver;
 	}
 	
+	public NewAboutCourseLocator(WebDriver driver)
+	{
+		this.driver = driver;
+		OpenWebsite.openSite(driver);
+	}
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_110\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\ChromeDriver_111\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -982,6 +988,8 @@ String addHosturl;
 					if(linkedURLLocator.isDisplayed())
 					{
 						jse.executeScript("window.scrollBy(0,-80)", "");
+						WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+						wait.until(ExpectedConditions.elementToBeClickable(linkedURLLocator));
 						linkedURLLocator.click();
 						String parentWindow = driver.getWindowHandle();
 						Set<String> windows = driver.getWindowHandles();
@@ -1080,6 +1088,7 @@ String addHosturl;
 					if(verifyDurationIcon.equalsIgnoreCase("time-icon"))
 					{
 						System.out.println("Duration icon is present");
+						break;
 					}
 				}
 				List<WebElement> durationHeader = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2']  div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
@@ -1089,16 +1098,19 @@ String addHosturl;
 					if(checkHeader.getText().equalsIgnoreCase("Duration"))
 					{
 						System.out.println("Duration is present");
+						break;
 					}
 				}
 				List<WebElement> durationContent = driver.findElements(By.xpath("//div[@class='col-12 CourseDescription_breakContent__EUpfp ']//div[@class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5']//div[@class='d-flex gap-2']//div[@class='CourseDescription_courseAboutTextSection__8_6ac']/h2/parent::div"));
 				for(int i = 0; i < durationContent.size(); i++)
 				{
 					String getDurationText = durationContent.get(i).getText();
-					if(getDurationText.equalsIgnoreCase(durationFromExcel))
+					 String replace = getDurationText.replace("Duration", "");  
+					if(replace.trim().equalsIgnoreCase(durationFromExcel.trim()))
 					{
 						System.out.println("Duration is correct");
 						checkDurationStatus = "pass";
+						break;
 					}
 				}
 			}
@@ -1128,6 +1140,7 @@ String addHosturl;
 					if(verifyFeeIcon.equalsIgnoreCase("fee-icon"))
 					{
 						System.out.println("Fee icon is present");
+						break;
 					}
 				}
 				List<WebElement> FeeHeader = driver.findElements(By.cssSelector("div[class='col-12 CourseDescription_breakContent__EUpfp '] div[class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5'] div[class='d-flex gap-2']  div[class='CourseDescription_courseAboutTextSection__8_6ac']"));
@@ -1137,13 +1150,15 @@ String addHosturl;
 					if(checkFee.getText().equalsIgnoreCase("StartsOn"))
 					{
 						System.out.println("fee header is present");
+						break;
 					}
 				}
 				List<WebElement> feeContent = driver.findElements(By.xpath("//div[@class='col-12 CourseDescription_breakContent__EUpfp ']//div[@class='CourseDescription_durationAndPriceSection__zodIu justify-content-start gap-5']//div[@class='d-flex gap-2']//div[@class='CourseDescription_courseAboutTextSection__8_6ac']/h2/parent::div"));
 				for(int i = 0; i < feeContent.size(); i++)
 				{
 					String getStartsOnText = feeContent.get(i).getText();
-					if(getStartsOnText.equalsIgnoreCase(flatPriceWithoutGSTFromExcel))
+					 String replace = getStartsOnText.replace("Fee", ""); 
+					if(getStartsOnText.trim().equalsIgnoreCase(flatPriceWithoutGSTFromExcel.trim()))
 					{
 						System.out.println("Starts On is correct");
 						checkPriceWOGSTStatus = "pass";

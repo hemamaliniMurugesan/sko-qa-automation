@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -31,11 +32,12 @@ public class TestRegressionGenericProcess
 	public static LinkedHashMap<String, ArrayList<ArrayList<String>>> EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP;
 	public static SoftAssert softAssert = null;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
-
-	public TestRegressionGenericProcess(String excelPath)
+	WebDriver driver;
+	public TestRegressionGenericProcess(WebDriver driver, String excelPath)
 	{
+		this.driver = driver;
 		softAssert = new SoftAssert();
-		regressionGenericLocator = new RegressionGenericLocator();
+		regressionGenericLocator = new RegressionGenericLocator(driver);
 		excelPath = "D:\\SkillUp_Testing\\SEO\\AboutCourseEnrollment\\TestEnrollment.xlsx";
 		this.regressionGenericLocator(excelPath);
 	}
@@ -54,7 +56,7 @@ public class TestRegressionGenericProcess
 				ArrayList<ArrayList<String>> sheetData = entry.getValue();
 				try
 				{
-					RegressionGenericValidator regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData);
+					RegressionGenericValidator regressionGenericValidator = new RegressionGenericValidator(driver, sheetName, sheetData);
 					String sheetStatus = regressionGenericValidator.processSheetData();
 					sheetsResult.put(sheetName, sheetStatus);
 				}

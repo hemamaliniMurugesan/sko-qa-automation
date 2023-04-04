@@ -227,18 +227,7 @@ public class ProcessLogin
 		try
 		{
 			System.out.println("Invalid password Process started");
-			/*
-			 * System.out.println("InvalidPassword process started"); ((JavascriptExecutor)
-			 * driver).executeScript("window.open()"); ArrayList<String> w = new
-			 * ArrayList<String>(driver.getWindowHandles());
-			 * driver.switchTo().window(w.get(1));
-			 */
 			this.loginFunction(uName, pwd);
-			/*
-			 * if(!checkBrowserName.toString().contains("Firefox")||
-			 * !checkBrowserName.toString().contains("firefox")) { driver.close(); }
-			 */
-			//driver.switchTo().window(w.get(0));
 			Thread.sleep(500);
 		}
 		catch(Exception e)
@@ -252,17 +241,7 @@ public class ProcessLogin
 		try
 		{
 			System.out.println("InvalidEmail and Password process started");
-			/*
-			 * ((JavascriptExecutor) driver).executeScript("window.open()");
-			 * ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
-			 * driver.switchTo().window(w.get(1));
-			 */
 			this.loginFunction(uName, pwd);
-			/*
-			 * if(!checkBrowserName.toString().contains("Firefox")||
-			 * !checkBrowserName.toString().contains("firefox")) { driver.close(); }
-			 */
-			//driver.switchTo().window(w.get(0));
 			Thread.sleep(500);
 		}
 		catch(Exception e)
@@ -276,17 +255,7 @@ public class ProcessLogin
 		try
 		{
 			System.out.println("valid data process started");
-			/*
-			 * ((JavascriptExecutor) driver).executeScript("window.open()");
-			 * ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
-			 * driver.switchTo().window(w.get(1));
-			 */
 			this.loginFunction(uName, pwd);
-			/*
-			 * if(!checkBrowserName.toString().contains("Firefox")||
-			 * !checkBrowserName.toString().contains("firefox")) { driver.close(); }
-			 */
-			//driver.switchTo().window(w.get(0));
 			Thread.sleep(500);
 		}
 		catch(Exception e)

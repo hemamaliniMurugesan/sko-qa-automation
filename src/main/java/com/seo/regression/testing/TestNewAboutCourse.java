@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -28,14 +29,16 @@ public class TestNewAboutCourse
 	String startTime = "";
 	String endTime = "";
 	String duration = "";
+	WebDriver driver;
 	public static LinkedHashMap<String, ArrayList<ArrayList<String>>> EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP;
 	public static SoftAssert softAssert = null;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
 
-	public TestNewAboutCourse(String excelPath)
+	public TestNewAboutCourse(WebDriver driver, String excelPath)
 	{
 		softAssert = new SoftAssert();
-		newAboutCoursePage = new NewAboutCourseLocator();
+		this.driver = driver;
+		this.newAboutCoursePage = new NewAboutCourseLocator(driver);
 		excelPath = "D:\\statusCode.xlsx";
 		this.newAboutCoursePage(excelPath);
 	}
@@ -51,7 +54,7 @@ public class TestNewAboutCourse
 				String sheetName = entry.getKey();
 				ArrayList<ArrayList<String>> sheetData = entry.getValue();
 				try {
-					NewAboutCourseValidator newAboutCourseValidator = new NewAboutCourseValidator(sheetName, sheetData);
+					NewAboutCourseValidator newAboutCourseValidator = new NewAboutCourseValidator(driver, sheetName, sheetData);
 					String sheetStatus = newAboutCourseValidator.processSheetData();
 					sheetsResult.put(sheetName, sheetStatus);
 				} catch (Exception e) {

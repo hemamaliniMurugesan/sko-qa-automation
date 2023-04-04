@@ -6,8 +6,8 @@
       <class name="com.seo.regression.testing.RegressionTesting">
         <methods>
           <include name="startTest"/>
-          <include name="afterMethod"/>
           <include name="setup"/>
+          <include name="afterMethod"/>
         </methods>
       </class> <!-- com.seo.regression.testing.RegressionTesting -->
     </classes>

@@ -82,7 +82,7 @@ public class RegressionTesting
 				if (data.containsKey(sheetName))// checking whether the excel is having the sheet
 				{
 					ArrayList<ArrayList<String>> sheetData = data.get(sheetName);// reading the sheet data
-					newAboutCourseValidator = new NewAboutCourseValidator(sheetName, sheetData);
+					newAboutCourseValidator = new NewAboutCourseValidator(driver, sheetName, sheetData);
 					try
 					{
 						//Get Started
@@ -93,7 +93,7 @@ public class RegressionTesting
 							break;
 							case "AboutCourse":
 							{
-								newAboutCourseValidator = new NewAboutCourseValidator(sheetName, sheetData);
+								newAboutCourseValidator = new NewAboutCourseValidator(driver, sheetName, sheetData);
 								newAboutCourseValidator.processSheetData();
 							}
 							break;
@@ -102,7 +102,7 @@ public class RegressionTesting
 							break;
 							case "GenericProcess":
 							{
-								regressionGenericValidator = new RegressionGenericValidator(sheetName, sheetData, driver);
+								regressionGenericValidator = new RegressionGenericValidator(driver, sheetName, sheetData);
 								regressionGenericValidator.processSheetData();
 							}
 							break;
@@ -232,14 +232,12 @@ public class RegressionTesting
 
 	        //Do something here
 	        System.out.println("passed **********");
-	        driver.quit();
 	    }
 
 	    else if(result.getStatus() == ITestResult.FAILURE)
 	    {
 	         //Do something here
 	        System.out.println("Failed ***********");
-	        driver.quit();
 	    }
 
 	     else if(result.getStatus() == ITestResult.SKIP ){

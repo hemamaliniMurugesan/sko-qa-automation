@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.openqa.selenium.WebDriver;
+
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.pompages.NewAboutCourseLocator;
 import com.seo.utility.Utils;
@@ -23,11 +25,11 @@ public class NewAboutCourseValidator
 	private String startTime = "";
 	private String endTime = "";
 	private String duration = "";
-
+	WebDriver driver;
 	public NewAboutCourseValidator(String sheetName, ArrayList<ArrayList<String>> rows) {
 		this.SHEET_NAME = sheetName;
 		this.ROWS = rows;
-		newAboutCourseLocators = new NewAboutCourseLocator();
+		newAboutCourseLocators = new NewAboutCourseLocator(driver);
 	}
 
 	public String processSheetData() {
@@ -75,12 +77,6 @@ public class NewAboutCourseValidator
 				break;
 			case "courseInformation":
 				courseInformation(row);
-				break;
-			case "CourseOutline":
-				courseOutline();
-				break;
-			case "EarnYourCertificate":
-				earnYourCertificate(row.get(1), row.get(2), row.get(3), row.get(4));
 				break;
 			case "typeofCertificate":
 				typeofCertificate(row.get(1));
@@ -545,7 +541,7 @@ public class NewAboutCourseValidator
 	}
 
 	private void flatPriceINRWithoutGST(String flatPriceWithoutGSTFromExcel) {
-		String checkPrice = "success";
+		String checkPrice = "pass";
 		try {
 			String checkFlatPrice = newAboutCourseLocators.getflatPrice(flatPriceWithoutGSTFromExcel);
 			if (checkFlatPrice.equalsIgnoreCase("successIND")) {

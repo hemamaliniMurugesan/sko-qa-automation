@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -14,6 +15,7 @@ import org.testng.asserts.SoftAssert;
 
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.pompages.NewAboutCourseLocator;
+import com.seo.regression.testing.OpenWebsite;
 import com.seo.utility.ProcessExcel;
 import com.seo.utility.Utils;
 
@@ -31,12 +33,14 @@ public class TestNewAboutCourse
 	public static LinkedHashMap<String, ArrayList<ArrayList<String>>> EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP;
 	public static SoftAssert softAssert = null;
 	private HashMap<String, String> sheetsResult = new HashMap<String, String>();
-
+	WebDriver driver;
 	public TestNewAboutCourse(String excelPath)
 	{
 		softAssert = new SoftAssert();
-		newAboutCoursePage = new NewAboutCourseLocator();
-		excelPath = "D:\\statusCode.xlsx";
+		//OpenWebsite.openDriver("chrome");
+		//OpenWebsite.openSite(driver);
+		newAboutCoursePage = new NewAboutCourseLocator(driver);
+		excelPath = "D:\\Doc\\DownloadFiles\\Data Analysis with Python.xlsx";
 		this.newAboutCoursePage(excelPath);
 	}
 

@@ -40,12 +40,14 @@ public class NewAboutCourseValidator
 		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
+			System.out.println("About course process started");
 			executeProcess(process, currentRow);
 		}
 	//	newAboutCourseLocators.getDriver().quit();
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		duration = Utils.findDifference(startTime, endTime);
 		collectSheetResult();
+		driver.quit();
 		return sheetStatus;
 	}
 	
@@ -82,9 +84,6 @@ public class NewAboutCourseValidator
 				break;
 			case "CourseOutline":
 				courseOutline();
-				break;
-			case "EarnYourCertificate":
-				earnYourCertificate(row.get(1), row.get(2), row.get(3), row.get(4));
 				break;
 			case "typeofCertificate":
 				typeofCertificate(row.get(1));

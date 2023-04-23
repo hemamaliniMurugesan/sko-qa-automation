@@ -18,7 +18,9 @@ public class ErrorCodeValidation
 	{
 		this.sheetData = sheetData;
 		this.errorCodeLocator = new ErrorCodeLocator(driver);
+		System.out.println("error code validation process started");
 		this.start();
+		driver.quit();
 	}
 	
 	public void start()

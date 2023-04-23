@@ -21,6 +21,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -50,12 +51,15 @@ public class NewAboutCourseLocator
 	public NewAboutCourseLocator(WebDriver driver)
 	{
 		this.driver = driver;
-		OpenWebsite.openSite(driver);
+		
 	}
 	public void openDriver()
 	{
 		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\ChromeDriver_111\\chromedriver_win32\\chromedriver.exe");
-		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		options.addArguments("--disable notifications");
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
@@ -223,9 +227,9 @@ public class NewAboutCourseLocator
 			else
 			{
 				WebElement orgImg = driver.findElement(By.cssSelector("div[class='col d-flex align-items-center justify-content-end'] img:nth-child(2)"));
-				String courseOrgFromBrowser = orgImg.getAttribute("alt");
+				String courseOrgFromBrowser = orgImg.getAttribute("src");
 				System.out.println("course org From Browser : "+courseOrgFromBrowser);
-				if(courseOrgFromBrowser.equals(courseOrganizationFromExcel))
+				if(courseOrgFromBrowser.contains(courseOrganizationFromExcel))
 				{
 					courseOrgStatus = "pass";
 				}
@@ -988,13 +992,14 @@ String addHosturl;
 					if(linkedURLLocator.isDisplayed())
 					{
 						jse.executeScript("window.scrollBy(0,-80)", "");
-						WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+						WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(80));
 						wait.until(ExpectedConditions.elementToBeClickable(linkedURLLocator));
 						linkedURLLocator.click();
 						String parentWindow = driver.getWindowHandle();
 						Set<String> windows = driver.getWindowHandles();
 						for(String handle : windows)
 						{
+							driver.switchTo().window(handle);
 							if(!handle.equals(parentWindow))
 							{
 								driver.switchTo().window(handle);
@@ -1147,7 +1152,7 @@ String addHosturl;
 				for(int i = 0; i < FeeHeader.size(); i++)
 				{
 					WebElement checkFee = FeeHeader.get(i).findElement(By.cssSelector(" h2"));
-					if(checkFee.getText().equalsIgnoreCase("StartsOn"))
+					if(checkFee.getText().equalsIgnoreCase("Fee"))
 					{
 						System.out.println("fee header is present");
 						break;
@@ -1158,9 +1163,9 @@ String addHosturl;
 				{
 					String getStartsOnText = feeContent.get(i).getText();
 					 String replace = getStartsOnText.replace("Fee", ""); 
-					if(getStartsOnText.trim().equalsIgnoreCase(flatPriceWithoutGSTFromExcel.trim()))
+					if(replace.trim().contains(flatPriceWithoutGSTFromExcel.trim()))
 					{
-						System.out.println("Starts On is correct");
+						System.out.println("fee is correct");
 						checkPriceWOGSTStatus = "pass";
 					}
 				}

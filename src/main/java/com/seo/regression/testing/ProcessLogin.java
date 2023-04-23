@@ -67,15 +67,14 @@ public class ProcessLogin
 					{
 						loginStatus = "Failed";
 					}
-					else
-					{
-						this.checkUserAfterLoggedIn();
-					}
-					driver.close();
+					
+					  else 
+					  { this.checkUserAfterLoggedIn(); } driver.close();
+					 
 					break;
 				}
 			}
-			driver.switchTo().window(parentWindow);
+		driver.switchTo().window(parentWindow);
 		}
 		catch(Exception e)
 		{

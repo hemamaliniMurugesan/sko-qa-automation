@@ -79,8 +79,8 @@ public class OpenWebsite
 	public static String launchCourse(WebDriver driver, String urlFromExcel)
 	{
 		String setURL = setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		driver.get(setURL);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		return setURL;
 	}
 	static String setURL;
@@ -88,8 +88,8 @@ public class OpenWebsite
 	{
 		String setURL;
 		setURL = setEnvironment(RegressionTesting.ENV_TO_USE);
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		driver.get(setURL);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		return setURL;
 	}
 	

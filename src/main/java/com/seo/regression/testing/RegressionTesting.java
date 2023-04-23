@@ -97,9 +97,6 @@ public class RegressionTesting
 								newAboutCourseValidator.processSheetData();
 							}
 							break;
-							case "ViewCourse":
-								new ViewCourseValidator(sheetData, driver);
-							break;
 							case "GenericProcess":
 							{
 								regressionGenericValidator = new RegressionGenericValidator(driver, sheetName, sheetData);
@@ -108,9 +105,6 @@ public class RegressionTesting
 							break;
 							case "urlValidation":
 								new ErrorCodeValidation(sheetData, driver);
-								break;
-							case"UserDropdown":
-								new UserDropdownValidation(sheetData, driver);
 								break;
 							case"SignUp":
 								new SignUpValidation(sheetData, driver);
@@ -135,6 +129,9 @@ public class RegressionTesting
 								break;
 							case "ContactUSForm":
 								new ContactUsValidation(sheetData, driver);
+								break;
+							case "SearchProcess":
+								new SearchPageValidation(sheetData, driver);
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");

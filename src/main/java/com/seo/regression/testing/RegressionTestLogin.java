@@ -20,7 +20,9 @@ public class RegressionTestLogin
 			this.sheetData = sheetData;
 			this.processLogin = new ProcessLogin(this.driver);
 			OpenWebsite.openSite(driver);
+			System.out.println("login process started");
 			this.start();
+			driver.quit();
 		}
 		catch(Exception e)
 		{

@@ -143,9 +143,17 @@ public class NewAboutCourseLocator
 		String CourseCodeStatus = "false";
 		HttpURLConnection huc = null;
 		int respCode = 200;
-		String addHosturl = this.setHost+"/courses/"+code;
+		String addHosturl = "";
 		try
 		{
+			if(code.contains("course-v1"))
+			{
+				addHosturl = this.setHost+"/courses/"+code;
+			}
+			else
+			{
+				addHosturl = this.setHost+code;
+			}
 			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
 			huc.setRequestMethod("HEAD");
 			huc.connect();
@@ -161,17 +169,30 @@ public class NewAboutCourseLocator
 				System.out.println("un broken link");
 				driver.get(addHosturl);
 				List<WebElement> checkCourseCode = driver.findElements(By.cssSelector("button[class*='enroll']"));
-				courseIDFromBrowser = checkCourseCode.get(0).getAttribute("href");
-				/*
-				 * int index = courseIDFromBrowser.lastIndexOf("/"); String getCourseID =
-				 * courseIDFromBrowser.substring(index+0); getCourseID =
-				 * getCourseID.replace("/", "");
-				 */
-				System.out.println("course ID from Browser : "+courseIDFromBrowser);
-				System.out.println("courseIDFrom Excel: "+code);
-				if(courseIDFromBrowser.contains(code))
+				if(checkCourseCode.size()>0)
 				{
-					CourseCodeStatus = "true";
+					courseIDFromBrowser = checkCourseCode.get(0).getAttribute("href");
+					/*
+					 * int index = courseIDFromBrowser.lastIndexOf("/"); String getCourseID =
+					 * courseIDFromBrowser.substring(index+0); getCourseID =
+					 * getCourseID.replace("/", "");
+					 */
+					System.out.println("course ID from Browser : "+courseIDFromBrowser);
+					System.out.println("courseIDFrom Excel: "+code);
+					if(courseIDFromBrowser.contains(code))
+					{
+						CourseCodeStatus = "true";
+					}
+				}
+				else
+				{
+					WebElement canonicalLocator = driver.findElement(By.cssSelector("link[rel='canonical']"));
+					String getCanonicalURLText = canonicalLocator.getAttribute("href");
+					if(getCanonicalURLText.contains(code))
+					{
+						System.out.println("course code is present");
+						CourseCodeStatus = "true";
+					}
 				}
 			}
 		}
@@ -1333,7 +1354,7 @@ String addHosturl;
 				String getCanonicalURLText = canonicalLocator.getAttribute("href");
 				if(addHost.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").equalsIgnoreCase(getCanonicalURLText.replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "")))
 				{
-					System.out.println(getCanonicalURLText);
+					System.out.println("canocial tag : "+getCanonicalURLText);
 					checkVPNStatus = "success";
 				}
 				else

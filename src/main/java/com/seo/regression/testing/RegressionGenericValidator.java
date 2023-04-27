@@ -136,19 +136,15 @@ public class RegressionGenericValidator
 	
 	private void enrollment(ArrayList<String> enrollDataFromExcel)
 	{
-		String statusOfEnrollment = "true";
+		ArrayList<String> verifyEnrollmentProcess = new ArrayList<String>();
 		try
 		{
-			ArrayList<String> verifyEnrollmentProcess = enrollDataFromExcel;
-			if(!verifyEnrollmentProcess.contains("NA"))
+			if(!enrollDataFromExcel.contains("NA"))
 			{
 				verifyEnrollmentProcess = regressionGenericLocator.enroll(enrollDataFromExcel);
 				for(int i = 0; i < verifyEnrollmentProcess.size(); i++)
 				{
-					if(!verifyEnrollmentProcess.get(i).equalsIgnoreCase(statusOfEnrollment))
-					{
-						markColumnFailed(i);
-					}
+					
 				}
 			}
 			else

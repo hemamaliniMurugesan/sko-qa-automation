@@ -133,6 +133,9 @@ public class RegressionTesting
 							case "SearchProcess":
 								new SearchPageValidation(sheetData, driver);
 								break;
+							case "MicrosoftPage":
+								new MicrosoftCourseValidation(sheetData, driver);
+								break;
 							default:
 								System.out.println("Not class found to work with the sheet");
 						}

@@ -773,138 +773,104 @@ public class RegressionGenericLocator
 	}
 	ArrayList<Integer> errorCells;
 	boolean checkEnrollStatus;
+	public String loginProcess(String getData)
+	{
+		String status = "fail";
+		try
+		{
+			String[] splitData = getData.split("-split-",2);
+			String parentWindow1 = driver.getWindowHandle();
+			Set<String> allWindows1 = driver.getWindowHandles();
+			for(String window1 : allWindows1)
+			{
+				driver.switchTo().window(window1);
+				if(driver.getCurrentUrl().contains("login??"))
+				{
+					driver.switchTo().window(window1);
+					WebElement email = driver.findElement(By.cssSelector("input#email"));
+					email.sendKeys(splitData[0]);
+					WebElement pwd = driver.findElement(By.cssSelector("input#password"));
+					pwd.sendKeys(splitData[1]);
+					WebElement loginButton = driver.findElement(By.cssSelector("input#login_in"));
+					loginButton.click();
+					if(driver.getCurrentUrl().contains("subscriptions"))
+					{
+						status = "pass";
+					}
+					else
+					{
+						status = "fail";
+					}
+				}
+			}
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status = "fail";
+		}
+		return getData;
+	}
+	public String choosePlan(String plan)
+	{
+		String parentWindow2 = driver.getWindowHandle();
+		Set<String> allWindows = driver.getWindowHandles();
+		for(String windows : allWindows)
+		{
+			
+		}
+	}	
 	public ArrayList<String> enroll(ArrayList<String> enrollDataFromExcel)
 	{
-		ArrayList<String> verifyEnrollmentProcess = new ArrayList<String>();
+		ArrayList<String> statusOfProcess = new ArrayList<String>();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		try
 		{
-			ArrayList<String> getData = new ArrayList<String>();
-			getData = enrollDataFromExcel;
-			for(int i = 0; i < getData.size(); i++)
+			
+			js.executeScript("window.scrollBy(0,200)");
+			String getCurrentURL = driver.getCurrentUrl();
+			if(getCurrentURL.contains("-in"))//india site
 			{
-				if(i == 1)
+				WebElement checkEnrollButton = driver.findElement(By.cssSelector("button[class*='CourseDescription_enrollNowBtn']"));
+				if(checkEnrollButton.isDisplayed())
 				{
-					js.executeScript("window.scrollBy(0,-1100)");
-					String getCurrentURL = driver.getCurrentUrl();
-					if(getCurrentURL.contains("-in"))//india site
+					if(checkEnrollButton.getText().equalsIgnoreCase("Enroll Now"))
 					{
-						WebElement checkEnrollButton = driver.findElement(By.cssSelector("div[class='col-12'] button[class='CourseDescription_enrollNowBtn__xyx0I']"));
-						if(checkEnrollButton.isDisplayed())
-						{
-							if(checkEnrollButton.getText().equalsIgnoreCase("Enroll Now"))
-							{
-								System.out.println("Enroll Button is displayed");
-								wait.until(ExpectedConditions.elementToBeClickable(checkEnrollButton));
-								js.executeScript("window.scrollBy(0,100)");
-								JavascriptExecutor jse = (JavascriptExecutor)driver;
-								jse.executeScript("arguments[0].click()", checkEnrollButton);
-								driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-								driver.navigate().refresh();
-								if(driver.getCurrentUrl().contains("register?"))
-								{
-									System.out.println("login page displayed");
-									checkEnrollStatus = true;
-									verifyEnrollmentProcess.add(login(getData.get(i))); // column 1
-								}
-								else
-								{
-									System.out.println("login page not displayed");
-									checkEnrollStatus = false;
-								}
-							}
-							else
-							{
-								System.out.println("Enroll Button webElement not found");
-								checkEnrollStatus = false;
-								if(checkEnrollButton.getText().equalsIgnoreCase("Start Now"))
-								{
-									checkEnrollButton.click();	
-									driver.close();
-								}
-							}
-						}
-					}
-					else
-					{
-						System.out.println("US site enrollment Process started");
-						if(!getCurrentURL.contains("-in"))
-						{
-
-							WebElement checkEnrollButton = driver.findElement(By.cssSelector("div[class='col-12'] button[class='CourseDescription_enrollNowBtn__xyx0I']"));
-							if(checkEnrollButton.isDisplayed())
-							{
-				
-								if(checkEnrollButton.getText().equalsIgnoreCase("Enroll Now"))
-								{
-									System.out.println("Enroll Button is displayed");
-									wait.until(ExpectedConditions.elementToBeClickable(checkEnrollButton));
-									js.executeScript("window.scrollBy(0,100)");
-									JavascriptExecutor jse = (JavascriptExecutor)driver;
-									jse.executeScript("arguments[0].click()", checkEnrollButton);
-									driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-									driver.navigate().refresh();
-									if(driver.getCurrentUrl().contains("register?"))
-									{
-										System.out.println("login page displayed");
-										checkEnrollStatus = true;
-										verifyEnrollmentProcess.add(login(getData.get(i))); // column 1
-									}
-									else
-									{
-										System.out.println("login page not displayed");
-										checkEnrollStatus = false;
-									}
-								}
-								else
-								{
-									System.out.println("Enroll Button webElement not found");
-									checkEnrollStatus = false;
-									if(checkEnrollButton.getText().equalsIgnoreCase("Start Now"))
-									{
-										checkEnrollButton.click();	
-										driver.close();
-									}
-								}
-							}
-
-						}
+						System.out.println("Enroll Button is displayed");
+						wait.until(ExpectedConditions.elementToBeClickable(checkEnrollButton));
+						js.executeScript("arguments[0].click()", checkEnrollButton);
 					}
 				}
-				if(i == 2)
+				String parentWindow = driver.getWindowHandle();
+				Set<String> allWindows = driver.getWindowHandles();
+				for(String window : allWindows)
 				{
-					 if(!driver.findElements(By.cssSelector("div[class=\"owl-item active\"]")).isEmpty()) 
-					  {
-						  verifyEnrollmentProcess.add(selectPlan(getData.get(i))); 
-					  }
-					  else
-					  {
-						  System.out.println("plan is not available");
-						  checkEnrollStatus = false;
-					  }
+					driver.switchTo().window(window);
+					if(driver.getCurrentUrl().contains("register?"))
+					{
+						driver.switchTo().window(window);
+						WebElement clickLoginIcon = driver.findElement(By.cssSelector("li#signinlink"));
+						clickLoginIcon.click();
+						break;
+					}
 				}
-				if(i == 3)
-				{
-					 verifyEnrollmentProcess.add(checkOutRazorpay(getData.get(i)));
-				}
-				if(i == 4)
-				{
-					verifyEnrollmentProcess.add(indiaPaymentProcess(getData.get(i))); 
-				}
-				if(i == 5)
-				{
-					verifyEnrollmentProcess.add(indiaOrderDetails(getData.get(i)));
-				}
+				statusOfProcess.add(this.loginProcess(enrollDataFromExcel.get(1)));
+			}
+			else
+			{
+				System.out.println("US Enroll Process");
 			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			checkEnrollStatus = false;
 		}
-		return verifyEnrollmentProcess;
 	}
+			
+	
+	
 	
 	public ArrayList<String> skillupOnlineLocator(ArrayList<String> skillupOnlineFromExcel)
 	{

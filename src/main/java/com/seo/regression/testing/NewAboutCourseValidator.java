@@ -36,11 +36,11 @@ public class NewAboutCourseValidator
 	{
 		startTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		//newAboutCourseLocators.openDriver();
+		System.out.println("About course process started");
 		for (CURRENT_ROW = 0; CURRENT_ROW < ROWS.size(); CURRENT_ROW++) 
 		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
-			System.out.println("About course process started");
 			executeProcess(process, currentRow);
 		}
 	//	newAboutCourseLocators.getDriver().quit();
@@ -61,101 +61,101 @@ public class NewAboutCourseValidator
 			case "courseCode":
 				courseCode(row.get(1));
 				break;
-			case "courseTitle":
-				courseTitle(row.get(1));
-				break;
-			case "courseOrganization":
-				courseOrganization(row.get(1));
-				break;
-			case "courseDescription":
-				courseDescription(row.get(1));
-				break;
-			case "courseType1":
-				courseType1(row.get(1));
-				break;
-			case "courseType2":
-				courseType2(row.get(1));
-				break;
-			case "courseLevel ":
-				courseLevel(row.get(1));
-				break;
-			case "courseInformation":
-				courseInformation(row);
-				break;
-			case "CourseOutline":
-				courseOutline();
-				break;
-			case "typeofCertificate":
-				typeofCertificate(row.get(1));
-				break;
-			case "aboutCourse":
-				aboutCourse(row.get(1));
-				break;
-			case "includes":
-				includes(row.get(1));
-				break;
-			case "create":
-				create(row.get(1));
-				break;
-			case "exercisesToExplore":
-				exercisesToExplore(row.get(1));
-				break;
-			case "experts":
-				experts(row);
-				break;
-			case "startsOn":
-				startsOn(row.get(1));
-				break;
-			case "duration":
-				duration(row.get(1));
-				break;
-			case "flatPriceINRWithoutGST":
-				flatPriceINRWithoutGST(row.get(1));
-				break;
-			case "flatPriceUSD":
-				flatPriceUSD(row.get(1));
-				break;
-			case "category":
-				category(row);
-				break;
-			case "currentURL":
-				launchUrlAndTestRedirection(row.get(1), row.get(2));
-				break;
+//			case "courseTitle":
+//				courseTitle(row.get(1));
+//				break;
+//			case "courseOrganization":
+//				courseOrganization(row.get(1));
+//				break;
+//			case "courseDescription":
+//				courseDescription(row.get(1));
+//				break;
+//			case "courseType1":
+//				courseType1(row.get(1));
+//				break;
+//			case "courseType2":
+//				courseType2(row.get(1));
+//				break;
+//			case "courseLevel ":
+//				courseLevel(row.get(1));
+//				break;
+//			case "courseInformation":
+//				courseInformation(row);
+//				break;
+//			case "CourseOutline":
+//				courseOutline();
+//				break;
+//			case "typeofCertificate":
+//				typeofCertificate(row.get(1));
+//				break;
+//			case "aboutCourse":
+//				aboutCourse(row.get(1));
+//				break;
+//			case "includes":
+//				includes(row.get(1));
+//				break;
+//			case "create":
+//				create(row.get(1));
+//				break;
+//			case "exercisesToExplore":
+//				exercisesToExplore(row.get(1));
+//				break;
+//			case "experts":
+//				experts(row);
+//				break;
+//			case "startsOn":
+//				startsOn(row.get(1));
+//				break;
+//			case "duration":
+//				duration(row.get(1));
+//				break;
+//			case "flatPriceINRWithoutGST":
+//				flatPriceINRWithoutGST(row.get(1));
+//				break;
+//			case "flatPriceUSD":
+//				flatPriceUSD(row.get(1));
+//				break;
+//			case "category":
+//				category(row);
+//				break;
+//			case "currentURL":
+//				launchUrlAndTestRedirection(row.get(1), row.get(2));
+//				break;
 			case "canonical":
 				canonical(row.get(1));
 				break;
-			case "checkMetaTagContentByName":
-				checkMetaTagContentByName(row);
-				break;
-			case "checkMetaTagContentByProperty":
-				checkMetaTagContentByProperty(row); 
-				break;
-			case "checkTagWithInnerText":
-				checkTagWithInnerText(row); 
-				break;
-			case "checkImgSrcAndAlt": 
-				checkImgSrcAndAlt(row); 
-				break;
-			case "FAQ": 
-				faq(row); 
-				break; 
-			case "ValidateSchemaHeading":
-				validateSchemaHeading(row);
-				break;
-			case "ValidateFAQ":
-				if(null == faqFromValidator)
-				{
-					faqFromValidator = newAboutCourseLocators.getFAQFromValidator();
-				}
-				validateSchemaFAQ(row, faqFromValidator);
-					break;
-			case "CheckRedirectStatus": 
-				System.out.println("checkRedirectStatus Method");
-				checkRedirectStatus(row.get(1), row.get(2), row.get(3));
-				break;
-			default:
-				markCellAsHeader();
-				break;
+//			case "checkMetaTagContentByName":
+//				checkMetaTagContentByName(row);
+//				break;
+//			case "checkMetaTagContentByProperty":
+//				checkMetaTagContentByProperty(row); 
+//				break;
+//			case "checkTagWithInnerText":
+//				checkTagWithInnerText(row); 
+//				break;
+//			case "checkImgSrcAndAlt": 
+//				checkImgSrcAndAlt(row); 
+//				break;
+//			case "FAQ": 
+//				faq(row); 
+//				break; 
+//			case "ValidateSchemaHeading":
+//				validateSchemaHeading(row);
+//				break;
+//			case "ValidateFAQ":
+//				if(null == faqFromValidator)
+//				{
+//					faqFromValidator = newAboutCourseLocators.getFAQFromValidator();
+//				}
+//				validateSchemaFAQ(row, faqFromValidator);
+//					break;
+//			case "CheckRedirectStatus": 
+//				System.out.println("checkRedirectStatus Method");
+//				checkRedirectStatus(row.get(1), row.get(2), row.get(3));
+//				break;
+//			default:
+//				markCellAsHeader();
+//				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

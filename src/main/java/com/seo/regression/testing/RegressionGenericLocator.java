@@ -820,6 +820,7 @@ public class RegressionGenericLocator
 		{
 			
 		}
+		return parentWindow2;
 	}	
 	public ArrayList<String> enroll(ArrayList<String> enrollDataFromExcel)
 	{
@@ -867,6 +868,7 @@ public class RegressionGenericLocator
 		{
 			e.printStackTrace();
 		}
+		return statusOfProcess;
 	}
 			
 	

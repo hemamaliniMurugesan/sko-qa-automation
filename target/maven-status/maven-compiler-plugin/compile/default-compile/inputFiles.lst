@@ -1,6 +1,51 @@
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\seo\manager\FileReaderManager.java
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\seo\utility\ProcessExcel.java
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\skillup\sample\EndToEnd.java
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\seo\pompages\CourseDetailsPage.java
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\seo\dataProvider\ConfigFileReader.java
-C:\Users\Skillup 200\eclipse-workspace\seo\src\main\java\com\seo\utility\TestUtil.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\AboutCourseLocators.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactUSLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\utility\TestUtil.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ForgotPasswordValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EnrollmentLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\SEOAboutPageLocators.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\FrontEndAboutCourseLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\HeaderSectionValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\FooterSectionValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SearchPageValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ProcessLogin.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\FooterSectionLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\MicrosoftCourseLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\FrontEndAboutPageLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\OpenWebsite.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\NewAboutCourseValidator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ForgotPasswordLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\TestNewAboutCourse.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\utility\Utils.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\LoginSocialAccValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\DashboardLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactInfoLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactInfoValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\UserPageValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\CategoryPageLocators.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\CourseDetailsPage.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionGenericLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\DashboardValidator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\dataProvider\ConfigFileReader.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionTestLogin.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\LoginSocialAccLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SearchPageLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ErrorCodeValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ErrorCodeLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionGenericValidator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\utility\ProcessExcel.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\AboutCourseEnrollmentLocators.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\StagecategoryLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\SEOGenericLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\TestRegressionGenericProcess.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SignUpValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\HeaderSectionLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SignUpLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactUsValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\MicrosoftCourseValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\CategoryUILocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\UserPageLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\NewAboutCourseLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\manager\FileReaderManager.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionTesting.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EnrollmentValidation.java

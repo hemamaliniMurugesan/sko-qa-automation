@@ -85,9 +85,16 @@ public class StagecategoryValidator
 				}
 				validateSchemaFAQ(row, faqFromValidator);
 				break;
-			case "checkRedirectStatus": System.out.println("checkRedirectStatus Method");
+			case "checkRedirectStatus": 
+				System.out.println("checkRedirectStatus Method");
 				checkRedirectStatus(row.get(1), row.get(2), row.get(3));
 				break;
+			case "programs":
+				verifyPrograms();
+				break;
+			case "courses":
+				verifyCourses();
+				break;	
 			default:
 				break;
 			}
@@ -167,7 +174,33 @@ public class StagecategoryValidator
 			
 		}
 	}
+	private void verifyPrograms()
+	{
+		ArrayList<String> programStatus = stagecategoryLocator.checkPrograms();
+		{
+			for(int i = 0; i < programStatus.size(); i++)
+			{
+				if(programStatus.contains("fail"))
+				{
+					markProcessFailed();
+				}
+			}
+		}
+	}
 	
+	private void verifyCourses()
+	{
+		ArrayList<String> courseStatus = stagecategoryLocator.checkCourses();
+		{
+			for(int i = 0; i < courseStatus.size(); i++)
+			{
+				if(courseStatus.contains("fail"))
+				{
+					markProcessFailed();
+				}
+			}
+		}
+	}
 	private void checkMetaTagContentByProperty(ArrayList<String> tags)
 	{
 		for (int i = 0; i < tags.size(); i++)
@@ -245,11 +278,11 @@ public class StagecategoryValidator
 				{
 					for (int j = 2; j < faqRow.size(); j++) 
 					{
-						String answerParagraphFromExcel = faqRow.get(j).replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
+						String answerParagraphFromExcel = faqRow.get(j).replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 						System.out.println("Answer from excel : "+answerParagraphFromExcel);
-						String answerParagraphFromBrowser = answersFromParagraphs.get(j - 2);
+						String answerParagraphFromBrowser = answersFromParagraphs.get(j - 2).replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "");
 						System.out.println("Answer from Browser : "+answerParagraphFromBrowser);
-						if(!answerParagraphFromExcel.equals(answerParagraphFromBrowser.replaceAll("[^\\p{ASCII}]", "")))
+						if(!answerParagraphFromExcel.equals(answerParagraphFromBrowser))
 						{
 							markColumnFailed(j);
 						}

@@ -136,6 +136,9 @@ public class RegressionTesting
 							case "MicrosoftPage":
 								new MicrosoftCourseValidation(sheetData, driver);
 								break;
+							case "SignupWithSocialAcc":
+								new SignupSocialAccValidator(sheetData, driver);
+								break;
 							default:
 								System.out.println("Not class found to work with the sheet");
 						}

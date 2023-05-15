@@ -1,30 +1,27 @@
 
 package com.seo.regression.testing;
 
-import java.net.URL;
 import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.seo.utility.TestUtil;
 
 public class OpenWebsite
 {
-	
+	static String setURL;
 	public static WebDriver openDriver(String browserName)
 	{
 		WebDriver driver = null;
 		if(browserName.equalsIgnoreCase("chrome"))
 		{
-			System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromeDriver_112\\chromedriver_win32\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_113\\chromedriver.exe");
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--disable notifications");
+			options.addArguments("--remote-allow-origins=*");
 			driver = new ChromeDriver(options);
 			driver.manage().window().maximize();
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -83,7 +80,6 @@ public class OpenWebsite
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
 		return setURL;
 	}
-	static String setURL;
 	public static String openSite(WebDriver driver)
 	{
 		String setURL;

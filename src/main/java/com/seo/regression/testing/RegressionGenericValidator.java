@@ -144,7 +144,35 @@ public class RegressionGenericValidator
 				verifyEnrollmentProcess = regressionGenericLocator.enroll(enrollDataFromExcel);
 				for(int i = 0; i < verifyEnrollmentProcess.size(); i++)
 				{
-					
+					if(verifyEnrollmentProcess.get(0).contains("fail"))
+					{
+						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(1);
+						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(1, (cellValue + " - failed"));
+					}
+					if(verifyEnrollmentProcess.get(1).contains("fail"))
+					{
+						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(2);
+						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(2, (cellValue + " - failed"));
+					}
+					if(verifyEnrollmentProcess.get(2).contains("fail"))
+					{
+						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(3);
+						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(3, (cellValue + " - failed"));
+					}
+					if(verifyEnrollmentProcess.get(3).contains("fail"))
+					{
+						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(4);
+						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(4, (cellValue + " - failed"));
+					}
+					if(verifyEnrollmentProcess.get(4).contains("fail"))
+					{
+						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(5);
+						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(5, (cellValue + " - failed"));
+					}
+				}
+				if(verifyEnrollmentProcess.contains("fail"))
+				{
+					markProcessFailed();
 				}
 			}
 			else

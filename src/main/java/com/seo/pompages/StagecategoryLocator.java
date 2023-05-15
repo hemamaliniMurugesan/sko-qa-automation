@@ -16,10 +16,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.seo.dataProvider.ConfigFileReader;
+import com.seo.regression.testing.OpenWebsite;
+import com.seo.regression.testing.RegressionTesting;
 import com.seo.utility.TestUtil;
 
 public class StagecategoryLocator
@@ -37,8 +41,12 @@ public class StagecategoryLocator
 	}
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\DownloadFiles\\chromedriver_107 version\\chromedriver_win32\\chromedriver.exe");
-		driver = new ChromeDriver();
+		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_113\\chromedriver.exe");
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		options.addArguments("--disable notifications");
+		options.addArguments("--remote-allow-origins=*");
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
@@ -238,7 +246,7 @@ public class StagecategoryLocator
 	{
 		ArrayList<String> ans = new ArrayList<String>();
 		JavascriptExecutor js = (JavascriptExecutor)driver;
-		WebElement checkFAQ =  driver.findElement(By.xpath("//h2[contains(text(),\"FAQ\")]"));
+		WebElement checkFAQ =  driver.findElement(By.xpath("//h2[contains(text(),'FAQ')]"));
 		js.executeScript("arguments[0].scrollIntoView(true);", checkFAQ);
 		WebElement HeadOfFAQSelector = driver.findElement(By.cssSelector("div[class='container-fluid Accordion_containerInner__lXdjS'] div[class='col']>h2"));
 		String getFAQHeadingText = HeadOfFAQSelector.getText();
@@ -248,7 +256,7 @@ public class StagecategoryLocator
 		{
 			for(int i = 0; i < listOfFAQ.size(); i++)
 			{
-				WebElement question = listOfFAQ.get(i).findElement(By.cssSelector(" h2[class='Accordion_accordionTitle__u92qv accordion-header'] button"));
+				WebElement question = listOfFAQ.get(i).findElement(By.cssSelector(" h2[class*='Accordion_accordionTitle']"));
 				js.executeScript("arguments[0].scrollIntoView();", question);
 				String questionText = question.getText();
 				System.out.println("Question from browser : "+questionText);
@@ -256,12 +264,12 @@ public class StagecategoryLocator
 				if(questionText.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").replaceAll("\u00A0", "").equalsIgnoreCase(questionFromExcel.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").replaceAll("\u00A0", "")))
 				{
 					//question.click();
-					List<WebElement> FAQAnswers = listOfFAQ.get(i).findElements(By.cssSelector("div[class*='accordion-collapse'] div[class='Accordion_accordionBody__cK_Px accordion-body'] div"));
+					List<WebElement> FAQAnswers = listOfFAQ.get(i).findElements(By.cssSelector("div[class*='accordion-collapse'] div[class*='Accordion_accordionBody'] div"));
 					JavascriptExecutor executor = (JavascriptExecutor)driver;
 					executor.executeScript("arguments[0].click();", question);
 					for(int j = 0; j < FAQAnswers.size(); j++)
 					{
-							String answer = FAQAnswers.get(j).getAttribute("textContent").replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").replaceAll("\u00A0", "");
+							String answer = FAQAnswers.get(j).getAttribute("textContent");
 							ans.add(answer);
 							break;
 					}
@@ -274,19 +282,126 @@ public class StagecategoryLocator
 		}
 		return ans;
 	}
-	
-	public void checkElementExist(String selector) throws Exception
+	public String checkLink(String data)
 	{
+		String CourseStatus = "fail";
+		int respCode = 200;
+		String endURL = data;
+		HttpURLConnection huc;
+		String addHosturl = data;
 		try
 		{
-			driver.findElement(By.xpath(selector)).getText();
+			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
+			huc.setRequestMethod("HEAD");
+			huc.connect();
+			respCode = huc.getResponseCode();
+			System.out.println("status code : "+respCode + " " +addHosturl);
+			if(respCode > 200)
+			{
+				System.out.println("broken link"+addHosturl);
+				System.exit(0);
+			}
+			else
+			{
+				System.out.println("un broken link"+addHosturl);
+				((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
+				String parentWindow = driver.getWindowHandle();
+				ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
+				for(String windows : w)
+				{
+					driver.switchTo().window(windows);
+					if(driver.getCurrentUrl().contains(endURL))
+					{
+						driver.switchTo().window(windows);
+						System.out.println("current url : "+driver.getCurrentUrl());
+						CourseStatus = "pass";
+						driver.close();
+					}
+					else if(driver.getCurrentUrl().contains("data"))
+					{
+						driver.close();
+					}
+				}
+			driver.switchTo().window(parentWindow);			
+			}
+		}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				CourseStatus = "fail";
+			}
+		return CourseStatus;
+	}
+	public ArrayList<String> checkPrograms()
+	{
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		ArrayList<String> status = new ArrayList<String>();
+		try
+		{
+			Actions a= new Actions(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			a.sendKeys(Keys.HOME).build().perform();
+			driver.navigate().refresh();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(3) div[class*='ManageCardsLimit_showMoreSection'] button"));
+			if(clickShowMore.get(0).isDisplayed())
+			{
+				clickShowMore.get(0).sendKeys(Keys.SHIFT);
+				js.executeScript("window.scrollBy(0,50)", "");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				js.executeScript("arguments[0].click();", clickShowMore.get(0));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			}
+			List<WebElement> pgms = driver.findElements(By.cssSelector("div[class*='LearningCatalog_cardRow'] div[class*='LearningCatalog_customCard'] div[class*='FlatCourseCard_FlatcardLinks'] a"));
+			for(int i = 0; i < pgms.size(); i++)
+			{
+				status.add(this.checkLink(pgms.get(i).getAttribute("href")));
+			}
 		}
 		catch(Exception e)
 		{
-			throw e;
+			e.printStackTrace();
+			status.add("fail");
 		}
+		return status;
 	}
 	
+	public ArrayList<String> checkCourses()
+	{
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		ArrayList<String> status = new ArrayList<String>();
+		try
+		{
+			Actions a= new Actions(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			a.sendKeys(Keys.HOME).build().perform();
+			driver.navigate().refresh();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
+			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(5) div[class*='ManageCardsLimit_showMoreSection'] button"));
+			if(clickShowMore.get(0).isDisplayed())
+			{
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				clickShowMore.get(0).sendKeys(Keys.SHIFT);
+				js.executeScript("window.scrollBy(0,50)", "");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				js.executeScript("arguments[0].click();", clickShowMore.get(0));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			}
+			List<WebElement> course = driver.findElements(By.cssSelector("div[class*='LearningCatalog_cardRow'] div[class*='RegularCourseCard_RegularcardLinks'] a"));
+			for(int i = 0; i < course.size(); i++)
+			{
+				status.add(this.checkLink(course.get(i).getAttribute("href")));
+				System.out.println("courses : "+course.get(i).getAttribute("href"));
+			}	
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status.add("fail");
+		}
+		return status;
+	}
 	public void launchValidator()
 	{
 		try

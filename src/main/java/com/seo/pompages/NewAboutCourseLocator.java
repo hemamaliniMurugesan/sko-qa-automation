@@ -55,7 +55,7 @@ public class NewAboutCourseLocator
 	}
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\ChromeDriver_111\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_113\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--remote-allow-origins=*");
 		options.addArguments("--disable notifications");
@@ -437,68 +437,24 @@ String addHosturl;
 		return getCourseInfoFromExcel;
 	}
 	
-	public String processCourseOutLineSection(List<WebElement> accordions)
+	public ArrayList<String> processCourseOutLineSection()
 	{
-		List<WebElement> overviewNavigation = driver.findElements(By.cssSelector("div[class*=\"CourseDescription_navigationBar\"] button"));
-		  for(int i = 0; i < overviewNavigation.size(); i++)
-		  {
-			  if(overviewNavigation.get(i).getText().equals("Details"))
-			  {
-				  overviewNavigation.get(i).click();
-				  break;
-			  }
-		  }
-		  List<WebElement> overviewNavigation2 = driver.findElements(By.cssSelector("div[class*=\"CourseDescription_navigationBar\"] button"));
-		  for(int i = 0; i < overviewNavigation2.size(); i++)
-		  {
-			  if(overviewNavigation2.get(i).getText().equals("FAQs"))
-			  {
-				  overviewNavigation2.get(i).click();
-				  break;
-			  }
-		  }
-		  //below is old one
-		String status = "Success";
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("window.scrollBy(0, 700)");
+		ArrayList<String> getStatus = new ArrayList<String>();
+		try
+		{
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			WebElement programOutLine = driver.findElement(By.cssSelector("section[class*='CourseMain_courseDetailsAndCertificateMain']>div[class*='CourseMain_courseOutlineDetails'] h2"));
+			System.out.println(programOutLine.getText());
+			List<WebElement> header = driver.findElements(By.cssSelector("div[class*='CourseOutline_accordionMain'] h2 button"));
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			getStatus.add("fail");
+		}
 		
-		if(accordions == null)
-		{
-			accordions = driver.findElements(By.cssSelector("div.dynamic_outline div.SkoMulTISection > div.panel-group > div.panel"));
-		}
-		for(WebElement accordion: accordions)
-		{
-			if(!accordion.findElement(By.cssSelector("div.panel-heading")).getAttribute("class").contains("arrowactive"))
-			{
-				//open accordion
-				//executor.executeScript("arguments[0].click();", question);
-				js.executeScript("arguments[0].click();", accordion.findElement(By.cssSelector("div.panel-heading a")));
-				//accordion.findElement(By.cssSelector("div.panel-heading a")).click();
-			}
-			
-			if(accordion.findElement(By.cssSelector("div.panel-heading")).getAttribute("class").contains("arrowactive") && 
-					accordion.findElement(By.cssSelector("div.panel-collapse")).getAttribute("class").contains("in"))
-			{
-				try
-				{
-					List<WebElement> subAccordians = accordion.findElements(By.cssSelector(" > div.panel-collapse > div.panel-body > div.panel-group > div.panel"));
-					status = processCourseOutLineSection(subAccordians);
-				}
-				catch(Exception e)
-				{
-					// Ignore because it is a text node or empty node
-				}
-			}
-			else
-			{
-				status = "Failed";
-			}
-			
-			//close accordion
-			//accordion.findElement(By.cssSelector("div.panel-heading a")).click();
-			js.executeScript("arguments[0].click();", accordion.findElement(By.cssSelector("div.panel-heading a")));
-		}
-		return status;
+		return getStatus;
 	}
 	
 	public ArrayList<Integer> getEarnCertificateText(String earnYourCertificateContentFromExcel, String titleName , String formatOfCertificate, String org)

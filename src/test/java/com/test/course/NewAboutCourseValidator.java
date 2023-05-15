@@ -49,8 +49,10 @@ public class NewAboutCourseValidator
 	String getMetaHost;
 	public void executeProcess(String process, ArrayList<String> row) {
 
-		try {
-			switch (process) {
+		try 
+		{
+			switch (process)
+			{
 			case "environment":
 				environment(row.get(1));
 				break;
@@ -143,8 +145,8 @@ public class NewAboutCourseValidator
 				validateSchemaFAQ(row, faqFromValidator);
 					break;
 			case "CheckRedirectStatus": 
-				System.out.println("checkRedirectStatus Method");
-				checkRedirectStatus(row.get(1), row.get(2), row.get(3));
+					System.out.println("checkRedirectStatus Method");
+					checkRedirectStatus(row.get(1), row.get(2), row.get(3));
 				break;
 			default:
 				markCellAsHeader();
@@ -323,11 +325,12 @@ public class NewAboutCourseValidator
 		}
 	}
 
-	private void courseOutline()
+	private void courseProgramOutline()
 	{
+		ArrayList<String> status = new ArrayList<String>();
 		try
 		{
-			newAboutCourseLocators.processCourseOutLineSection(null);
+			status = newAboutCourseLocators.processCourseOutLineSection();
 		} 
 		catch (Exception e)
 		{

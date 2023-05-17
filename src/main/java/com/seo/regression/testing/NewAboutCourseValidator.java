@@ -47,7 +47,6 @@ public class NewAboutCourseValidator
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
 		duration = Utils.findDifference(startTime, endTime);
 		collectSheetResult();
-		driver.quit();
 		return sheetStatus;
 	}
 	

@@ -21,7 +21,6 @@ public class OpenWebsite
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--disable notifications");
-			options.addArguments("--remote-allow-origins=*");
 			driver = new ChromeDriver(options);
 			driver.manage().window().maximize();
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
@@ -77,7 +76,8 @@ public class OpenWebsite
 	{
 		String setURL = setEnvironment(RegressionTesting.ENV_TO_USE)+urlFromExcel;
 		driver.get(setURL);
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 		return setURL;
 	}
 	public static String openSite(WebDriver driver)

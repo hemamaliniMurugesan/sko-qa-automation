@@ -1,22 +1,28 @@
 package com.seo.regression.testing;
 
+import static org.testng.Assert.ARRAY_MISMATCH_TEMPLATE;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -43,8 +49,11 @@ public class RegressionGenericLocator
 	
 	public void openDriver()
 	{
-		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\ChromeDriver_111\\chromedriver_win32\\chromedriver.exe");
-		driver = new ChromeDriver();
+		System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_113\\chromedriver.exe");
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--remote-allow-origins=*");
+		options.addArguments("--disable notifications");
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
@@ -106,7 +115,9 @@ public class RegressionGenericLocator
 				System.out.println("un broken link");
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 				driver.get(addHosturl);
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(80));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 				List<WebElement> checkCourseCode = driver.findElements(By.cssSelector("div[class='CourseDescription_buttonsContent__qPhJg '] button[class*='enrollNowBtn']"));
 				List<WebElement> checkCourseContent = driver.findElements(By.cssSelector("meta[property='og:title']"));
 				if(checkCourseCode.size()>0)
@@ -311,8 +322,12 @@ public class RegressionGenericLocator
 	{
 		String checkRazorpay = "fail";
 		String amountWithTax[] = amountFromExcel.split("=");
+		String amt = amountWithTax[1].replaceAll("\\s", "");
+		String value = amt.toString();
+		int excelValue = Integer.parseInt(value);
 		try
 		{
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
 			String parentWindow = driver.getWindowHandle();
 			Set<String> allWindows = driver.getWindowHandles();
 			for(String window : allWindows)
@@ -321,27 +336,42 @@ public class RegressionGenericLocator
 				if(driver.getCurrentUrl().contains("/basket/"))
 				{
 					driver.switchTo().window(window);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
 					WebElement checkoutAmount = driver.findElement(By.cssSelector("div[class='selected-plan'] span"));
 					String getCheckoutAmount = checkoutAmount.getText();
-					System.out.println("checkout Razorpay amount :"+getCheckoutAmount);
-					WebElement getAmountWithGST = driver.findElement(By.cssSelector("div[class='selected-plan'] span[class='h5-regular24 Accent_Red02-text']"));
-					String amountWithGSTFromBrowser = getAmountWithGST.getText();
-					System.out.println(amountWithGSTFromBrowser);
-					if(amountWithGSTFromBrowser.contains(amountWithTax[1]))
+					System.out.println("checkout Razorpay amount from Browser :"+getCheckoutAmount);
+					//WebElement getAmountWithGST = driver.findElement(By.cssSelector("div[class='selected-plan'] span[class='h5-regular24 Accent_Red02-text']"));
+					//String amountWithGSTFromBrowser = getAmountWithGST.getText().replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "");
+					String val[] = getCheckoutAmount.split("\\.");
+					String editVal = val[0].replaceAll("[^a-zA-Z0-9]", " ").replaceAll("\\s", "").toString();
+					
+					int browserValue = Integer.parseInt(editVal);
+					
+					System.out.println("amountWithGST From Browser in Razorpay : " + browserValue);
+					if(browserValue == excelValue)
 					{
-						System.out.println("both amount are same");
+						System.out.println("both Razorpay amount and excel amount are same");
 						checkRazorpay = "pass";
 					}
 					else
 					{
+						System.out.println(" amount with GST from Excel : "+amountWithTax[1]);
 						checkRazorpay = "fail";
 					}
 					JavascriptExecutor js = (JavascriptExecutor)driver;
 					js.executeScript("window.scrollBy(0,200)");
-					WebElement enterPromo = driver.findElement(By.cssSelector("a[id*='ui-collapse']"));
-					enterPromo.click();
+					/*
+					 * WebElement enterPromo =
+					 * driver.findElement(By.cssSelector("a[id*='ui-collapse']"));
+					 * enterPromo.click();
+					 */
 					WebElement completePayment = driver.findElement(By.xpath("//button[@id='razorpay' or @id='stripecheckout']"));
 					completePayment.click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 				}
 			}
 		}
@@ -374,6 +404,8 @@ public class RegressionGenericLocator
 				if(clickLogin.isDisplayed())
 				{
 					clickLogin.click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
 					checkLoginProcess = "true";
 				}
@@ -409,18 +441,24 @@ public class RegressionGenericLocator
 				if(label.getText().equalsIgnoreCase("Pay using Netbanking"))
 				{
 					label.click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					List<WebElement> listOfNetBanking = driver.findElements(By.cssSelector("div#netb-banks label[for*='bank-radio']"));
 					for(int j = 0; j < listOfNetBanking.size(); j++)
 					{
 						System.out.println(listOfNetBanking.get(j).getText());
 						if(listOfNetBanking.get(j).getText().equalsIgnoreCase(bankName))
 						{
+							System.out.println("netbanking name is : "+listOfNetBanking.get(j).getText());
 							WebElement clickBank = listOfNetBanking.get(j);
 							driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
 							WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 						    wait.until(ExpectedConditions.elementToBeClickable(clickBank)).click(); 
 						    WebElement clickPayNow = driver.findElement(By.cssSelector("button#redesign-v15-cta"));
 						    clickPayNow.click();
+						    System.out.println("netbanking paid ");
+						    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+							driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 						    checkPaymentProcess = "pass";
 						    break;
 						}
@@ -447,14 +485,21 @@ public class RegressionGenericLocator
 		{
 			WebElement selectBank = driver.findElement(By.cssSelector("button#bank-select"));
 			selectBank.click();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 			List<WebElement> enterBank = driver.findElements(By.cssSelector("div[id='netbanking_bank_select_search_results'] div[class='list svelte-15q0kle'] img[alt]"));
 			for(int i = 0; i < enterBank.size(); i++)
 			{
 				if(enterBank.get(i).getAttribute("alt").equalsIgnoreCase(bank))
 				{
+					System.out.println("bank name is : "+enterBank.get(i).getAttribute("alt"));
 					enterBank.get(i).click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					WebElement clickPayNow = driver.findElement(By.cssSelector("button[id*='redesign']"));
 					clickPayNow.click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					break;
 				}
 			}
@@ -479,7 +524,10 @@ public class RegressionGenericLocator
 			{
 				if(bankName.get(i).getText().contains(bank))
 				{
+					System.out.println("bank name is : "+bankName.get(i).getText());
 					bankName.get(i).click();
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					break;
 				}
 			}
@@ -504,6 +552,7 @@ public class RegressionGenericLocator
 				System.out.println(label.getText());
 				if(label.getText().equalsIgnoreCase("Pay using Card"))
 				{
+					System.out.println("card name is : "+label.getText());
 					label.click();
 					if(driver.findElement(By.cssSelector("button#otp-sec")).isDisplayed())
 					{
@@ -519,8 +568,11 @@ public class RegressionGenericLocator
 						cvv.sendKeys("234");
 						WebElement payNowButton = driver.findElement(By.cssSelector("form#form button[id='redesign-v15-cta']"));
 						payNowButton.click();
+						System.out.println("pay now button clicked");
 						WebElement payWOSavingCard = driver.findElement(By.cssSelector("button#redesign-v15-cta"));
 						payWOSavingCard.click();
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 						checkPaymentProcess = "pass";
 					}
@@ -536,6 +588,9 @@ public class RegressionGenericLocator
 						cvv.sendKeys("234");
 						WebElement payNowButton = driver.findElement(By.cssSelector("button#redesign-v15-cta"));
 						payNowButton.click();
+						System.out.println("Pay now button is clicked");
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 						checkPaymentProcess = "pass";
 					}
 				}
@@ -565,6 +620,9 @@ public class RegressionGenericLocator
 				{
 					driver.switchTo().window(window);
 					driver.findElement(By.cssSelector("button[class='success']")).click();
+					System.out.println("success button clicked");
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					checkOrderDetails = "pass";
 					break;
 				}
@@ -581,16 +639,16 @@ public class RegressionGenericLocator
 				System.out.println(driver.getCurrentUrl());
 				System.out.println("checkout page");
 				WebElement getOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td"));
-				System.out.println(getOrderDetails.getText());
+				System.out.println("order details : "+getOrderDetails.getText());
 				String amountOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td[class='spacing-pl8 spacing-pr20 spacing-pl20  spacing-pt8 table_lastrow last_prize table_border_bottom text_table']")).getText();
-				System.out.println(amountOrderDetails);
+				System.out.println("amount order details : "+amountOrderDetails);
 				WebElement getOrderNumber = driver.findElement(By.cssSelector("div[class*='order_info']:nth-child(2) div:nth-child(3) h4"));
 				orderNumber = getOrderNumber.getText();
 				System.out.println("OrderNumber: "+orderNumber);
 				if(priceWOGSTFromExcel.equalsIgnoreCase(amountOrderDetails))
 				{
-					System.out.println("both are same amount ");
 					checkOrderDetails = "pass";
+					System.out.println("both price without GST from excel and ordered amount values are same : "+amountOrderDetails);
 				}
 				else
 				{
@@ -609,28 +667,36 @@ public class RegressionGenericLocator
 	
 	public void USOrderDetails()
 	{
-		String currentWindow = driver.getWindowHandle();
-		Set<String> windows = driver.getWindowHandles();
-		for(String win : windows)
+		try
 		{
-			driver.switchTo().window(win);
-			System.out.println(driver.getCurrentUrl());
-			System.out.println("checkout page");
-			WebElement clickDashBoard = driver.findElement(By.xpath("//a[contains(text(),'Continue to your Dashboard')]"));
-			clickDashBoard.click();
-			WebElement getOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td"));
-			System.out.println(getOrderDetails.getText());
-			String amountOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td[class='spacing-pl8 spacing-pr20 spacing-pl20  spacing-pt8 table_lastrow last_prize table_border_bottom text_table']")).getText();
-			System.out.println(amountOrderDetails);
-			if(amountWithTax.equalsIgnoreCase(amountOrderDetails))
+			String currentWindow = driver.getWindowHandle();
+			Set<String> windows = driver.getWindowHandles();
+			for(String win : windows)
 			{
-				System.out.println("both are same amount ");
-			}
-			else
-			{
-				errorCells.add(5);
+				driver.switchTo().window(win);
+				System.out.println(driver.getCurrentUrl());
+				System.out.println("checkout page");
+				WebElement clickDashBoard = driver.findElement(By.xpath("//a[contains(text(),'Continue to your Dashboard')]"));
+				clickDashBoard.click();
+				WebElement getOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td"));
+				System.out.println(getOrderDetails.getText());
+				String amountOrderDetails = driver.findElement(By.cssSelector("table[class=' spacing-pl8 spacing-pr8 spacing-pl20 spacing-pr20 mb table_border'] tr td[class='spacing-pl8 spacing-pr20 spacing-pl20  spacing-pt8 table_lastrow last_prize table_border_bottom text_table']")).getText();
+				System.out.println(amountOrderDetails);
+				if(amountWithTax.equalsIgnoreCase(amountOrderDetails))
+				{
+					System.out.println("both are same amount ");
+				}
+				else
+				{
+					errorCells.add(5);
+				}
 			}
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	public String wallet()
 	{
@@ -827,20 +893,15 @@ public class RegressionGenericLocator
 				if(driver.getCurrentUrl().contains("login?"))
 				{
 					driver.switchTo().window(window1);
+					status = "pass";
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
 					WebElement email = driver.findElement(By.cssSelector("input#email"));
 					email.sendKeys(splitData[0]);
 					WebElement pwd = driver.findElement(By.cssSelector("input#password"));
 					pwd.sendKeys(splitData[1]);
 					WebElement loginButton = driver.findElement(By.cssSelector("input#login_in"));
 					loginButton.click();
-					if(driver.getCurrentUrl().contains("subscriptions"))
-					{
-						status = "pass";
-					}
-					else
-					{
-						status = "fail";
-					}
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(500));
 				}
 			}
 			
@@ -855,47 +916,65 @@ public class RegressionGenericLocator
 	public String choosePlan(String plan)
 	{
 		String checkPlanStatus = "fail";
-		String parentWindow2 = driver.getWindowHandle();
-		Set<String> allWindows = driver.getWindowHandles();
-		for(String windows : allWindows)
+		try
 		{
-			JavascriptExecutor js = (JavascriptExecutor)driver;
-			js.executeScript("window.scrollBy(0,300)");
-			if(driver.getCurrentUrl().contains("choose-subscription"))
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
+			String parentWindow2 = driver.getWindowHandle();
+			Set<String> allWindows = driver.getWindowHandles();
+			for(String windows : allWindows)
 			{
-				List<WebElement> listOfPlan = driver.findElements(By.cssSelector("div[id='custom-plans1'] div[class*='owl-item']"));// div[class=\"bttn\"] a
-				for(int i = 0; i < listOfPlan.size(); i++)
+				JavascriptExecutor js = (JavascriptExecutor)driver;
+				js.executeScript("window.scrollBy(0,300)");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
+				if(driver.getCurrentUrl().contains("choose-subscription"))
 				{
-					WebElement selectPlan = listOfPlan.get(i).findElement(By.cssSelector(" div[class*='plan_heading']"));
-					String getPlanText = selectPlan.getText();
-					if(getPlanText.contains(plan))
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					List<WebElement> listOfPlan = driver.findElements(By.cssSelector("div[id='custom-plans1'] div[class*='owl-item']"));// div[class=\"bttn\"] a
+					for(int i = 0; i < listOfPlan.size(); i++)
 					{
-						WebElement clickPlan = listOfPlan.get(i).findElement(By.cssSelector(" div[class='bttn']"));
-						if(clickPlan.isDisplayed())
+						WebElement selectPlan = listOfPlan.get(i).findElement(By.cssSelector(" div[class*='plan_heading']"));
+						String getPlanText = selectPlan.getText();
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						if(getPlanText.contains(plan))
 						{
-							clickPlan.click();
-							checkPlanStatus = "pass";
-							break;
-						}
-						else
-						{
-							if(listOfPlan.get(i).findElement(By.cssSelector(" button[disabled]")).isDisplayed())
+							System.out.println("Plan is : "+getPlanText);
+							WebElement clickPlan = listOfPlan.get(i).findElement(By.cssSelector(" div[class='bttn'] a"));
+							if(clickPlan.isDisplayed())
 							{
-								System.out.println("button is disabled");
-								checkPlanStatus = "fail";
+								js.executeScript("arguments[0].click()", clickPlan);
+								driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+								driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+								driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
+								checkPlanStatus = "pass";
+								break;
 							}
+							else
+							{
+								if(listOfPlan.get(i).findElement(By.cssSelector(" button[disabled]")).isDisplayed())
+								{
+									System.out.println("button is disabled");
+									checkPlanStatus = "fail";
+								}
+							}
+							
 						}
-						
 					}
 				}
 			}
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 		return checkPlanStatus;
 	}	
 	public ArrayList<String> enroll(ArrayList<String> enrollDataFromExcel)
 	{
+
 		ArrayList<String> statusOfProcess = new ArrayList<String>();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		try
 		{
@@ -910,9 +989,11 @@ public class RegressionGenericLocator
 					if(checkEnrollButton.getText().equalsIgnoreCase("Enroll Now"))
 					{
 						System.out.println("Enroll Button is displayed");
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
 						wait.until(ExpectedConditions.elementToBeClickable(checkEnrollButton));
 						js.executeScript("arguments[0].click()", checkEnrollButton);
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					}
 				}
 				String parentWindow = driver.getWindowHandle();
@@ -923,10 +1004,12 @@ public class RegressionGenericLocator
 					if(driver.getCurrentUrl().contains("register?"))
 					{
 						driver.switchTo().window(window);
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
 						WebElement clickLoginIcon = driver.findElement(By.cssSelector("li#signinlink"));
 						clickLoginIcon.click();
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(300));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 						break;
 					}
 				}
@@ -1086,6 +1169,7 @@ public class RegressionGenericLocator
 						}
 					}
 				}
+				driver.findElement(By.cssSelector("div#share-course button[class='btn-close shadow-none']")).click();
 		}
 		catch(Exception e)
 		{

@@ -22,7 +22,6 @@ public class RegressionTestLogin
 			OpenWebsite.openSite(driver);
 			System.out.println("login process started");
 			this.start();
-			driver.quit();
 		}
 		catch(Exception e)
 		{

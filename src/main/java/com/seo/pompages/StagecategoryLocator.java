@@ -305,6 +305,8 @@ public class StagecategoryLocator
 			{
 				System.out.println("un broken link"+addHosturl);
 				((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 				String parentWindow = driver.getWindowHandle();
 				ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
 				for(String windows : w)
@@ -356,6 +358,8 @@ public class StagecategoryLocator
 			for(int i = 0; i < pgms.size(); i++)
 			{
 				status.add(this.checkLink(pgms.get(i).getAttribute("href")));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 			}
 		}
 		catch(Exception e)

@@ -304,27 +304,19 @@ public class StagecategoryLocator
 			else
 			{
 				System.out.println("un broken link"+addHosturl);
-				((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
-				String parentWindow = driver.getWindowHandle();
-				ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
-				for(String windows : w)
-				{
-					driver.switchTo().window(windows);
-					if(driver.getCurrentUrl().contains(endURL))
-					{
-						driver.switchTo().window(windows);
-						System.out.println("current url : "+driver.getCurrentUrl());
-						CourseStatus = "pass";
-						driver.close();
-					}
-					else if(driver.getCurrentUrl().contains("data"))
-					{
-						driver.close();
-					}
-				}
-			driver.switchTo().window(parentWindow);			
+				/*
+				 * ((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
+				 * driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				 * driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70)); String
+				 * parentWindow = driver.getWindowHandle(); ArrayList<String> w = new
+				 * ArrayList<String>(driver.getWindowHandles()); for(String windows : w) {
+				 * driver.switchTo().window(windows);
+				 * if(driver.getCurrentUrl().contains(endURL)) {
+				 * driver.switchTo().window(windows);
+				 * System.out.println("current url : "+driver.getCurrentUrl()); CourseStatus =
+				 * "pass"; //driver.close(); } else if(driver.getCurrentUrl().contains("data"))
+				 * { driver.close(); } } driver.switchTo().window(parentWindow);
+				 */		
 			}
 		}
 			catch(Exception e)
@@ -338,6 +330,10 @@ public class StagecategoryLocator
 	{
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		ArrayList<String> status = new ArrayList<String>();
+		ArrayList<String> addPgmIcon = new ArrayList<String>();
+		ArrayList<String> pgmCardType = new ArrayList<String>();
+		ArrayList<String> enrollStatus = new ArrayList<String>();
+		ArrayList<String> enrollAmount = new ArrayList<String>();
 		try
 		{
 			Actions a= new Actions(driver);
@@ -357,7 +353,23 @@ public class StagecategoryLocator
 			List<WebElement> pgms = driver.findElements(By.cssSelector("div[class*='LearningCatalog_cardRow'] div[class*='LearningCatalog_customCard'] div[class*='FlatCourseCard_FlatcardLinks'] a"));
 			for(int i = 0; i < pgms.size(); i++)
 			{
-				status.add(this.checkLink(pgms.get(i).getAttribute("href")));
+				WebElement pgmIconLocator = pgms.get(i).findElement(By.cssSelector(" img[alt='Course-Image']"));
+				addPgmIcon.add(pgmIconLocator.getAttribute("alt"));
+				List<WebElement> pgmCardTypeLocator = pgms.get(i).findElements(By.cssSelector(" div[class*='FlatCourseCard_propertiesList'] ul li"));
+				for(int j = 0; j < pgmCardTypeLocator.size(); j++)
+				{
+					pgmCardType.add(pgmCardTypeLocator.get(j).getText());
+				}
+				WebElement enrollStatusLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_courseStartSection'] h4"));
+				enrollStatus.add(enrollStatusLocator.getText());
+				
+				WebElement enrollAmountLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_priceSection'] h3"));
+				enrollAmount.add(enrollAmountLocator.getText());
+				
+				String programLink = pgms.get(i).getAttribute("href");
+				status.add(this.checkLink(programLink));
+				
+				status.add(this.checkProgramPage(programLink));
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
 				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 			}
@@ -370,6 +382,44 @@ public class StagecategoryLocator
 		return status;
 	}
 	
+	public String checkProgramPage(String programLink)
+	{
+		String CourseStatus ="fail";
+		try
+		{
+			((JavascriptExecutor) driver).executeScript("window.open('"+programLink+"')");
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+			String parentWindow = driver.getWindowHandle();
+			ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
+			for(String windows : w)
+			{
+				driver.switchTo().window(windows);
+				if(driver.getCurrentUrl().contains(programLink))
+				{
+					driver.switchTo().window(windows);
+					System.out.println("current url : "+driver.getCurrentUrl());
+					CourseStatus = "pass";
+					//driver.close();
+				}
+				else if(driver.getCurrentUrl().contains("data"))
+				{
+					driver.close();
+				}
+			}
+			driver.switchTo().window(parentWindow);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return CourseStatus;	
+	}
+	public String verifyProgramOutLine()
+	{
+		List<WebElement> listOfPgmOutline = driver.findElements(By.cssSelector(launchURL));
+		return launchURL;
+	}
 	public ArrayList<String> checkCourses()
 	{
 		JavascriptExecutor js = (JavascriptExecutor)driver;

@@ -90,11 +90,11 @@ public class StagecategoryValidator
 				checkRedirectStatus(row.get(1), row.get(2), row.get(3));
 				break;
 			case "programs":
-				verifyPrograms();
+				verifyProgramsLinks();
 				break;
 			case "courses":
 				verifyCourses();
-				break;	
+				break;
 			default:
 				break;
 			}
@@ -174,7 +174,7 @@ public class StagecategoryValidator
 			
 		}
 	}
-	private void verifyPrograms()
+	private void verifyProgramsLinks()
 	{
 		ArrayList<String> programStatus = stagecategoryLocator.checkPrograms();
 		{

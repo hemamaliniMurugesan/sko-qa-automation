@@ -1,3 +1,4 @@
+
 package com.seo.regression.testing;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,64 +86,65 @@ public class RegressionTesting
 					newAboutCourseValidator = new NewAboutCourseValidator(driver, sheetName, sheetData);
 					try
 					{
+						String sheetStatus = "Pass";
 						//Get Started
 						switch(sheetName)
 						{
 							case "Login":
-								new RegressionTestLogin(driver, ENV_TO_USE, sheetData);
+								sheetStatus = new RegressionTestLogin(driver, ENV_TO_USE, sheetData).start();
 							break;
 							case "AboutCourse":
 							{
 								newAboutCourseValidator = new NewAboutCourseValidator(driver, sheetName, sheetData);
-								newAboutCourseValidator.processSheetData();
+								sheetStatus = newAboutCourseValidator.processSheetData();
 							}
 							break;
 							case "GenericProcess":
 							{
 								regressionGenericValidator = new RegressionGenericValidator(driver, sheetName, sheetData);
-								regressionGenericValidator.processSheetData();
+								sheetStatus = regressionGenericValidator.processSheetData();
 							}
 							break;
 							case "urlValidation":
-								new ErrorCodeValidation(sheetData, driver);
+								sheetStatus = new ErrorCodeValidation(sheetData, driver).start();
 								break;
 							case"SignUp":
-								new SignUpValidation(sheetData, driver);
+								sheetStatus = new SignUpValidation(sheetData, driver).start();
 								break;
 							case"ForGotPwd":
-								new ForgotPasswordValidation(sheetData, driver);
+								sheetStatus = new ForgotPasswordValidation(sheetData, driver).start();
 								break;
 							case"FooterSection":
-								new FooterSectionValidation(sheetData, driver);
+								sheetStatus = new FooterSectionValidation(sheetData, driver).start();
 								break;
 							case"HeaderSection":
-								new HeaderSectionValidation(sheetData, driver);
+								sheetStatus = new HeaderSectionValidation(sheetData, driver).start();
 								break;
 							case"Dashboard":
-								new DashboardValidator(sheetData, driver);
+								sheetStatus = new DashboardValidator(sheetData, driver).start();
 								break;
 							case "ContactInfo":
-								new ContactInfoValidation(sheetData, driver);
+								sheetStatus = new ContactInfoValidation(sheetData, driver).start();
 								break;
 							case "LoginWithSocialAcc":
-								new LoginSocialAccValidation(sheetData, driver);
+								sheetStatus = new LoginSocialAccValidation(sheetData, driver).start();
 								break;
 							case "ContactUSForm":
-								new ContactUsValidation(sheetData, driver);
+								sheetStatus = new ContactUsValidation(sheetData, driver).start();
 								break;
 							case "SearchProcess":
-								new SearchPageValidation(sheetData, driver);
+								sheetStatus = new SearchPageValidation(sheetData, driver).start();
 								break;
 							case "MicrosoftPage":
-								new MicrosoftCourseValidation(sheetData, driver);
+								sheetStatus =new MicrosoftCourseValidation(sheetData, driver).start();
 								break;
 							case "SignupWithSocialAcc":
-								new SignupSocialAccValidator(sheetData, driver);
+								sheetStatus = new SignupSocialAccValidator(sheetData, driver).start();
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");
 						}
-						sheetsResult.put(sheetName, "Success");
+						sheetsResult.put(sheetName, sheetStatus);
 					} 
 					catch (Exception e) 
 					{

@@ -13,16 +13,17 @@ public class ErrorCodeValidation
 	ArrayList<ArrayList<String>> sheetData = null;
 	WebDriver driver;
 	ErrorCodeLocator errorCodeLocator;
+	String sheetStatus = "Pass";
 	
 	public ErrorCodeValidation(ArrayList<ArrayList<String>> sheetData,WebDriver driver)
 	{
 		this.sheetData = sheetData;
 		this.errorCodeLocator = new ErrorCodeLocator(driver);
 		System.out.println("error code validation process started");
-		this.start();
+//		this.start();
 	}
 	
-	public void start()
+	public String start()
 	{
 		for(int i = 0; i < this.sheetData.size(); i++)
 		{
@@ -35,19 +36,21 @@ public class ErrorCodeValidation
 				break;
 			}
 		}
+		return sheetStatus;
 	}
 	
 	
 	public void geturl(ArrayList<String> codeFromExcel)
 	{
-		String status = "Failed";
 		ArrayList<String> checkURL = errorCodeLocator.checkCourseCode(codeFromExcel);
 		for(int i = 0; i < checkURL.size(); i++)
 		{
-			if(checkURL.get(i).equalsIgnoreCase("Failed"))
+			if(codeFromExcel.contains(checkURL.get(i)))
 			{
-				RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("urlValidation").get(1).set(i, "url - failed");
-				status = "Failed";
+				sheetStatus = "Fail";
+				int position = codeFromExcel.indexOf(checkURL.get(i));
+				String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("urlValidation").get(0).get(position);
+				RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("urlValidation").get(0).set(position, (cellValue + " - failed"));
 			}
 		}
 	}

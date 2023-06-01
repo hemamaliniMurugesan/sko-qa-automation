@@ -164,14 +164,7 @@ public class ProcessExcel
 			}
 			ArrayList<ArrayList<String>> rowsData = entry.getValue();
 			XSSFSheet sheet = workbook.createSheet(sheetName);
-			if(sheetTabColor.equalsIgnoreCase("green"))
-			{
-				sheet.setTabColor(3);
-			}
-			else if(sheetTabColor.equalsIgnoreCase("red"))
-			{
-				sheet.setTabColor(2);
-			}
+			boolean sheetHasFailedCell = false;
 			for(int i = 0; i < rowsData.size(); i++)
 			{
 				ArrayList<String> rowData = rowsData.get(i);
@@ -235,6 +228,7 @@ public class ProcessExcel
 						String originalValue = cellValue.replaceAll(" - failed", "");
 						cell.setCellValue(originalValue);
 						errorCell(workbook, cell);
+						sheetHasFailedCell = true;
 					}
 					else if(cellValue.indexOf(" - ignored") >= 0)
 					{
@@ -259,6 +253,14 @@ public class ProcessExcel
 						cell.setCellValue((String) cellValue);
 					}
 				}
+			}
+			if(sheetTabColor.equalsIgnoreCase("green"))
+			{
+				sheet.setTabColor(3);
+			}
+			else if(sheetTabColor.equalsIgnoreCase("red") || sheetHasFailedCell)
+			{
+				sheet.setTabColor(2);
 			}
 		}
 		try (FileOutputStream outputStream = new FileOutputStream(filePathToWrite + "\\" + fileName)) {

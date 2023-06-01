@@ -37,8 +37,6 @@ public class TestNewAboutCourse
 	public TestNewAboutCourse(String excelPath)
 	{
 		softAssert = new SoftAssert();
-		//OpenWebsite.openDriver("chrome");
-		//OpenWebsite.openSite(driver);
 		newAboutCoursePage = new NewAboutCourseLocator(driver);
 		excelPath = "D:\\Doc\\DownloadFiles\\Data Analysis with Python.xlsx";
 		this.newAboutCoursePage(excelPath);

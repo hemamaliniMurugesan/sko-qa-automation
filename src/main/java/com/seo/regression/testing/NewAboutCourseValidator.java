@@ -19,7 +19,7 @@ public class NewAboutCourseValidator
 	private int CURRENT_ROW = 0;
 	private HashMap<String, String> faqFromValidator = null;
 	private NewAboutCourseLocator newAboutCourseLocators;
-	private String sheetStatus = "Pass";
+	String sheetStatus = "Pass";
 	private String startTime = "";
 	private String endTime = "";
 	private String duration = "";
@@ -41,7 +41,7 @@ public class NewAboutCourseValidator
 		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
-			executeProcess(process, currentRow);
+			sheetStatus = executeProcess(process, currentRow);
 		}
 	//	newAboutCourseLocators.getDriver().quit();
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
@@ -50,7 +50,7 @@ public class NewAboutCourseValidator
 		return sheetStatus;
 	}
 	
-	public void executeProcess(String process, ArrayList<String> row) {
+	public String executeProcess(String process, ArrayList<String> row) {
 
 		try {
 			switch (process) {
@@ -160,6 +160,7 @@ public class NewAboutCourseValidator
 			e.printStackTrace();
 			markProcessFailed();
 		}
+		return sheetStatus;
 	}
 
 	String loginURL, getImageHost;
@@ -181,10 +182,13 @@ public class NewAboutCourseValidator
 		String courseCodestatus = "true";
 		try {
 			String checkCourseCode = newAboutCourseLocators.getCourseCodeText(courseCodeFromExcel);
-			if (!(courseCodestatus).equals(checkCourseCode)) {
+			if (!(courseCodestatus).equals(checkCourseCode)) 
+			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		} catch (Exception e) {
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -198,10 +202,12 @@ public class NewAboutCourseValidator
 			System.out.println("Title from excel : " + courseTitleFromExcel);
 			if (checkCourseTitleStatus.equals(currentTitlestatus.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "")))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if (checkCourseTitleStatus.equalsIgnoreCase("notProcessed"))
 			{
+				
 				markProcessIgnored();
 			}
 		}
@@ -219,6 +225,7 @@ public class NewAboutCourseValidator
 			System.out.println("course org from Excel : " + courseOrganizationFromExcel);
 			if (checkCourseOrgStatus.equals(currentOrgStatus))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if(checkCourseOrgStatus.equalsIgnoreCase("notProcessed"))
@@ -239,6 +246,7 @@ public class NewAboutCourseValidator
 			System.out.println("Course description from excel : " + courseDescriptionFromExcel);
 			if (checkCourseDes.equals(checkCourseDesStatus.replaceAll("\\s", "").replaceAll("\u00A0", "")
 					.replaceAll("[^\\p{ASCII}]", ""))) {
+				sheetStatus = "Fail";
 				markProcessFailed();
 			} else if (checkCourseDes.equalsIgnoreCase("notProcessed")) {
 				markProcessIgnored();
@@ -255,8 +263,10 @@ public class NewAboutCourseValidator
 			System.out.println("Course Type1 from excel : " + courseType1FromExcel);
 			if (courseType1Status.equals(checkCourseType1Status.replaceAll("\\s", "").replaceAll("\u00A0", "")
 					.replaceAll("[^\\p{ASCII}]", ""))) {
+				sheetStatus = "Fail";
 				markProcessFailed();
 			} else if (checkCourseType1Status.equalsIgnoreCase("notProcessed")) {
+				sheetStatus = "Fail";
 				markProcessIgnored();
 			}
 		} catch (Exception e) {
@@ -271,6 +281,7 @@ public class NewAboutCourseValidator
 			System.out.println("courseType2 from Excel : " + courseType2FromExcel);
 			if (courseType2Status.equals(
 					checkCourseType.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", ""))) {
+				sheetStatus = "Fail";
 				markProcessFailed();
 			} else if (checkCourseType.equals("notProcessed")) {
 				markProcessIgnored();
@@ -287,6 +298,7 @@ public class NewAboutCourseValidator
 			System.out.println("Course level from excel : " + courseLevelFromExcel);
 			if (courseLevelStatus.equals(
 					checkCourseLevel.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", ""))) {
+				sheetStatus = "Fail";
 				markProcessFailed();
 			} else if (checkCourseLevel.equals("notProcessed")) {
 				markProcessIgnored();
@@ -317,6 +329,7 @@ public class NewAboutCourseValidator
 						}
 						else if(getCourseInfoFromExcel.equals(getCourseInfoFromBrowser))
 						{
+							sheetStatus = "Fail";
 							markColumnFailed(j);
 						}
 					}
@@ -337,6 +350,7 @@ public class NewAboutCourseValidator
 		} 
 		catch (Exception e)
 		{
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -361,6 +375,7 @@ public class NewAboutCourseValidator
 			String checkEarnYourCertificate = newAboutCourseLocators.getTypeofCertificate(typeOfCertificateFromExcel);
 			if (checkEarnYourCertificate.equals(typeOfCertificateStatus))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if(checkEarnYourCertificate.equals("notProcessed"))
@@ -386,6 +401,7 @@ public class NewAboutCourseValidator
 			}
 			else if(checkAbout.equals(aboutCourseStatus))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		} 
@@ -404,6 +420,7 @@ public class NewAboutCourseValidator
 			System.out.println("Includes from excel : " + includesFromExcel);
 			if(checkIncludes.equals(includeStatus))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if(checkIncludes.equals("notProcessed"))
@@ -425,6 +442,7 @@ public class NewAboutCourseValidator
 			String checkCreate = newAboutCourseLocators.getCreate(createFromExcel);
 			if(checkCreateStatus.equals(checkCreate))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if(checkCreate.equals("notProcessed"))
@@ -444,7 +462,7 @@ public class NewAboutCourseValidator
 			String checkExerciseToExplore = newAboutCourseLocators.getExerciseToExplore(exerciseFromExcel);
 			if(checkExerciseToExplore.equals(checkExerciseToExploreStatus))
 			{
-				
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 			else if(checkExerciseToExplore.equals("notProcessed"))
@@ -489,17 +507,20 @@ public class NewAboutCourseValidator
 								}
 							}
 							if (!isExpertInfoFound) {
+								sheetStatus = "Fail";
 								markColumnFailed(i);
 							}
 						}
 					} 
 					else 
 					{
+						sheetStatus = "Fail";
 						markColumnFailed(i);
 					}
 				}
 				catch (Exception e)
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 					e.printStackTrace();
 				}
@@ -521,6 +542,7 @@ public class NewAboutCourseValidator
 			}
 			else if (!checkDurationDetails.equals(checkDuration))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		} catch (Exception e) {
@@ -540,6 +562,7 @@ public class NewAboutCourseValidator
 			} 
 			else if (!checkStartsOnDetails.replaceAll("\\s", "").replaceAll("\u00A0", "").replaceAll("[^\\p{ASCII}]", "").equals(checkStartOn))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		}
@@ -555,10 +578,13 @@ public class NewAboutCourseValidator
 			String checkFlatPrice = newAboutCourseLocators.getflatPrice(flatPriceWithoutGSTFromExcel);
 			if (checkFlatPrice.equalsIgnoreCase("successIND")) {
 				markProcessIgnored();
-			} else if (!checkFlatPrice.equals(checkPrice)) {
+			} else if (!checkFlatPrice.equals(checkPrice))
+			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		} catch (Exception e) {
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -570,9 +596,11 @@ public class NewAboutCourseValidator
 			if (checkUSDPriceStatus.equalsIgnoreCase("successIND")) {
 				markProcessIgnored();
 			} else if (!checkUSDPriceStatus.equalsIgnoreCase(checkUSDPrice)) {
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		} catch (Exception e) {
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -587,6 +615,7 @@ public class NewAboutCourseValidator
 				if (getCategoryStatus.equalsIgnoreCase("successIND")) {
 					markProcessIgnored();
 				} else if (!getCategoryStatus.equalsIgnoreCase(checkCategoryStatus)) {
+					sheetStatus = "Fail";
 					markColumnFailed(i);
 				}
 			}
@@ -602,6 +631,7 @@ public class NewAboutCourseValidator
 			String redirectedURL = newAboutCourseLocators.launchCourseURL(redirectURLFromExcel);
 			if(!(redirectURLFromExcel.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()).equalsIgnoreCase(redirectedURL.replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		}
@@ -623,11 +653,13 @@ public class NewAboutCourseValidator
 			}
 			else if(!getCanonicalStatus.equalsIgnoreCase(checkCanonicalURL))
 			{
+				sheetStatus = "Fail";
 				markProcessFailed();
 			}
 		}
 		catch(Exception e)
 		{
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -645,11 +677,13 @@ public class NewAboutCourseValidator
 				String content = newAboutCourseLocators.getAttributeOfTag("meta[name='" + attributes.get("name") + "']", "content").trim();
 				if(!(content.replaceAll("\\s", "").replaceAll("\\P{InBasic_Latin}", "").replaceAll("\u00A0", "").trim()).equals(attributes.get("content").replaceAll("\\P{InBasic_Latin}", "").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 				{
+					sheetStatus = "Fail";
 					markColumnFailed(i);
 				}
 			}
 			catch(Exception e)
 			{
+				sheetStatus = "Fail";
 				markColumnFailed(i);
 			}
 			
@@ -670,11 +704,13 @@ public class NewAboutCourseValidator
 				String content = newAboutCourseLocators.getAttributeOfTag("meta[property='" + attributes.get("property") + "']", "content");
 				if(!content.replaceAll("\\s", "").replaceAll("\u00A0", "").trim().equals(attributes.get("content").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 				{
+					sheetStatus = "Fail";
 					markColumnFailed(i);
 				}
 			}
 			catch(Exception e)
 			{
+				sheetStatus = "Fail";
 				markColumnFailed(i);
 			}
 			
@@ -691,6 +727,7 @@ public class NewAboutCourseValidator
 			try {
 				newAboutCourseLocators.getTagWithInnerText(tagAndText[0], tagAndText[1]);
 			} catch (Exception e) {
+				sheetStatus = "Fail";
 				markColumnFailed(i);
 			}
 		}
@@ -710,11 +747,13 @@ public class NewAboutCourseValidator
 				
 				if(!altText.replaceAll("\\s", "").replaceAll("\u00A0", "").trim().equals(attributes.get("alt").replaceAll("\\s", "").replaceAll("\u00A0", "").trim()))
 				{
+					sheetStatus = "Fail";
 					markColumnFailed(i);
 				}
 			}
 			catch(Exception e)
 			{
+				sheetStatus = "Fail";
 				markColumnFailed(i);
 			}
 		}
@@ -737,6 +776,7 @@ public class NewAboutCourseValidator
 						
 						if(!answerParagraphFromExcel.equals(answerParagraphFromBrowser.replaceAll("[^\\p{ASCII}]", "")))
 						{
+							sheetStatus = "Fail";
 							markColumnFailed(j);
 						}
 					}
@@ -754,6 +794,7 @@ public class NewAboutCourseValidator
 				}
 				for (int j = 2; j < faqRow.size(); j++) 
 				{
+					sheetStatus = "Fail";
 					markColumnFailed(j);
 				}
 			}
@@ -772,6 +813,7 @@ public class NewAboutCourseValidator
 			String headingStatus = newAboutCourseLocators.validateHeading(row.get(1));
 			if(!headingStatus.equals("Success"))
 			{
+				sheetStatus = "Fail";
 				markColumnFailed(1);
 			}
 		}
@@ -791,6 +833,7 @@ public class NewAboutCourseValidator
 			{
 				if(!(answer.trim()).equalsIgnoreCase(faqFromValidator.get(question).trim()))
 				{
+					sheetStatus = "Fail";
 					markColumnFailed(1);
 				}
 			}
@@ -810,15 +853,18 @@ public class NewAboutCourseValidator
 		String[] status = newAboutCourseLocators.checkRedirectStatus(url, statusCode1, statusCode2);
 		if(status[0].equalsIgnoreCase("failed"))
 		{
+			sheetStatus = "Fail";
 			markColumnFailed(2);
 		}
 		if(status[1].equalsIgnoreCase("failed"))
 		{
+			sheetStatus = "Fail";
 			markColumnFailed(3);
 		}
 	}
 	private void markColumnFailed(int columnIndex)
 	{
+		sheetStatus = "Fail";
 		String cellValue = TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW)
 				.get(columnIndex);
 		TestNewAboutCourse.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex,

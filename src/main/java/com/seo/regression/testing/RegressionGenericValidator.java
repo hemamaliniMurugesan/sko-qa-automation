@@ -38,7 +38,7 @@ public class RegressionGenericValidator
 		{
 			ArrayList<String> currentRow = ROWS.get(CURRENT_ROW);
 			String process = currentRow.get(0);
-			executeProcess(process, currentRow);
+			sheetStatus = executeProcess(process, currentRow);
 		}
 	//	regressionGenericLocator.getDriver().quit();
 		endTime = new SimpleDateFormat(Utils.DEFAULT_DATA_FORMAT).format(Calendar.getInstance().getTime());
@@ -47,7 +47,7 @@ public class RegressionGenericValidator
 		return sheetStatus;
 	}
 	
-	public void executeProcess(String process, ArrayList<String> row)
+	public String executeProcess(String process, ArrayList<String> row)
 	{
 		try
 		{
@@ -90,6 +90,7 @@ public class RegressionGenericValidator
 			e.printStackTrace();
 			markProcessFailed();
 		}
+		return sheetStatus;
 	}
 	String loginURL;
 	
@@ -117,8 +118,9 @@ public class RegressionGenericValidator
 			if(!getFreeConsultation.contains("NA"))
 			{
 				ArrayList<String> checkFreeConsultation = regressionGenericLocator.freeConsultationProcess(getFreeConsultation);
-				if(checkFreeConsultation.equals("Fail"))
+				if(checkFreeConsultation.contains("Fail"))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
@@ -145,32 +147,38 @@ public class RegressionGenericValidator
 				{
 					if(verifyEnrollmentProcess.get(0).contains("fail"))
 					{
+						sheetStatus = "Fail";
 						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(1);
 						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(1, (cellValue + " - failed"));
 					}
 					if(verifyEnrollmentProcess.get(1).contains("fail"))
 					{
+						sheetStatus = "Fail";
 						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(2);
 						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(2, (cellValue + " - failed"));
 					}
 					if(verifyEnrollmentProcess.get(2).contains("fail"))
 					{
+						sheetStatus = "Fail";
 						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(3);
 						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(3, (cellValue + " - failed"));
 					}
 					if(verifyEnrollmentProcess.get(3).contains("fail"))
 					{
+						sheetStatus = "Fail";
 						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(4);
 						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(4, (cellValue + " - failed"));
 					}
 					if(verifyEnrollmentProcess.get(4).contains("fail"))
 					{
+						sheetStatus = "Fail";
 						String cellValue = RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).get(5);
 						RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("GenericProcess").get(8).set(5, (cellValue + " - failed"));
 					}
 				}
 				if(verifyEnrollmentProcess.contains("fail"))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
@@ -181,6 +189,7 @@ public class RegressionGenericValidator
 		}
 		catch(Exception e)
 		{
+			sheetStatus = "Fail";
 			markProcessFailed();
 		}
 	}
@@ -193,11 +202,12 @@ public class RegressionGenericValidator
 				String checkNavigation = regressionGenericLocator.navigateProcess();
 				if(checkNavigation.equalsIgnoreCase("fail"))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
 			else
-			{
+			{sheetStatus = "Fail";
 				markProcessIgnored();
 			}
 				
@@ -217,11 +227,13 @@ public class RegressionGenericValidator
 				ArrayList<String> checkSubscribe = regressionGenericLocator.subscribeLocator(subscribeFromExcel);
 				if(checkSubscribe.contains("fail"))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
 			else
 			{
+				sheetStatus = "Fail";
 				markProcessIgnored();
 			}
 		}
@@ -245,6 +257,7 @@ public class RegressionGenericValidator
 					{
 						if(checkSkillupOnline.get(i).equals("fail"))
 						{
+							sheetStatus = "Fail";
 							markColumnFailed(i);
 						}
 					}
@@ -252,6 +265,7 @@ public class RegressionGenericValidator
 					{
 						if(checkSkillupOnline.get(i).equals("fail"))
 						{
+							sheetStatus = "Fail";
 							markColumnFailed(i);
 						}
 					}
@@ -274,11 +288,13 @@ public class RegressionGenericValidator
 				String checkShare = regressionGenericLocator.shareLocator(shareFromExcel);
 				if(checkShare.equals(checkShareStatus))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
 			else
 			{
+				sheetStatus = "Fail";
 				markProcessIgnored();
 			}
 		}
@@ -298,6 +314,7 @@ public class RegressionGenericValidator
 				String checkDownload = regressionGenericLocator.downloadLocator(downloadFromExcel);
 				if(checkDownload.equals(checkDownloadStatus))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
@@ -322,6 +339,7 @@ public class RegressionGenericValidator
 				ArrayList<String> checkProgram = regressionGenericLocator.programLocator(programFromExcel);
 				if(checkProgram.equals(checkProgramProcess))
 				{
+					sheetStatus = "Fail";
 					markProcessFailed();
 				}
 			}
@@ -338,6 +356,7 @@ public class RegressionGenericValidator
 	
 	private void markColumnFailed(int columnIndex)
 	{
+		sheetStatus = "Fail";
 		String cellValue = TestRegressionGenericProcess.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).get(columnIndex);
 		TestRegressionGenericProcess.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get(SHEET_NAME).get(CURRENT_ROW).set(columnIndex, (cellValue + " - failed"));
 		markProcessFailed();

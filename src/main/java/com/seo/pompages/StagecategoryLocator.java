@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -288,7 +289,7 @@ public class StagecategoryLocator
 		int respCode = 200;
 		String endURL = data;
 		HttpURLConnection huc;
-		String addHosturl = data;
+		String addHosturl = endURL;
 		try
 		{
 			huc = (HttpURLConnection)(new URL(addHosturl).openConnection());
@@ -299,24 +300,32 @@ public class StagecategoryLocator
 			if(respCode > 200)
 			{
 				System.out.println("broken link"+addHosturl);
-				System.exit(0);
 			}
 			else
 			{
 				System.out.println("un broken link"+addHosturl);
-				/*
-				 * ((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
-				 * driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-				 * driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70)); String
-				 * parentWindow = driver.getWindowHandle(); ArrayList<String> w = new
-				 * ArrayList<String>(driver.getWindowHandles()); for(String windows : w) {
-				 * driver.switchTo().window(windows);
-				 * if(driver.getCurrentUrl().contains(endURL)) {
-				 * driver.switchTo().window(windows);
-				 * System.out.println("current url : "+driver.getCurrentUrl()); CourseStatus =
-				 * "pass"; //driver.close(); } else if(driver.getCurrentUrl().contains("data"))
-				 * { driver.close(); } } driver.switchTo().window(parentWindow);
-				 */		
+				
+				  ((JavascriptExecutor) driver).executeScript("window.open('"+addHosturl+"')");
+				  driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				  driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70)); 
+				  String parentWindow = driver.getWindowHandle(); 
+				  ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles()); 
+				  for(String windows : w)
+				  {
+					  driver.switchTo().window(windows);
+						  if(driver.getCurrentUrl().contains(endURL))
+						  {
+						  driver.switchTo().window(windows);
+						  System.out.println("current url : "+driver.getCurrentUrl()); 
+						  CourseStatus =  "pass"; 
+						  driver.close(); 
+						  } 
+						  else if(driver.getCurrentUrl().contains("data"))
+						  { 
+							  driver.close(); 
+						  } 
+				 } 
+				  driver.switchTo().window(parentWindow);
 			}
 		}
 			catch(Exception e)
@@ -326,21 +335,18 @@ public class StagecategoryLocator
 			}
 		return CourseStatus;
 	}
-	public ArrayList<String> checkPrograms()
+	
+	String addPgmIcon;
+	ArrayList<String> pgmCardType = new ArrayList<String>();
+	String enrollStatus;
+	String enrollAmount;
+	
+	public String showMoreIcon_Prgram()
 	{
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		ArrayList<String> status = new ArrayList<String>();
-		ArrayList<String> addPgmIcon = new ArrayList<String>();
-		ArrayList<String> pgmCardType = new ArrayList<String>();
-		ArrayList<String> enrollStatus = new ArrayList<String>();
-		ArrayList<String> enrollAmount = new ArrayList<String>();
+		String status = "fail";
 		try
 		{
-			Actions a= new Actions(driver);
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
-			a.sendKeys(Keys.HOME).build().perform();
-			driver.navigate().refresh();
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			JavascriptExecutor js = (JavascriptExecutor)driver;
 			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(3) div[class*='ManageCardsLimit_showMoreSection'] button"));
 			if(clickShowMore.get(0).isDisplayed())
 			{
@@ -349,30 +355,167 @@ public class StagecategoryLocator
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 				js.executeScript("arguments[0].click();", clickShowMore.get(0));
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				status = "pass";
 			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status = "fail";
+		}
+		return status;
+	}
+	
+	String getPgmIcon;
+	ArrayList<String> getPgmLevels = new ArrayList<String>();
+	String pgmEnrollStatus;
+	public ArrayList<String> verifyProgramCardDetailsInProgramPage(ArrayList<String> dataFromExcel)
+	{
+		ArrayList<String> status = new ArrayList<String>();
+		try
+		{
+			String programName[] = dataFromExcel.get(1).split("\\?");
+			String pgmName = programName[1];
+			System.out.println(pgmName);
+			
 			List<WebElement> pgms = driver.findElements(By.cssSelector("div[class*='LearningCatalog_cardRow'] div[class*='LearningCatalog_customCard'] div[class*='FlatCourseCard_FlatcardLinks'] a"));
 			for(int i = 0; i < pgms.size(); i++)
 			{
-				WebElement pgmIconLocator = pgms.get(i).findElement(By.cssSelector(" img[alt='Course-Image']"));
-				addPgmIcon.add(pgmIconLocator.getAttribute("alt"));
-				List<WebElement> pgmCardTypeLocator = pgms.get(i).findElements(By.cssSelector(" div[class*='FlatCourseCard_propertiesList'] ul li"));
-				for(int j = 0; j < pgmCardTypeLocator.size(); j++)
-				{
-					pgmCardType.add(pgmCardTypeLocator.get(j).getText());
-				}
-				WebElement enrollStatusLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_courseStartSection'] h4"));
-				enrollStatus.add(enrollStatusLocator.getText());
-				
-				WebElement enrollAmountLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_priceSection'] h3"));
-				enrollAmount.add(enrollAmountLocator.getText());
-				
 				String programLink = pgms.get(i).getAttribute("href");
-				status.add(this.checkLink(programLink));
-				
-				status.add(this.checkProgramPage(programLink));
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
-			}
+				if(pgmName.contains(pgms.get(i).findElement(By.cssSelector(" h2")).getText()))
+				{
+					status.add(this.checkLink(programLink));
+					
+					Actions a= new Actions(driver);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+					a.sendKeys(Keys.HOME).build().perform();
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+					
+					
+					WebElement pgmCardIconLocator = pgms.get(i).findElement(By.cssSelector(" img[alt='Course-Image']"));
+					if(pgmCardIconLocator.isDisplayed())
+					{
+						addPgmIcon = "present";
+					}
+					
+					List<WebElement> pgmCardTypeLocator = pgms.get(i).findElements(By.cssSelector(" div[class*='FlatCourseCard_propertiesList'] ul li"));
+					for(int j = 0; j < pgmCardTypeLocator.size(); j++)
+					{
+						pgmCardType.add(pgmCardTypeLocator.get(j).getText());
+					}
+					
+					WebElement enrollStatusLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_courseStartSection'] h4"));
+					enrollStatus = enrollStatusLocator.getText();
+					
+					WebElement enrollAmountLocator = pgms.get(i).findElement(By.cssSelector(" div[class*='FlatCourseCard_priceSection'] h3"));
+					enrollAmount = enrollAmountLocator.getText().replaceAll("[^0-9]", " ").replaceAll("\\s", "").trim();
+					System.out.println("program card amount : "+enrollAmount);
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					
+					((JavascriptExecutor) driver).executeScript("window.open('"+programLink+"')");
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					
+					String parentWindow = driver.getWindowHandle();
+					ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
+					for(String windows : w)
+					{
+						driver.switchTo().window(windows);
+						if(driver.getCurrentUrl().contains(programLink))
+						{
+							driver.switchTo().window(windows);
+							System.out.println("current url : "+driver.getCurrentUrl());
+							
+							if(driver.findElements(By.cssSelector("img[alt='course-icon']")).size()>=1)
+							{
+								WebElement prgIcon = driver.findElement(By.cssSelector("img[alt='course-icon']"));
+								if(prgIcon.isDisplayed())
+								{
+									getPgmIcon = "present";
+								}
+							}
+							
+							List<WebElement> programLevel = driver.findElements(By.cssSelector("div[class*='CourseDescription_levelSection'] [class*='text-uppercase CourseDescription_regular']"));
+							for(int k = 0; k < programLevel.size(); k++)
+							{
+								getPgmLevels.add(programLevel.get(k).getText());
+							}
+							
+							if(driver.findElements(By.cssSelector("button[class*='CourseDescription_enrollNowBtn']")).size() != 0)
+							{
+								WebElement enrollButtonLocator = driver.findElement(By.cssSelector("button[class*='CourseDescription_enrollNowBtn']"));
+								pgmEnrollStatus = enrollButtonLocator.getText();
+								System.out.println("program enroll status : "+pgmEnrollStatus);
+							}
+							else if(driver.findElements(By.cssSelector("div[class*='CourseDescription_buttonsContent'] h6")).size() != 0)
+							{
+								WebElement enrollButtonStatus = driver.findElement(By.cssSelector("div[class*='CourseDescription_buttonsContent'] h6"));
+								pgmEnrollStatus = enrollButtonStatus.getText();
+								System.out.println("program enroll status : "+pgmEnrollStatus);
+							}
+							WebElement amountLocator = driver.findElement(By.cssSelector("div[class*='CourseDescription_durationAndPriceSection'] div[class='d-flex gap-2']:nth-child(3) div[class*='CourseDescription_courseAboutTextSection'] p"));
+							String amount = amountLocator.getText().replaceAll("[^0-9]", " ").replaceAll("\\s", "").trim();
+							
+							System.out.println("program page enroll amount :"+amount);
+							if(addPgmIcon.contains(getPgmIcon))
+							{
+								status.add("pass");
+								System.out.println("prgm icon is same in both prg card and prg page for "+programLink);	
+							}
+							else
+							{
+								status.add("icon");
+								System.out.println("prgm icon is not same in both prg card and prg page for "+programLink);	
+							}
+							if(pgmCardType.toString().toUpperCase().equalsIgnoreCase(getPgmLevels.toString().toUpperCase()))
+							{
+								status.add("pass");
+								System.out.println("prgm level type is same in both prg card and prg page for "+programLink);
+							}
+							else
+							{
+								status.add("level");
+								System.out.println("prgm level type is not same in both prg card and prg page for "+programLink);
+							}
+							if((enrollStatus.contains("Open") && pgmEnrollStatus.contains("Enroll Now")))
+							{
+								status.add("pass");
+								System.out.println("prgm enroll status is same in both prg card and prg page for "+programLink);
+							}
+							else
+							{
+								status.add("enrollStatus");
+								System.out.println("prgm enroll is not same in both prg card and prg page for "+programLink);
+							}
+							if(enrollAmount.equalsIgnoreCase(amount))
+							{
+								status.add("pass");
+								System.out.println("prgm enroll amount is same in both prg card and prg page for "+programLink);
+								driver.close();
+								break;
+								
+							}
+							else
+							{
+								status.add("amount");
+								System.out.println("prgm enroll amount is not same in both prg card and prg page for "+programLink);
+								break;
+							}
+							}
+							else if(driver.getCurrentUrl().contains("data"))
+							{
+								driver.close();
+							}
+							
+						}
+						driver.switchTo().window(parentWindow);
+						break;
+					}
+				}
 		}
 		catch(Exception e)
 		{
@@ -382,45 +525,260 @@ public class StagecategoryLocator
 		return status;
 	}
 	
-	public String checkProgramPage(String programLink)
+	public String verifyCourseShowMoreIconStatus()
 	{
-		String CourseStatus ="fail";
+		String status = "fail";
+		JavascriptExecutor js = (JavascriptExecutor)driver;
 		try
 		{
-			((JavascriptExecutor) driver).executeScript("window.open('"+programLink+"')");
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
-			String parentWindow = driver.getWindowHandle();
-			ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
-			for(String windows : w)
-			{
-				driver.switchTo().window(windows);
-				if(driver.getCurrentUrl().contains(programLink))
-				{
-					driver.switchTo().window(windows);
-					System.out.println("current url : "+driver.getCurrentUrl());
-					CourseStatus = "pass";
-					//driver.close();
-				}
-				else if(driver.getCurrentUrl().contains("data"))
-				{
-					driver.close();
-				}
+			Actions a= new Actions(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			a.sendKeys(Keys.HOME).build().perform();
+			driver.navigate().refresh();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
+			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(5) div[class*='ManageCardsLimit_showMoreSection'] button"));
+			if(clickShowMore.get(0).isDisplayed())
+			{	
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				clickShowMore.get(0).sendKeys(Keys.SHIFT);
+				js.executeScript("window.scrollBy(0,50)", "");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				js.executeScript("arguments[0].click();", clickShowMore.get(0));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				status = "pass";
 			}
-			driver.switchTo().window(parentWindow);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status = "fail";
+		}
+		return status;
+	}
+	
+	public ArrayList<String> verifyCourseCardDetailsInCoursePage(ArrayList<String> data)
+	{
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		ArrayList<String> status = new ArrayList<String>();
+		ArrayList<String> courseCardType = new ArrayList<String>();
+		ArrayList<String> getCourseLevels = new ArrayList<String>();
+		
+		String courseCardIcon = null, getCourseIcon = null, courseCardenrollStatus, courseEnrollStatus = null, courseCardEnrollAmount;
+		try
+		{
+			String courseFromExcel[] = data.get(1).split("\\?");
+			String courseName = courseFromExcel[1];
+			List<WebElement> course = driver.findElements(By.cssSelector("div[class*='LearningCatalog_cardRow'] div[class*='RegularCourseCard_RegularcardLinks'] a"));
+			for(int i = 0; i < course.size(); i++)
+			{
+				System.out.println("courses : "+course.get(i).getAttribute("href"));
+				if(courseName.contains(course.get(i).findElement(By.cssSelector(" div[class*='RegularCourseCard_courseHeading'] p")).getText()))
+				{
+					String courseLink = course.get(i).getAttribute("href");
+					status.add(this.checkLink(courseLink));
+					Actions a= new Actions(driver);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+					a.sendKeys(Keys.HOME).build().perform();
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+					
+					WebElement courseCardIconLocator = course.get(i).findElement(By.cssSelector(" img[alt='icon']"));
+					if(courseCardIconLocator.isDisplayed())
+					{
+						courseCardIcon = "present";
+					}
+					
+					List<WebElement> courseCardTypeLocator = course.get(i).findElements(By.cssSelector(" div[class*='RegularCourseCard_courseHeading'] ul li"));
+					for(int j = 0; j < courseCardTypeLocator.size(); j++)
+					{
+						courseCardType.add(courseCardTypeLocator.get(j).getText());
+					}
+					
+					WebElement enrollStatusLocator = course.get(i).findElement(By.cssSelector(" div[class*='RegularCourseCard_priceLeft'] p"));
+					courseCardenrollStatus = enrollStatusLocator.getText();
+					
+					WebElement enrollAmountLocator = course.get(i).findElement(By.cssSelector(" div[class*='RegularCourseCard_priceRight'] p"));
+					courseCardEnrollAmount = enrollAmountLocator.getText().replaceAll("[^0-9]", " ").replaceAll("\\s", "").trim();
+					System.out.println("course card amount : "+courseCardEnrollAmount);
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					
+					((JavascriptExecutor) driver).executeScript("window.open('"+courseLink+"')");
+					
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+					
+					String parentWindow = driver.getWindowHandle();
+					ArrayList<String> w = new ArrayList<String>(driver.getWindowHandles());
+					for(String windows : w)
+					{
+						driver.switchTo().window(windows);
+						if(driver.getCurrentUrl().contains(courseLink))
+						{
+							driver.switchTo().window(windows);
+							System.out.println("current url : "+driver.getCurrentUrl());
+							
+							if(driver.findElements(By.cssSelector("img[alt='course-icon']")).size()>=1)
+							{
+								WebElement courseIcon = driver.findElement(By.cssSelector("img[alt='course-icon']"));
+								if(courseIcon.isDisplayed())
+								{
+									getCourseIcon = "present";
+								}
+							}
+							
+							List<WebElement> courseLevel = driver.findElements(By.cssSelector("div[class*='CourseDescription_levelSection'] [class*='text-uppercase CourseDescription_regularTheme']"));
+							for(int k = 0; k < courseLevel.size(); k++)
+							{
+								getCourseLevels.add(courseLevel.get(k).getText());
+							}
+							
+							if(driver.findElements(By.cssSelector("button[class*='CourseDescription_enrollNowBtn']")).size() != 0)
+							{
+								WebElement enrollButtonLocator = driver.findElement(By.cssSelector("button[class*='CourseDescription_enrollNowBtn']"));
+								courseEnrollStatus = enrollButtonLocator.getText();
+								System.out.println("course page enroll status : "+courseEnrollStatus);
+							}
+							else if(driver.findElements(By.cssSelector("div[class*='CourseDescription_buttonsContent'] h6")).size() != 0)
+							{
+								WebElement enrollButtonLocator = driver.findElement(By.cssSelector("div[class*='CourseDescription_buttonsContent'] h6"));
+								courseEnrollStatus = enrollButtonLocator.getText();
+								System.out.println("course page enroll status : "+courseEnrollStatus);
+							}
+							String courseAmount = null;
+							WebElement amountLocator = driver.findElement(By.xpath("//div[@class='d-flex gap-2']//h2[contains(text(),'Fee')]/following-sibling::p"));
+							if(amountLocator.getText().contains("-"))
+							{
+								String temp[] = amountLocator.getText().split("\\-");//7399-14999
+								courseAmount = temp[0].replaceAll("[^0-9]", " ").replaceAll("\\s", "").trim();
+							}
+							else
+							{
+								courseAmount = amountLocator.getText().replaceAll("[^0-9]", " ").replaceAll("\\s", "").trim();
+							}
+							System.out.println("course page enroll amount :"+courseAmount);
+							if(courseCardIcon.equalsIgnoreCase(getCourseIcon))
+							{
+								status.add("pass");
+								System.out.println("course icon is same in both prg card and prg page for "+courseLink);	
+							}
+							else
+							{
+								status.add("icon");
+								System.out.println("course icon is not same in both prg card and prg page for "+courseLink);	
+							}
+							if(courseCardType.toString().toUpperCase().equalsIgnoreCase(getCourseLevels.toString().toUpperCase()))
+							{
+								status.add("pass");
+								System.out.println("course level type is same in both prg card and prg page for "+courseLink);
+							}
+							else
+							{
+								status.add("level");
+								System.out.println("course level type is not same in both prg card and prg page for "+courseLink);
+							}
+							if((courseCardenrollStatus.contains("Open") && courseEnrollStatus.contains("Enroll Now")))
+							{
+								status.add("pass");
+								System.out.println("course enroll status is same in both prg card and prg page for "+courseLink);
+							}
+							else
+							{
+								status.add("enrollStatusclosed");
+								System.out.println("course enroll is not same in both prg card and prg page for "+courseLink);
+							}
+							if(courseCardEnrollAmount.equalsIgnoreCase(courseAmount))
+							{
+								status.add("pass");
+								System.out.println("prgm enroll amount is same in both prg card and prg page for "+courseLink);
+								driver.close();
+								break;
+								
+							}
+							else
+							{
+								status.add("amount");
+								System.out.println("prgm enroll amount is not same in both prg card and prg page for "+courseLink);
+								break;
+							}
+							}
+							else if(driver.getCurrentUrl().contains("data"))
+							{
+								driver.close();
+							}
+							
+						}
+						driver.switchTo().window(parentWindow);
+						break;
+					}
+				}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return CourseStatus;	
+		return status;
 	}
-	public String verifyProgramOutLine()
+	
+	public String verifyProgramShowMoreIconStatus()
 	{
-		List<WebElement> listOfPgmOutline = driver.findElements(By.cssSelector(launchURL));
-		return launchURL;
+		String status = "fail";
+		try
+		{
+			Actions a= new Actions(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			a.sendKeys(Keys.HOME).build().perform();
+			driver.navigate().refresh();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(3) div[class*='ManageCardsLimit_showMoreSection'] button"));
+			if(clickShowMore.get(0).isDisplayed())
+			{
+				clickShowMore.get(0).sendKeys(Keys.SHIFT);
+				js.executeScript("window.scrollBy(0,50)", "");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				js.executeScript("arguments[0].click();", clickShowMore.get(0));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				status = "pass";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status = "fail";
+		}
+		return status;
 	}
-	public ArrayList<String> checkCourses()
+	
+	public String verifyCourseShowMoreIconStatus1()
+	{
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		String status = "fail";
+		try
+		{
+			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(3) div[class*='ManageCardsLimit_showMoreSection'] button"));
+			if(clickShowMore.get(1).isDisplayed())
+			{
+				clickShowMore.get(0).sendKeys(Keys.SHIFT);
+				js.executeScript("window.scrollBy(0,50)", "");
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				js.executeScript("arguments[0].click();", clickShowMore.get(0));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+				status = "pass";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			status = "fail";
+		}
+		
+		return addPgmIcon;
+	}
+	
+	public ArrayList<String> checkCourses(ArrayList<String> dataFromExcel)
 	{
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		ArrayList<String> status = new ArrayList<String>();
@@ -434,7 +792,7 @@ public class StagecategoryLocator
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
 			List<WebElement> clickShowMore = driver.findElements(By.cssSelector("div[class*='container-fluid Courses_containerInner']>div[class*='row']:nth-child(5) div[class*='ManageCardsLimit_showMoreSection'] button"));
 			if(clickShowMore.get(0).isDisplayed())
-			{
+			{	
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 				clickShowMore.get(0).sendKeys(Keys.SHIFT);
 				js.executeScript("window.scrollBy(0,50)", "");
@@ -456,6 +814,7 @@ public class StagecategoryLocator
 		}
 		return status;
 	}
+	
 	public void launchValidator()
 	{
 		try

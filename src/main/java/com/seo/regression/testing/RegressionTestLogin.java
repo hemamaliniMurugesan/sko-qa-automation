@@ -12,16 +12,18 @@ public class RegressionTestLogin
 	String result = "failed";
 	ArrayList<ArrayList<String>> sheetData = null;
 	ProcessLogin processLogin;
+	String sheetStatus = "Pass";
+	
 	public RegressionTestLogin(WebDriver driver, String host, ArrayList<ArrayList<String>> sheetData) throws Exception
 	{
 		try
 		{
+			OpenWebsite.openSite(driver);
 			this.driver = driver;
 			this.sheetData = sheetData;
 			this.processLogin = new ProcessLogin(this.driver);
-			OpenWebsite.openSite(driver);
 			System.out.println("login process started");
-			this.start();
+			//this.start();
 		}
 		catch(Exception e)
 		{
@@ -29,7 +31,7 @@ public class RegressionTestLogin
 		}
 	}
 	
-	public void start() throws InterruptedException
+	public String start() throws InterruptedException
 	{
 		for(int i = 0; i < this.sheetData.size(); i++)
 		{
@@ -51,6 +53,7 @@ public class RegressionTestLogin
 					break;
 			}
 		}
+		return sheetStatus;
 	}
 	
 	private void InvalidUsername() throws InterruptedException
@@ -62,6 +65,7 @@ public class RegressionTestLogin
 		status = this.processLogin.checkInvalidUsername(userName, passWord);
 		if(status.equalsIgnoreCase("success"))
 		{
+			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(0).set(0, "InvalidUsername - failed");
 		}
 	}
@@ -75,6 +79,7 @@ public class RegressionTestLogin
 		status = this.processLogin.checkInvalidPassword(userName, passWord);
 		if(status.equalsIgnoreCase("Success"))
 		{
+			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(1).set(0, "InvalidPassword - failed");
 		}
 	}
@@ -88,6 +93,7 @@ public class RegressionTestLogin
 		status = this.processLogin.checkInvalidUserNameAndPassword(userName, passWord);
 		if(status.equalsIgnoreCase("Success"))
 		{
+			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(2).set(0, "InvalidUserNameAndPassword - failed");
 		}
 	}
@@ -101,6 +107,7 @@ public class RegressionTestLogin
 		status = this.processLogin.checkValidCredentials(userName, passWord);
 		if(status.equalsIgnoreCase("Failed"))
 		{
+			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "ValidCredentials - failed");
 		}
 	}

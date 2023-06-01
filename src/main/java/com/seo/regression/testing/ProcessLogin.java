@@ -87,6 +87,8 @@ public class ProcessLogin
 		try
 		{
 			List<WebElement> errorMsg2 = driver.findElements(By.xpath("//div[@class='NotificationTypeError spacing-mb16 status message submission-error is-shown']//div[@class='fiederror message-title']"));
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(200));
+			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 			if(errorMsg2.size()>0)
 			{
 				if(errorMsg2.get(0).getText().equalsIgnoreCase("Email or password is incorrect."))

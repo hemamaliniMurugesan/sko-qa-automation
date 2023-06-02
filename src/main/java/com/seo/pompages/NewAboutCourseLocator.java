@@ -162,29 +162,29 @@ public class NewAboutCourseLocator
 			if(respCode > 200 && !(respCode == 308))
 			{
 				System.out.println("broken link");
-				System.exit(0);
 			}
 			else
 			{
 				System.out.println("un broken link");
 				driver.get(addHosturl);
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 				List<WebElement> checkCourseCode = driver.findElements(By.cssSelector("button[class*='enroll']"));
 				if(checkCourseCode.size()>0)
 				{
 					courseIDFromBrowser = checkCourseCode.get(0).getAttribute("href");
-					/*
-					 * int index = courseIDFromBrowser.lastIndexOf("/"); String getCourseID =
-					 * courseIDFromBrowser.substring(index+0); getCourseID =
-					 * getCourseID.replace("/", "");
-					 */
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					System.out.println("course ID from Browser : "+courseIDFromBrowser);
 					System.out.println("courseIDFrom Excel: "+code);
 					if(courseIDFromBrowser.contains(code))
 					{
 						CourseCodeStatus = "true";
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
 					}
 				}
-				else
+				else if(!setHost.contains("in."))
 				{
 					WebElement canonicalLocator = driver.findElement(By.cssSelector("link[rel='canonical']"));
 					String getCanonicalURLText = canonicalLocator.getAttribute("href");
@@ -193,6 +193,10 @@ public class NewAboutCourseLocator
 						System.out.println("course code is present");
 						CourseCodeStatus = "true";
 					}
+				}
+				else
+				{
+					CourseCodeStatus = "fail";
 				}
 			}
 		}

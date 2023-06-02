@@ -967,7 +967,7 @@ public class RegressionGenericLocator
 							if(clickPlan.isDisplayed())
 							{
 								js.executeScript("arguments[0].click()", clickPlan);
-								driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+								driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(400));
 								driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(800));
 								checkPlanStatus = "pass";
 								break;

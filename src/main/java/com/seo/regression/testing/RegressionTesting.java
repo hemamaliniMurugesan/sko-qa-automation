@@ -60,6 +60,7 @@ public class RegressionTesting
 		System.out.println(driver);
 		//new RegressionTesting().startTesting();
 		this.startTesting();
+		driver.quit();
 	}
 	
 	public void startTesting()

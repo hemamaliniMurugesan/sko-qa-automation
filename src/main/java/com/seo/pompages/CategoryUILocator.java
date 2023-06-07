@@ -19,7 +19,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.seo.dataProvider.ConfigFileReader;
 import com.seo.utility.TestUtil;
 
-import io.opentelemetry.exporter.logging.SystemOutLogExporter;
 
 public class CategoryUILocator
 {

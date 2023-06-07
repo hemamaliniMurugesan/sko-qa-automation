@@ -15,9 +15,9 @@ public class OpenWebsite
 	public static WebDriver openDriver(String browserName)
 	{
 		WebDriver driver = null;
-		if(browserName.equalsIgnoreCase("chrome"))
+		if(browserName.equalsIgnoreCase("Chrome"))
 		{
-			System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_113\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "D:\\Doc\\chromedriver_v114\\chromedriver.exe");
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--remote-allow-origins=*");
 			options.addArguments("--disable notifications");

@@ -3,6 +3,7 @@ D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\utility\TestUtil.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ForgotPasswordValidation.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EnrollmentLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SignupSocialAccValidator.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\SEOAboutPageLocators.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\FrontEndAboutCourseLocator.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\HeaderSectionValidation.java
@@ -48,4 +49,5 @@ D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\NewAboutCourseLocator.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\manager\FileReaderManager.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionTesting.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\SignupSocialAccLocator.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EnrollmentValidation.java

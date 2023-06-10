@@ -20,7 +20,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ProcessLogin
 {
 	WebDriver driver;
-	String loginStatus;
 	String url = "";
 	public ProcessLogin(WebDriver driver) 
 	{
@@ -28,6 +27,7 @@ public class ProcessLogin
 	}
 	public String loginFunction(String userName, String passWord) throws InterruptedException
 	{
+		String loginStatus="success";
 		try
 		{
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
@@ -68,8 +68,11 @@ public class ProcessLogin
 						loginStatus = "Failed";
 					}
 					
-					  else 
-					  { this.checkUserAfterLoggedIn(); } driver.close();
+				  else 
+				  { 
+					  loginStatus= this.checkUserAfterLoggedIn(); 
+				  } 
+					driver.close();
 					 
 					break;
 				}
@@ -79,21 +82,30 @@ public class ProcessLogin
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			loginStatus="failed";
 		}
 		return loginStatus;
 	}
 	public String ErrorMessage()
 	{
+		String loginStatus = null;
 		try
 		{
-			List<WebElement> errorMsg2 = driver.findElements(By.xpath("//div[@class='NotificationTypeError spacing-mb16 status message submission-error is-shown']//div[@class='fiederror message-title']"));
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(200));
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
-			if(errorMsg2.size()>0)
+			if(driver.findElements(By.xpath("//div[@class='NotificationTypeError spacing-mb16 status message submission-error is-shown']//div[@class='fiederror message-title']")).size()>0)
 			{
-				if(errorMsg2.get(0).getText().equalsIgnoreCase("Email or password is incorrect."))
+				List<WebElement> errorMsg2 = driver.findElements(By.xpath("//div[@class='NotificationTypeError spacing-mb16 status message submission-error is-shown']//div[@class='fiederror message-title']"));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(200));
+				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));
+				if(errorMsg2.size()>0)
 				{
-					loginStatus = "Failed";
+					if(errorMsg2.get(0).getText().equalsIgnoreCase("Email or password is incorrect."))
+					{
+						loginStatus = "Failed";
+					}
+					else
+					{
+						loginStatus = "Success";
+					}
 				}
 				else
 				{
@@ -102,8 +114,10 @@ public class ProcessLogin
 			}
 			else
 			{
+				System.out.println("no error message");
 				loginStatus = "Success";
 			}
+			
 		}
 		catch(Exception e)
 		{
@@ -116,6 +130,7 @@ public class ProcessLogin
 	
 	public String checkUserAfterLoggedIn()
 	{
+		String loginStatus=null;
 			try
 			{
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
@@ -152,16 +167,18 @@ public class ProcessLogin
 									loginStatus = "Success";
 									System.out.println("logged in successfully");
 									Thread.sleep(1000);
+									WebElement clickDropDown = driver.findElement(By.cssSelector("li[class='SigNUP'] img[class='dPaRoW']"));
+									clickDropDown.click();
+									WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
+									clickSignOut.click();
+									Thread.sleep(1000);
 								}
 								else
 								{
 									loginStatus = "Failed";
 									System.out.println("not logged in ");
 								}
-							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
-							clickSignOut.click();
-							Thread.sleep(1000);
-						}
+							}
 						}
 					 }
 					else if(driver.getCurrentUrl().contains("dashboard"))
@@ -177,7 +194,12 @@ public class ProcessLogin
 						{
 							loginStatus = "Success";
 							System.out.println("logged in successfully");
+							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu'] li:nth-child(5) a"));
+							JavascriptExecutor js = (JavascriptExecutor) driver;
+							js.executeScript("arguments[0].click()", clickSignOut);
+							//clickSignOut.click();
 							Thread.sleep(1000);
+							
 						}
 						else
 						{
@@ -198,7 +220,7 @@ public class ProcessLogin
 	{
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 		Thread.sleep(2000);
-		WebElement clickDropdown = driver.findElement(By.cssSelector("img[class='dPaRoW']"));
+		WebElement clickDropdown = driver.findElement(By.cssSelector("li[class='SigNUP'] img[class='dPaRoW']"));
 		wait.until(ExpectedConditions.elementToBeClickable(clickDropdown));
 		clickDropdown.click();
 		Thread.sleep(2000);
@@ -209,60 +231,70 @@ public class ProcessLogin
 		Thread.sleep(1000);
 	}
 	
-	public String checkInvalidUsername(String uName, String pwd) throws InterruptedException
+	public ArrayList<String> checkInvalidUsername(String uName, String pwd) throws InterruptedException
 	{
+		ArrayList<String> InvalidUsername = new ArrayList<String>();
 		try
 		{
 			System.out.println("Invalid Email Process started");
 			System.out.println(driver);
-			this.loginFunction(uName, pwd);
+			OpenWebsite.openSite(driver);
+			InvalidUsername.add(this.loginFunction(uName, pwd));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return loginStatus;
+		return InvalidUsername;
 	}
-	public String checkInvalidPassword(String uName, String pwd) throws InterruptedException
+	public ArrayList<String> checkInvalidPassword(String uName, String pwd) throws InterruptedException
 	{
+		ArrayList<String> InvalidPassword = new ArrayList<String>();
 		try
 		{
 			System.out.println("Invalid password Process started");
-			this.loginFunction(uName, pwd);
+			OpenWebsite.openSite(driver);
+			InvalidPassword.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			InvalidPassword.add("failed");
 		}
-		return loginStatus;
+		return InvalidPassword;
 	}
-	public String checkInvalidUserNameAndPassword(String uName, String pwd) throws InterruptedException
+	public ArrayList<String> checkInvalidUserNameAndPassword(String uName, String pwd) throws InterruptedException
 	{
+		ArrayList<String> InvalidUserNameAndPassword = new ArrayList<String>();
 		try
 		{
 			System.out.println("InvalidEmail and Password process started");
-			this.loginFunction(uName, pwd);
+			OpenWebsite.openSite(driver);
+			InvalidUserNameAndPassword.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return loginStatus;
+		return InvalidUserNameAndPassword;
 	}
-	public String checkValidCredentials(String uName, String pwd) throws InterruptedException
+	public ArrayList<String> checkValidCredentials(String uName, String pwd) throws InterruptedException
 	{
+		ArrayList<String> ValidCredentials = new ArrayList<String>();
 		try
 		{
 			System.out.println("valid data process started");
-			this.loginFunction(uName, pwd);
+			OpenWebsite.openSite(driver);			
+			ValidCredentials.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-		return loginStatus;
+		System.out.println("login process done");
+		return ValidCredentials;
 	}
 }

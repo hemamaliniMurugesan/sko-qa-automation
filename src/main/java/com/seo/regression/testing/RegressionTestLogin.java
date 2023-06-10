@@ -14,21 +14,13 @@ public class RegressionTestLogin
 	ProcessLogin processLogin;
 	String sheetStatus = "Pass";
 	
-	public RegressionTestLogin(WebDriver driver, String host, ArrayList<ArrayList<String>> sheetData) throws Exception
-	{
-		try
-		{
-			OpenWebsite.openSite(driver);
-			this.driver = driver;
-			this.sheetData = sheetData;
+	public RegressionTestLogin(WebDriver driver, ArrayList<ArrayList<String>> sheetData) throws Exception
+	{		
+		 	this.sheetData = sheetData;
+		 	this.driver= driver;
 			this.processLogin = new ProcessLogin(this.driver);
 			System.out.println("login process started");
 			//this.start();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	public String start() throws InterruptedException
@@ -56,56 +48,53 @@ public class RegressionTestLogin
 		return sheetStatus;
 	}
 	
-	private void InvalidUsername() throws InterruptedException
+	public void InvalidUsername() throws InterruptedException
 	{
-		String status = "Failed";
 		ArrayList<String> credsRow = sheetData.get(0);
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
-		status = this.processLogin.checkInvalidUsername(userName, passWord);
-		if(status.equalsIgnoreCase("success"))
+		ArrayList<String> status = this.processLogin.checkInvalidUsername(userName, passWord);
+		if(status.contains("success"))
 		{
 			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(0).set(0, "InvalidUsername - failed");
 		}
 	}
 	
-	private void InvalidPassword() throws InterruptedException
+	public void InvalidPassword() throws InterruptedException
 	{
-		String status = "Failed";
 		ArrayList<String> credsRow = sheetData.get(1);
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
-		status = this.processLogin.checkInvalidPassword(userName, passWord);
-		if(status.equalsIgnoreCase("Success"))
+		ArrayList<String> status = this.processLogin.checkInvalidPassword(userName, passWord);
+		if(status.contains("Success"))
 		{
 			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(1).set(0, "InvalidPassword - failed");
 		}
 	}
 	
-	private void InvalidUserNameAndPassword() throws InterruptedException
+	public void InvalidUserNameAndPassword() throws InterruptedException
 	{
-		String status = "Failed";
 		ArrayList<String> credsRow = sheetData.get(2);
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
-		status = this.processLogin.checkInvalidUserNameAndPassword(userName, passWord);
-		if(status.equalsIgnoreCase("Success"))
+		ArrayList<String> status = this.processLogin.checkInvalidUserNameAndPassword(userName, passWord);
+		if(status.contains("Success"))
 		{
 			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(2).set(0, "InvalidUserNameAndPassword - failed");
 		}
 	}
 	
-	private void ValidCredentials() throws InterruptedException
+	public void ValidCredentials() throws InterruptedException
 	{
-		String status = "Failed";
 		ArrayList<String> credsRow = sheetData.get(3);
 		String userName = credsRow.get(1);
 		String passWord = credsRow.get(2);
-		status = this.processLogin.checkValidCredentials(userName, passWord);
-		if(status.equalsIgnoreCase("Failed"))
+		ArrayList<String> status = this.processLogin.checkValidCredentials(userName, passWord);
+		
+		if(status.contains("Failed"))
 		{
 			sheetStatus = "Fail";
 			RegressionTesting.EXCEL_DATA_AS_SHEEET_NAME_AND_ROWS_MAP.get("Login").get(3).set(0, "ValidCredentials - failed");

@@ -92,7 +92,7 @@ public class RegressionTesting
 						switch(sheetName)
 						{
 							case "Login":
-								sheetStatus = new RegressionTestLogin(driver, ENV_TO_USE, sheetData).start();
+								sheetStatus = new RegressionTestLogin(driver, sheetData).start();
 							break;
 							case "AboutCourse":
 							{

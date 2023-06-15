@@ -1147,7 +1147,7 @@ String addHosturl;
 					if(replace.trim().contains(flatPriceWithoutGSTFromExcel.trim()))
 					{
 						System.out.println("fee is correct");
-						checkPriceWOGSTStatus = "pass";
+						checkPriceWOGSTStatus = "success";
 					}
 				}
 			}

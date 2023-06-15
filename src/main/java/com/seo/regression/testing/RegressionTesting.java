@@ -142,6 +142,9 @@ public class RegressionTesting
 							case "SignupWithSocialAcc":
 								sheetStatus = new SignupSocialAccValidator(sheetData, driver).start();
 								break;
+							case "Pacific":
+								sheetStatus = new PLUValidation(sheetData, driver).start();
+								break;
 							default:
 								System.out.println("Not class found to work with the sheet");
 						}

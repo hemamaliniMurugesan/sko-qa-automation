@@ -20,7 +20,6 @@ public class RegressionTestLogin
 		 	this.driver= driver;
 			this.processLogin = new ProcessLogin(this.driver);
 			System.out.println("login process started");
-			//this.start();
 	}
 	
 	public String start() throws InterruptedException

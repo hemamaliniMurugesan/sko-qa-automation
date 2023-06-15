@@ -101,7 +101,6 @@ public class StagecategoryValidator
 			case "courseCard_TC2":
 				compareCardDetailsInCoursePage(row);
 				break;
-			
 			case "courses":
 				verifyCourses(row);
 				break;

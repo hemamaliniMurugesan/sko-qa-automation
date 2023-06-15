@@ -578,7 +578,8 @@ public class NewAboutCourseValidator
 			String checkFlatPrice = newAboutCourseLocators.getflatPrice(flatPriceWithoutGSTFromExcel);
 			if (checkFlatPrice.equalsIgnoreCase("successIND")) {
 				markProcessIgnored();
-			} else if (!checkFlatPrice.equals(checkPrice))
+			} 
+			else if (!checkFlatPrice.equals(checkPrice))
 			{
 				sheetStatus = "Fail";
 				markProcessFailed();

@@ -23,7 +23,7 @@ public class OpenWebsite
 			options.addArguments("--disable notifications");
 			driver = new ChromeDriver(options);
 			driver.manage().window().maximize();
-			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(TestUtil.PAGE_LOAD_TIMEOUT));
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(TestUtil.IMPLICIT_WAIT));
 		}
 		else if(browserName.equalsIgnoreCase("firefox"))
 		{
@@ -85,7 +85,8 @@ public class OpenWebsite
 		String setURL;
 		setURL = setEnvironment(RegressionTesting.ENV_TO_USE);
 		driver.get(setURL);
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(70));
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 		return setURL;
 	}
 	

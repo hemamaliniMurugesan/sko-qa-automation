@@ -975,7 +975,7 @@ String addHosturl;
 						jse.executeScript("window.scrollBy(0,-80)", "");
 						WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(80));
 						wait.until(ExpectedConditions.elementToBeClickable(linkedURLLocator));
-						linkedURLLocator.click();
+						jse.executeScript("arguments[0].click()", linkedURLLocator);
 						String parentWindow = driver.getWindowHandle();
 						Set<String> windows = driver.getWindowHandles();
 						for(String handle : windows)

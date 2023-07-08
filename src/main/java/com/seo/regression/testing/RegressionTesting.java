@@ -60,7 +60,7 @@ public class RegressionTesting
 		System.out.println(driver);
 		//new RegressionTesting().startTesting();
 		this.startTesting();
-		driver.quit();
+		//driver.quit();
 	}
 	
 	public void startTesting()
@@ -144,6 +144,12 @@ public class RegressionTesting
 								break;
 							case "Pacific":
 								sheetStatus = new PLUValidation(sheetData, driver).start();
+								break;
+							case "ExploreAll":
+								sheetStatus = new ExploreAllValidator(sheetData, driver).start();
+								break;
+							case "EditProfile":
+								sheetStatus = new EditProfileValidation(sheetData, driver).start();
 								break;
 							default:
 								System.out.println("Not class found to work with the sheet");

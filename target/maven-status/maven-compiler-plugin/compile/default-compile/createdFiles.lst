@@ -6,6 +6,7 @@ com\seo\regression\testing\ForgotPasswordValidation.class
 com\seo\regression\testing\SignUpLocator.class
 com\seo\regression\testing\UserPageLocator.class
 com\seo\pompages\AboutCourseLocators.class
+com\seo\regression\testing\PLULocators.class
 com\seo\regression\testing\TestRegressionGenericProcess.class
 com\seo\utility\ProcessExcel.class
 com\seo\regression\testing\EnrollmentValidation.class
@@ -16,6 +17,7 @@ com\seo\utility\TestUtil.class
 com\seo\regression\testing\ContactUsValidation.class
 com\seo\regression\testing\MicrosoftCourseValidation.class
 com\seo\regression\testing\UserPageValidation.class
+com\seo\regression\testing\ExploreAllValidator.class
 com\seo\regression\testing\FooterSectionValidation.class
 com\seo\regression\testing\RegressionTestLogin.class
 com\seo\pompages\CourseDetailsPage.class
@@ -24,6 +26,7 @@ com\seo\regression\testing\SignupSocialAccLocator.class
 com\seo\regression\testing\DashboardLocator.class
 com\seo\regression\testing\ErrorCodeValidation.class
 com\seo\pompages\AboutCourseEnrollmentLocators.class
+com\seo\regression\testing\PLUValidation.class
 com\seo\manager\FileReaderManager.class
 com\seo\regression\testing\LoginSocialAccLocator.class
 com\seo\regression\testing\ProcessLogin.class
@@ -33,6 +36,7 @@ com\seo\regression\testing\ForgotPasswordLocator.class
 com\seo\pompages\StagecategoryLocator.class
 com\seo\regression\testing\TestNewAboutCourse.class
 com\seo\regression\testing\ContactInfoLocator.class
+com\seo\regression\testing\ExploreAllLocator.class
 com\seo\regression\testing\SearchPageValidation.class
 com\seo\pompages\FrontEndAboutPageLocator.class
 com\seo\regression\testing\DashboardValidator.class

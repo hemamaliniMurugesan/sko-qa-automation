@@ -152,38 +152,15 @@ public class ProcessLogin
 						WebDriverWait wait2 =  new WebDriverWait(driver, Duration.ofSeconds(30));
 						wait2.until(ExpectedConditions.elementToBeClickable(clickBeginProfile));
 						clickBeginProfile.click();
-						Thread.sleep(1000);
+						Thread.sleep(3000);
 						WebElement clickDropdownIcon = driver.findElement(By.cssSelector("li[class='Header_SigNUP__cUzCw'] img[alt='icon']"));
 						clickDropdownIcon.click();
-						Thread.sleep(1000);
-						String parentWindow1 = driver.getWindowHandle();
-						Set<String> listOfWindow1 = driver.getWindowHandles();
-						for(String windows1 : listOfWindow1)
-						{
-							Thread.sleep(1000);
-							driver.switchTo().window(windows1);
-							if(driver.getCurrentUrl().equalsIgnoreCase("https://stage-in.skillup.online/interested/"))
-							{
-								driver.switchTo().window(windows1);
-								WebElement checkLoggedName = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(1) a"));
-								if(checkLoggedName.getText().contains("Hello"))
-								{
-									loginStatus = "Success";
-									System.out.println("logged in successfully");
-									Thread.sleep(1000);
-									WebElement clickDropDown = driver.findElement(By.cssSelector("li[class='SigNUP'] img[class='dPaRoW']"));
-									clickDropDown.click();
-									WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header'] li:nth-child(5) a"));
-									clickSignOut.click();
-									Thread.sleep(1000);
-								}
-								else
-								{
-									loginStatus = "Failed";
-									System.out.println("not logged in ");
-								}
-							}
-						}
+						Thread.sleep(2000);
+						WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header_Primary02_Blue__bffoz show'] li:nth-child(5) a"));
+						JavascriptExecutor js = (JavascriptExecutor) driver;
+						js.executeScript("arguments[0].click()", clickSignOut);
+						Thread.sleep(2000);
+						
 					 }
 					else if(driver.getCurrentUrl().contains("dashboard"))
 					{
@@ -198,9 +175,11 @@ public class ProcessLogin
 						{
 							loginStatus = "Success";
 							System.out.println("logged in successfully");
-							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu'] li:nth-child(5) a"));
+							Thread.sleep(2000);
+							WebElement clickSignOut = driver.findElement(By.cssSelector("ul[class*='dropdown-menu Header_Primary02_Blue__bffoz show'] li:nth-child(5) a"));
 							JavascriptExecutor js = (JavascriptExecutor) driver;
 							js.executeScript("arguments[0].click()", clickSignOut);
+							System.out.println("log out successfully");
 							//clickSignOut.click();
 							Thread.sleep(1000);
 							
@@ -243,6 +222,7 @@ public class ProcessLogin
 			System.out.println("Invalid Email Process started");
 			System.out.println(driver);
 			OpenWebsite.openSite(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 			InvalidUsername.add(this.loginFunction(uName, pwd));
 		}
 		catch(Exception e)
@@ -258,6 +238,7 @@ public class ProcessLogin
 		{
 			System.out.println("Invalid password Process started");
 			OpenWebsite.openSite(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 			InvalidPassword.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}
@@ -275,6 +256,7 @@ public class ProcessLogin
 		{
 			System.out.println("InvalidEmail and Password process started");
 			OpenWebsite.openSite(driver);
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 			InvalidUserNameAndPassword.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}
@@ -290,7 +272,8 @@ public class ProcessLogin
 		try
 		{
 			System.out.println("valid data process started");
-			OpenWebsite.openSite(driver);			
+			OpenWebsite.openSite(driver);		
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 			ValidCredentials.add(this.loginFunction(uName, pwd));
 			Thread.sleep(500);
 		}

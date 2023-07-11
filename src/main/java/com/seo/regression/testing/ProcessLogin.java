@@ -96,7 +96,7 @@ public class ProcessLogin
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 			if(error.size()>0)
 			{
-				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 				List<WebElement> errorMsg2 = driver.findElements(By.xpath("//div[@class='NotificationTypeError spacing-mb16 status message submission-error is-shown']//div[@class='fiederror message-title']"));
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(200));
 				driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(70));

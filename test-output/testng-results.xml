@@ -2,12 +2,12 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2023-07-07T17:00:53 IST" name="Testing Google Apps" finished-at="2023-07-07T17:09:51 IST" duration-ms="538334">
+  <suite started-at="2023-07-11T13:39:42 IST" name="Testing Google Apps" finished-at="2023-07-11T13:41:15 IST" duration-ms="92933">
     <groups>
     </groups>
-    <test started-at="2023-07-07T17:00:53 IST" name="Regression" finished-at="2023-07-07T17:09:51 IST" duration-ms="538334">
+    <test started-at="2023-07-11T13:39:42 IST" name="Regression" finished-at="2023-07-11T13:41:15 IST" duration-ms="92933">
       <class name="com.seo.regression.testing.RegressionTesting">
-        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:com.seo.regression.testing.RegressionTesting@459e9125]" started-at="2023-07-07T17:00:53 IST" name="setup" finished-at="2023-07-07T17:00:59 IST" duration-ms="5832" status="PASS">
+        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:com.seo.regression.testing.RegressionTesting@6f1de4c7]" started-at="2023-07-11T13:39:42 IST" name="setup" finished-at="2023-07-11T13:39:47 IST" duration-ms="4664" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -18,15 +18,15 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="startTest()[pri:0, instance:com.seo.regression.testing.RegressionTesting@459e9125]" started-at="2023-07-07T17:00:59 IST" name="startTest" finished-at="2023-07-07T17:09:51 IST" duration-ms="532450" status="PASS">
+        <test-method signature="startTest()[pri:0, instance:com.seo.regression.testing.RegressionTesting@6f1de4c7]" started-at="2023-07-11T13:39:47 IST" name="startTest" finished-at="2023-07-11T13:41:15 IST" duration-ms="88243" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- startTest -->
-        <test-method is-config="true" signature="afterMethod(org.testng.ITestResult)[pri:0, instance:com.seo.regression.testing.RegressionTesting@459e9125]" started-at="2023-07-07T17:09:51 IST" name="afterMethod" finished-at="2023-07-07T17:09:51 IST" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="afterMethod(org.testng.ITestResult)[pri:0, instance:com.seo.regression.testing.RegressionTesting@6f1de4c7]" started-at="2023-07-11T13:41:15 IST" name="afterMethod" finished-at="2023-07-11T13:41:15 IST" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=startTest status=SUCCESS method=RegressionTesting.startTest()[pri:0, instance:com.seo.regression.testing.RegressionTesting@459e9125] output={null}]]]>
+                <![CDATA[[TestResult name=startTest status=SUCCESS method=RegressionTesting.startTest()[pri:0, instance:com.seo.regression.testing.RegressionTesting@6f1de4c7] output={null}]]]>
               </value>
             </param>
           </params>

@@ -26,6 +26,8 @@ D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactInfoLocator.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\ContactInfoValidation.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\UserPageValidation.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EditProfileLocator.java
+D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\EditProfileValidation.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\CategoryPageLocators.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\pompages\CourseDetailsPage.java
 D:\AutomationTestingWorkspace\sko-qa-automation\src\main\java\com\seo\regression\testing\RegressionGenericLocator.java

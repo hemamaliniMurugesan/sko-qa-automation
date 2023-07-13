@@ -29,16 +29,19 @@
   <artifactId>java-ocr-api</artifactId>
   <version>15.3.0.3</version>
 </dependency>
+
 <dependency>
     <groupId>org.json</groupId>
     <artifactId>json</artifactId>
     <version>20220320</version>
 </dependency>
+
 <dependency>
     <groupId>net.sourceforge.tess4j</groupId>
     <artifactId>tess4j</artifactId>
     <version>5.2.1</version>
 </dependency>
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -60,11 +63,7 @@
     <version>4.9.1</version>
 </dependency>
 
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<version>7.2.3</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit</artifactId>

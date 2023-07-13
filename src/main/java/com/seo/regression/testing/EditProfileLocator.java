@@ -44,8 +44,8 @@ public class EditProfileLocator
 					pwd.sendKeys(data.get(2));
 					WebElement submit = driver.findElement(By.cssSelector("input#login_in"));
 					submit.click();
-					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
-					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(150));
 					Thread.sleep(1000);
 					Set<String> allWindows1 = driver.getWindowHandles();
 					for(String window1 : allWindows1)
@@ -54,12 +54,12 @@ public class EditProfileLocator
 					if(driver.getCurrentUrl().contains("dashboard"))
 					{
 						driver.switchTo().window(window1);
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
-						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(150));
 						Thread.sleep(1000);
 						System.out.println("dashboard page");//dashboard page (1)
-						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
-						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+						driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+						driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(150));
 						status.add("pass");
 						Thread.sleep(2000);
 					}
@@ -87,14 +87,14 @@ public class EditProfileLocator
 				{
 					WebElement clickDropDown = driver.findElement(By.cssSelector("div[class='container-fluid container-inner'] ul[class='nav navbar-nav LoGInMeNU']>li:nth-child(3)>a"));
 					clickDropDown.click();
-					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
-					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(150));
 					Thread.sleep(1000);
 					WebElement clickProfile = driver.findElement(By.cssSelector("ul[class='dropdown-menu Primary02_Blue'] li:nth-child(3)"));
 					clickProfile.click();
 					Thread.sleep(1000);
-					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
-					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(150));
+					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(150));
 					driver.switchTo().window(window);
 					if(driver.getCurrentUrl().contains("stagecourses-in"))
 					{
@@ -889,11 +889,11 @@ public class EditProfileLocator
 					driver.switchTo().window(window);
 					JavascriptExecutor js = (JavascriptExecutor) driver;
 					js.executeScript("window.scrollBy(0, 400)","");
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					WebElement clickCancel = driver.findElement(By.cssSelector("div[class='row gy-3'] div[class='col-md-12']:nth-child(2) div[class='Workstatus_buttonBottom__gah5Y'] div[class='Workstatus_skipButonDesk__2yAQW']>button[class='Workstatus_skipButton__vZu4F']\r\n"
 							+ ""));
 					clickCancel.click();
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 					Set<String> a = driver.getWindowHandles();
@@ -978,8 +978,8 @@ public class EditProfileLocator
 							if(getDataFromBrowser.equalsIgnoreCase(getDataFromExcel))
 							{
 								selectWorkExperience.get(i).click();
-								System.out.println(selectWorkExperience.get(i)+" is selected");
 								Thread.sleep(1000);
+								System.out.println(selectWorkExperience.get(i)+" is selected");
 								if(k == data.size()-1)
 								{
 									break;
@@ -987,9 +987,10 @@ public class EditProfileLocator
 							}
 						}
 					}
-					js.executeScript("window.scrollBy(0, 400)","");
+					js.executeScript("window.scrollBy(0, 500)","");
+					Thread.sleep(1000);
 					WebElement clickUpdateFromContacts = driver.findElement(By.cssSelector("div[class='row gy-3'] div[class='col-md-12']:nth-child(2) div[class='Workstatus_buttonBottom__gah5Y'] button[type='submit']"));
-					clickUpdateFromContacts.click();
+					js.executeScript("arguments[0].click()", clickUpdateFromContacts);
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 					Thread.sleep(2000);
@@ -1160,7 +1161,7 @@ public class EditProfileLocator
 	public String checkworkExperienceUpdateIcon()
 	{
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,200)", "");
+		js.executeScript("window.scrollBy(0,300)", "");
 
 		String status = "";
 		try
@@ -1213,17 +1214,17 @@ public class EditProfileLocator
 			for(String window : allWindows)
 			{
 				driver.switchTo().window(window);
-				if(driver.getCurrentUrl().contains("workstatusUpdate/"))
+				if(driver.getCurrentUrl().contains("workexperienceUpdate/"))
 				{
 					driver.switchTo().window(window);
 					JavascriptExecutor js = (JavascriptExecutor) driver;
 					js.executeScript("window.scrollBy(0, 400)","");
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					WebElement clickCancel = driver.findElement(By.cssSelector("div[class='row gy-3'] div[class='col-md-12']:nth-child(2) div[class='Workexperience_buttonBottom__5NssD'] div[class='Workexperience_skipButonDesk__5hyrY']>button[class='Workexperience_skipButton__Lmt9c']\r\n"
 							+ ""
 							+ ""));
 					clickCancel.click();
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 					Set<String> a = driver.getWindowHandles();
@@ -1237,6 +1238,7 @@ public class EditProfileLocator
 							WebElement getTextFromAlert = driver.findElement(By.cssSelector("div[class='modelPopup_popupTop__yPF_N'] p"));
 							System.out.println(getTextFromAlert.getText());
 							System.out.println("Alert from work experience");
+							System.out.println("WorkExperience cancelIcon process done");
 						}
 					}
 					status = "pass";
@@ -1247,7 +1249,6 @@ public class EditProfileLocator
 		{
 			status = "fail";
 		}
-		System.out.println("WorkExperience cancelIcon process done");
 		return status;
 	}
 	
@@ -1265,8 +1266,9 @@ public class EditProfileLocator
 					driver.switchTo().window(window);
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
+					JavascriptExecutor js = (JavascriptExecutor)driver;
+					js.executeScript("window.scrollBy(0, 100)", "");
 					WebElement closeAlert = driver.findElement(By.cssSelector("button[class='btn-close']"));
-					JavascriptExecutor js = (JavascriptExecutor) driver;
 					js.executeScript("arguments[0].click()", closeAlert);
 					Thread.sleep(1000);
 					driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(50));
@@ -1276,13 +1278,13 @@ public class EditProfileLocator
 					System.out.println(driver.getCurrentUrl());
 				}
 			}
+			System.out.println("alert close from work experience");
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			status = "fail";
 		}
-		System.out.println("alert close from work experience");
 		return status;
 	}
 	public ArrayList<String> checkworkExperienceSubmitValidData(ArrayList<String> data)
@@ -1309,6 +1311,7 @@ public class EditProfileLocator
 							if(getDataFromBrowser.equalsIgnoreCase(getDataFromExcel))
 							{
 								selectWorkExperience.get(i).click();
+								Thread.sleep(1000);
 								System.out.println(selectWorkExperience.get(i)+" is selected");
 								Thread.sleep(1000);
 								if(k == data.size()-1)
@@ -1342,6 +1345,7 @@ public class EditProfileLocator
 								}
 							}
 					    }
+						System.out.println("work experience SubmitValidData process done");
 				  }
 			}
 		
@@ -1351,7 +1355,6 @@ public class EditProfileLocator
 		{
 			status.add("fail");
 		}
-		System.out.println("work experience SubmitValidData process done");
 		return status;
 	}
 	public String checkworkExperienceAlertGoBackButton()

@@ -40,6 +40,7 @@ public class RegressionTesting
 	@Parameters("browser")
 	public void setup(String browserName) throws Exception
 	{
+		System.out.println("welcome");
 	    if (browserName.equalsIgnoreCase("Firefox"))
 	    {
 	    	driver = OpenWebsite.openDriver(browserName);

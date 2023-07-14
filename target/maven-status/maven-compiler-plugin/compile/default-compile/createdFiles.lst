@@ -24,6 +24,7 @@ com\seo\pompages\CourseDetailsPage.class
 com\seo\regression\testing\ContactUSLocator.class
 com\seo\regression\testing\SignupSocialAccLocator.class
 com\seo\regression\testing\DashboardLocator.class
+com\seo\regression\testing\EditProfileLocator.class
 com\seo\regression\testing\ErrorCodeValidation.class
 com\seo\pompages\AboutCourseEnrollmentLocators.class
 com\seo\regression\testing\PLUValidation.class
@@ -47,6 +48,7 @@ com\seo\regression\testing\ErrorCodeLocator.class
 com\seo\regression\testing\MicrosoftCourseLocator.class
 com\seo\regression\testing\HeaderSectionValidation.class
 com\seo\regression\testing\ContactInfoValidation.class
+com\seo\regression\testing\EditProfileValidation.class
 com\seo\pompages\SEOAboutPageLocators.class
 com\seo\regression\testing\RegressionTesting.class
 com\seo\regression\testing\NewAboutCourseValidator.class
